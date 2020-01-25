@@ -10,10 +10,10 @@ docs:
 	cd docs && make html
 
 coverage:
-	pytest --cov=seriesbr
+	pytest --cov=reportforce
 
 lint:
-	flake8 seriesbr
+	flake8 reportforce
 
 cov:
-	pytest --cov=seriesbr --cov-report term-missing
+	pytest --cov=reportforce --cov-report term-missing

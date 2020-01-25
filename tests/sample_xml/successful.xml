@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<soapenv:Envelope xmlns="urn:partner.soap.sforce.com" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Body>
+		<loginResponse>
+			<result>
+				<metadataServerUrl>metadataServerUrl</metadataServerUrl>
+				<passwordExpired>passwordExpired</passwordExpired>
+				<sandbox>sandbox</sandbox>
+				<serverUrl>https://dummy.salesforce.com/services/Soap/u/00.0/000000000000000</serverUrl>
+				<sessionId>sessionId</sessionId>
+				<userId>userId</userId>
+				<userInfo>
+					<accessibilityMode>accessibilityMode</accessibilityMode>
+					<chatterExternal>chatterExternal</chatterExternal>
+					<currencySymbol>currencySymbol</currencySymbol>
+					<orgAttachmentFileSizeLimit>orgAttachmentFileSizeLimit</orgAttachmentFileSizeLimit>
+					<orgDefaultCurrencyIsoCode>orgDefaultCurrencyIsoCode</orgDefaultCurrencyIsoCode>
+					<orgDefaultCurrencyLocale>orgDefaultCurrencyLocale</orgDefaultCurrencyLocale>
+					<orgDisallowHtmlAttachments>orgDisallowHtmlAttachments</orgDisallowHtmlAttachments>
+					<orgHasPersonAccounts>orgHasPersonAccounts</orgHasPersonAccounts>
+					<organizationId>organizationId</organizationId>
+					<organizationMultiCurrency>organizationMultiCurrency</organizationMultiCurrency>
+					<organizationName>organizationName</organizationName>
+					<profileId>profileId</profileId>
+					<roleId>roleId</roleId>
+					<sessionSecondsValid>sessionSecondsValid</sessionSecondsValid>
+					<userDefaultCurrencyIsoCode xsi:nil="true"/>
+					<userEmail>userEmail</userEmail>
+					<userFullName>userFullName</userFullName>
+					<userId>userId</userId>
+					<userLanguage>userLanguage</userLanguage>
+					<userLocale>userLocale</userLocale>
+					<userName>userName</userName>
+					<userTimeZone>userTimeZone</userTimeZone>
+					<userType>userType</userType>
+					<userUiSkin>userUiSkin</userUiSkin>
+				</userInfo>
+			</result>
+		</loginResponse>
+	</soapenv:Body>
+</soapenv:Envelope>
