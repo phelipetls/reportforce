@@ -1,0 +1,44 @@
+__pycache__
+__init__.py
+
+# virtual env
+venv*
+
+# ctags
+tags
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# codebraid
+_codebraid
+
+# temp files
+*~
+\#*
+.\#*
+
+# unittests
+.coverage
+.coverage.*
+
+# docs
+docs/source/auto_examples/
+
+# flake
+.flake8
