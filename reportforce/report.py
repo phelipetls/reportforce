@@ -1,4 +1,5 @@
 import copy
+import dateutil
 import requests
 import functools
 import pandas as pd
@@ -38,10 +39,10 @@ def get_report(
         Date column name (label).
 
     start : str
-        Initial date in the format %Y-%m-%d.
+        Initial date string, passed into dateutil.parser.parse.
 
     end : str
-        Final date in the format %Y-%m-%d.
+        Final date string, passed into dateutil.parser.parse.
 
     filters : list
         List of tuples, each of which represents
@@ -143,6 +144,6 @@ def set_logic(logic, metadata):
 
 def set_period(start, end, metadata):
     date_filter = metadata["reportMetadata"]["standardDateFilter"]
-    date_filter["startDate"] = start
-    date_filter["endDate"] = end
+    date_filter["startDate"] = dateutil.parser.parse(start).strftime("%Y-%m-%d")
+    date_filter["endDate"] = dateutil.parser.parse(end).strftime("%Y-%m-%d")
     date_filter["durationValue"] = "CUSTOM"

@@ -21,7 +21,7 @@ class TestSalesforce(unittest.TestCase):
     maxdiff = None
 
     filters = [("Opportunity Name", "!=", "VALUE")]
-    period = ("2020-01-01", "2020-01-31")
+    period = ("01-01-2020", "2020-01-31")
     logic = "1 AND 2"
 
     def setUp(self):
