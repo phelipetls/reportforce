@@ -63,6 +63,9 @@ def get_report(
         A DataFrame contaning the records from
         the report.
     """
+    if not session:
+        raise SessionNotFound
+
     metadata = copy.deepcopy(get_metadata(report_id, session))
 
     if start and end:
@@ -107,6 +110,10 @@ def get_metadata(report_id, session=None):
         base_url.format(session.instance_url, session.version, report_id) + "/describe"
     )
     return requests.get(url, headers=session.headers).json()
+
+
+class SessionNotFound(Exception):
+    pass
 
 
 operators_dict = {
