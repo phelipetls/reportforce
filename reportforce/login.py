@@ -9,16 +9,14 @@ class Login(object):
     A Salesforce session instance
     """
 
-    def __init__(self, username, password, security_token, version="47.0"):
-        self.version = version
+    def __init__(self, username, password, security_token, **kwargs):
         self.session_id, self.instance_url = soap_login(
-            username, password, security_token, version
+            username, password, security_token, **kwargs
         )
         self.headers = {"Authorization": "Bearer " + self.session_id}
 
 
 class AuthenticationError(Exception):
-
     def __init__(self, msg):
         self.msg = msg
 
@@ -26,8 +24,7 @@ class AuthenticationError(Exception):
         return self.msg
 
 
-
-def soap_login(username, password, security_token, version="47.0"):
+def soap_login(username, password, security_token, domain="login", version="47.0"):
     """
     Helper function to login into Salesforce via SOAP API.
 
@@ -43,6 +40,9 @@ def soap_login(username, password, security_token, version="47.0"):
         The security token. This is normally provided when
         you change your password via e-mail.
 
+    domain : str
+        Domain. Either 'login' or 'test', login by default.
+
     version : str
         Latest available version in your Salesforce server.
 
@@ -51,7 +51,7 @@ def soap_login(username, password, security_token, version="47.0"):
     tuple
         A tuple containing the session id and instance url.
     """
-    soap_url = "https://login.salesforce.com/services/Soap/u/" + version
+    soap_url = "https://{}.salesforce.com/services/Soap/u/{}".format(domain, version)
     soap_headers = {
         "Content-Type": "text/xml; charset=UTF-8",
         "SoapAction": "login",
