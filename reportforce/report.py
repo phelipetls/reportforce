@@ -54,7 +54,7 @@ def get_report(
         it can also be useful in general.
 
     session : object
-        A simple-salesforce's Salesforce object or
+        A simple_salesforce's Salesforce object or
         a reportforce.login.Login object, needed for
         authentication.
 
@@ -90,6 +90,11 @@ def get_report(
 def report_generator(
     report_id, id_column=None, id_index=None, metadata=None, session=None
 ):
+    """
+    Auxiliary function to generate reports until
+    all data is returned, i.e. until "allData" in the
+    JSON response body is "true".
+    """
     url = base_url.format(session.instance_url, session.version, report_id)
 
     report = request.request_report(url, headers=session.headers, json=metadata)
@@ -107,6 +112,10 @@ def report_generator(
 
 @functools.lru_cache(maxsize=8)
 def get_metadata(report_id, session=None):
+    """
+    Function to get a report metadata information,
+    which is used for filtering reports.
+    """
     url = (
         base_url.format(session.instance_url, session.version, report_id) + "/describe"
     )
