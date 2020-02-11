@@ -19,6 +19,50 @@ def get_report(
     logic=None,
     session=None,
 ):
+    """
+    Function to retrieve a Salesforce tabular report
+    into a DataFrame.
+
+    Parameters
+    ----------
+    report_id : str
+        Report unique identifier.
+
+    id_column : str
+        Column name (label) which has unique values
+        for each row, i.e., a key. This is needed to
+        as a workaround the Analytics API's 2000 row
+        limitation.
+
+    date_column : str
+        Date column name (label).
+
+    start : str
+        Initial date in the format %Y-%m-%d.
+
+    end : str
+        Final date in the format %Y-%m-%d.
+
+    filters : list
+        List of tuples, each of which represents
+        a filter: [("COL", ">=", "VALUE")].
+
+    logic : str
+        Logical filter. This is commonly needed if
+        the report already has a report filter, but
+        it can also be useful in general.
+
+    session : object
+        A simple-salesforce's Salesforce object or
+        a reportforce.login.Login object, needed for
+        authentication.
+
+    Returns
+    -------
+    DataFrame
+        A DataFrame contaning the records from
+        the report.
+    """
     metadata = copy.deepcopy(get_metadata(report_id, session))
 
     if start and end:
