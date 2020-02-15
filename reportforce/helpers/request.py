@@ -2,7 +2,7 @@ import requests
 
 s = requests.Session()
 
-def request_report(url, *args, **kwargs):
+def request_report(url, **kwargs):
     report = s.post(url, **kwargs).json()
     try:
         raise ReportError(report[0]["errorCode"], report[0]["message"])
