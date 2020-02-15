@@ -1,0 +1,178 @@
+{
+    "attributes": {
+        "describeUrl": "describeUrl",
+        "instancesUrl": "instancesUrl",
+        "reportId": "reportId",
+        "reportName": "reportName",
+        "type": "type"
+    },
+    "reportExtendedMetadata": {
+        "aggregateColumnInfo": {
+            "RowCount": {
+                "dataType": "dataType",
+                "label": "label"
+            }
+        },
+        "availableDashboardSettings": null,
+        "detailColumnInfo": {
+            "OPPORTUNITY_NAME": {
+                "dataType": "string",
+                "label": "Opportunity Name"
+            },
+            "AMOUNT": {
+                "dataType": "currency",
+                "label": "Amount"
+            },
+            "LEAD_SOURCE": {
+                "dataType": "picklist",
+                "label": "Lead Source"
+            },
+            "NEXT_STEP": {
+                "dataType": "string",
+                "label": "Next Step"
+            },
+            "PROBABILITY": {
+                "dataType": "percent",
+                "label": "Probability (%)"
+            },
+            "FISCAL_QUARTER": {
+                "dataType": "string",
+                "label": "Fiscal Period"
+            },
+            "AGE": {
+                "dataType": "int",
+                "label": "Age"
+            },
+            "CREATED_DATE": {
+                "dataType": "datetime",
+                "label": "Created Date"
+            },
+            "FULL_NAME": {
+                "dataType": "string",
+                "label": "Opportunity Owner"
+            },
+            "ROLLUP_DESCRIPTION": {
+                "dataType": "string",
+                "label": "Owner Role"
+            }
+        },
+        "groupingColumnInfo": {}
+    },
+    "reportMetadata": {
+        "aggregates": [
+            "RowCount"
+        ],
+        "chart": null,
+        "crossFilters": [],
+        "currency": null,
+        "dashboardSetting": null,
+        "description": null,
+        "detailColumns": [
+            "OPPORTUNITY_NAME",
+            "AMOUNT",
+            "LEAD_SOURCE",
+            "NEXT_STEP",
+            "PROBABILITY",
+            "FISCAL_QUARTER",
+            "AGE",
+            "CREATED_DATE",
+            "FULL_NAME",
+            "ROLLUP_DESCRIPTION"
+        ],
+        "developerName": "developerName",
+        "division": null,
+        "folderId": "folderId",
+        "groupingsAcross": [],
+        "groupingsDown": [],
+        "hasDetailRows": true,
+        "hasRecordCount": true,
+        "historicalSnapshotDates": [],
+        "id": "id",
+        "name": "name",
+        "presentationOptions": {
+            "hasStackedSummaries": true
+        },
+        "reportBooleanFilter": "reportBooleanFilter",
+        "reportFilters": [
+            {
+                "column": "column",
+                "filterType": "filterType",
+                "isRunPageEditable": true,
+                "operator": "operator",
+                "value": "value"
+            }
+        ],
+        "reportFormat": "MATRIX",
+        "reportType": {
+            "label": "label",
+            "type": "type"
+        },
+        "saveRoleHierarchy": false,
+        "scope": "scope",
+        "showGrandTotal": true,
+        "showSubtotals": true,
+        "sortBy": [],
+        "standardDateFilter": {
+            "column": "column",
+            "durationValue": "durationValue",
+            "endDate": "endDate",
+            "startDate": "startDate"
+        },
+        "standardFilters": [
+            {
+                "column": "column",
+                "filterType": "filterType",
+                "isRunPageEditable": true,
+                "operator": "operator",
+                "value": "value"
+            }
+        ],
+        "supportsRoleHierarchy": true,
+        "userOrHierarchyFilterId": null
+    },
+    "reportTypeMetadata": {
+        "categories": [],
+        "dataTypeFilterOperatorMap": {
+            "date": [],
+            "string": [],
+            "double": [],
+            "picklist": [],
+            "textarea": [],
+            "percent": [],
+            "int": [],
+            "url": [],
+            "reference": [],
+            "datetime": [],
+            "boolean": [],
+            "phone": [],
+            "currency": [],
+            "html": [],
+            "id": [],
+            "email": []
+        },
+        "dateGranularityInfos": null,
+        "divisionInfo": null,
+        "hasOuterJoin": false,
+        "isExternalObjectReport": false,
+        "isHistorical": false,
+        "objectRelationships": [],
+        "scopeInfo": {
+            "defaultValue": "defaultValue",
+            "values": []
+        },
+        "standardDateFilterDurationGroups": [],
+        "standardFilterInfos": {
+            "probability": {
+                "type": "type",
+                "filterValues": [],
+                "label": "label"
+            },
+            "open": {
+                "type": "type",
+                "filterValues": [],
+                "label": "label"
+            }
+        },
+        "supportsJoinedFormat": true
+    }
+}

@@ -1,0 +1,1130 @@
+{
+    "attributes": {
+        "describeUrl": "describeUrl",
+        "instancesUrl": "instancesUrl",
+        "reportId": "000000000000000000",
+        "reportName": "reportName",
+        "type": "type"
+    },
+    "reportExtendedMetadata": {
+        "aggregateColumnInfo": {
+            "RowCount": {
+                "dataType": "int",
+                "label": "label"
+            }
+        },
+        "availableDashboardSettings": null,
+        "detailColumnInfo": {
+            "Column1": {
+                "dataType": "datetime",
+                "filterValues": [],
+                "filterable": true,
+                "inactiveFilterValues": [],
+                "isLookup": false,
+                "label": "label1",
+                "uniqueCountable": true
+            },
+            "Column2": {
+                "dataType": "date",
+                "filterValues": [],
+                "filterable": true,
+                "inactiveFilterValues": [],
+                "isLookup": false,
+                "label": "label2",
+                "uniqueCountable": true
+            },
+            "Column3": {
+                "dataType": "string",
+                "filterValues": [],
+                "filterable": true,
+                "inactiveFilterValues": [],
+                "isLookup": false,
+                "label": "label3",
+                "uniqueCountable": true
+            },
+            "Column4": {
+                "dataType": "string",
+                "filterValues": [],
+                "filterable": true,
+                "inactiveFilterValues": [],
+                "isLookup": false,
+                "label": "label4",
+                "uniqueCountable": true
+            },
+            "Column5": {
+                "dataType": "picklist",
+                "filterValues": [
+                    {
+                        "apiName": "apiName",
+                        "label": "label",
+                        "name": "name"
+                    }
+                ],
+                "filterable": true,
+                "inactiveFilterValues": [],
+                "isLookup": false,
+                "label": "label5",
+                "uniqueCountable": true
+            },
+            "Column6": {
+                "dataType": "string",
+                "filterValues": [],
+                "filterable": true,
+                "inactiveFilterValues": [],
+                "isLookup": false,
+                "label": "label6",
+                "uniqueCountable": true
+            },
+            "Column7": {
+                "dataType": "string",
+                "filterValues": [],
+                "filterable": true,
+                "inactiveFilterValues": [],
+                "isLookup": false,
+                "label": "label7",
+                "uniqueCountable": true
+            }
+        },
+        "groupingColumnInfo": {
+            "Column": {
+                "dataType": "picklist",
+                "filterValues": [
+                    {
+                        "apiName": "apiName",
+                        "label": "label",
+                        "name": "name"
+                    },
+                    {
+                        "apiName": "apiName",
+                        "label": "label",
+                        "name": "name"
+                    }
+                ],
+                "filterable": true,
+                "groupingLevel": 2,
+                "inactiveFilterValues": [],
+                "isLookup": false,
+                "label": "label",
+                "uniqueCountable": true
+            }
+        }
+    },
+    "reportMetadata": {
+        "aggregates": [
+            "RowCount"
+        ],
+        "chart": null,
+        "crossFilters": [],
+        "currency": null,
+        "dashboardSetting": null,
+        "description": "description",
+        "detailColumns": [
+            "Column",
+            "Column",
+            "Column",
+            "Column",
+            "Column",
+            "Column",
+            "Column"
+        ],
+        "developerName": "developerName",
+        "division": null,
+        "folderId": "000000000000000000",
+        "groupingsAcross": [],
+        "groupingsDown": [
+            {
+                "dateGranularity": "None",
+                "name": "name",
+                "sortAggregate": null,
+                "sortOrder": "Asc"
+            },
+            {
+                "dateGranularity": "None",
+                "name": "name",
+                "sortAggregate": null,
+                "sortOrder": "Asc"
+            },
+            {
+                "dateGranularity": "None",
+                "name": "name",
+                "sortAggregate": null,
+                "sortOrder": "Asc"
+            }
+        ],
+        "hasDetailRows": true,
+        "hasRecordCount": true,
+        "historicalSnapshotDates": [],
+        "id": "id",
+        "name": "name",
+        "presentationOptions": {
+            "hasStackedSummaries": false
+        },
+        "reportBooleanFilter": null,
+        "reportFilters": [
+            {
+                "column": "column",
+                "filterType": "fieldValue",
+                "isRunPageEditable": true,
+                "operator": "equals",
+                "value": "value"
+            },
+            {
+                "column": "column",
+                "filterType": "fieldValue",
+                "isRunPageEditable": true,
+                "operator": "equals",
+                "value": "value"
+            },
+            {
+                "column": "column",
+                "filterType": "fieldValue",
+                "isRunPageEditable": true,
+                "operator": "equals",
+                "value": "value"
+            }
+        ],
+        "reportFormat": "SUMMARY",
+        "reportType": {
+            "label": "label",
+            "type": "type"
+        },
+        "scope": "organization",
+        "showGrandTotal": true,
+        "showSubtotals": true,
+        "sortBy": [],
+        "standardDateFilter": {
+            "column": "column",
+            "durationValue": "TODAY",
+            "endDate": "2020-02-14",
+            "startDate": "2020-02-14"
+        },
+        "standardFilters": null,
+        "supportsRoleHierarchy": false,
+        "userOrHierarchyFilterId": null
+    },
+    "reportTypeMetadata": {
+        "categories": [
+            {
+                "columns": {
+                    "Column": {
+                        "allowedInCustomDetailFormula": true,
+                        "bucketable": true,
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "inactiveFilterValues": [],
+                        "isCustom": true,
+                        "isLookup": false,
+                        "label": "label",
+                        "maxLength": 50,
+                        "uniqueCountable": true
+                    }
+                },
+                "label": "label",
+                "labelSuffix": null
+            },
+            {
+                "columns": {
+                    "Column": {
+                        "allowedInCustomDetailFormula": true,
+                        "bucketable": true,
+                        "dataType": "currency",
+                        "filterValues": [],
+                        "filterable": true,
+                        "inactiveFilterValues": [],
+                        "isCustom": true,
+                        "isLookup": false,
+                        "label": "label",
+                        "maxLength": null,
+                        "uniqueCountable": true
+                    }
+                },
+                "label": "label",
+                "labelSuffix": null
+            }
+        ],
+        "dataTypeFilterOperatorMap": {
+            "date": [
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                }
+            ],
+            "string": [
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                }
+            ],
+            "double": [
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                }
+            ],
+            "picklist": [
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                }
+            ],
+            "textarea": [
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                }
+            ],
+            "reference": [
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                }
+            ],
+            "datetime": [
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                }
+            ],
+            "boolean": [
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                }
+            ],
+            "phone": [
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                }
+            ],
+            "html": [
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                }
+            ],
+            "currency": [
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                }
+            ],
+            "id": [
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                }
+            ],
+            "email": [
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                },
+                {
+                    "label": "label",
+                    "name": "name"
+                }
+            ]
+        },
+        "dateGranularityInfos": [
+            {
+                "label": "label",
+                "value": "value"
+            },
+            {
+                "label": "label",
+                "value": "value"
+            },
+            {
+                "label": "label",
+                "value": "value"
+            },
+            {
+                "label": "label",
+                "value": "value"
+            },
+            {
+                "label": "label",
+                "value": "value"
+            },
+            {
+                "label": "label",
+                "value": "value"
+            },
+            {
+                "label": "label",
+                "value": "value"
+            },
+            {
+                "label": "label",
+                "value": "value"
+            },
+            {
+                "label": "label",
+                "value": "value"
+            }
+        ],
+        "divisionInfo": null,
+        "hasOuterJoin": false,
+        "isExternalObjectReport": false,
+        "isHistorical": false,
+        "objectRelationships": [
+            {
+                "label": "label",
+                "primaryEntityField": "primaryEntityField",
+                "relatedObjects": [
+                    {
+                        "label": "label",
+                        "relatedEntity": "Acao__c",
+                        "relatedEntityJoinField": "relatedEntityJoinField"
+                    },
+                    {
+                        "label": "label",
+                        "relatedEntity": "CaseArticle-Article",
+                        "relatedEntityJoinField": "relatedEntityJoinField"
+                    },
+                    {
+                        "label": "label",
+                        "relatedEntity": "Activity",
+                        "relatedEntityJoinField": "relatedEntityJoinField"
+                    },
+                    {
+                        "label": "label",
+                        "relatedEntity": "LP__Chat_transcript__c",
+                        "relatedEntityJoinField": "relatedEntityJoinField"
+                    },
+                    {
+                        "label": "label",
+                        "relatedEntity": "CollaborationGroupRecord-Group",
+                        "relatedEntityJoinField": "relatedEntityJoinField"
+                    },
+                    {
+                        "label": "label",
+                        "relatedEntity": "CaseComment",
+                        "relatedEntityJoinField": "relatedEntityJoinField"
+                    },
+                    {
+                        "label": "label",
+                        "relatedEntity": "CaseExternalDocument-Case",
+                        "relatedEntityJoinField": "relatedEntityJoinField"
+                    },
+                    {
+                        "label": "label",
+                        "relatedEntity": "EmailMessage",
+                        "relatedEntityJoinField": "relatedEntityJoinField"
+                    },
+                    {
+                        "label": "label",
+                        "relatedEntity": "CaseTeamMember-Team",
+                        "relatedEntityJoinField": "relatedEntityJoinField"
+                    },
+                    {
+                        "label": "label",
+                        "relatedEntity": "CaseFeed",
+                        "relatedEntityJoinField": "relatedEntityJoinField"
+                    },
+                    {
+                        "label": "label",
+                        "relatedEntity": "CaseTeamMember-Member",
+                        "relatedEntityJoinField": "relatedEntityJoinField"
+                    },
+                    {
+                        "label": "label",
+                        "relatedEntity": "Remessa_Para_Reclamacao__c",
+                        "relatedEntityJoinField": "relatedEntityJoinField"
+                    },
+                    {
+                        "label": "label",
+                        "relatedEntity": "CaseSolution-Solution",
+                        "relatedEntityJoinField": "relatedEntityJoinField"
+                    },
+                    {
+                        "label": "label",
+                        "relatedEntity": "LiveChatTranscript",
+                        "relatedEntityJoinField": "relatedEntityJoinField"
+                    }
+                ]
+            },
+            {
+                "label": "label",
+                "primaryEntityField": "primaryEntityField",
+                "relatedObjects": [
+                    {
+                        "label": "label",
+                        "relatedEntity": "Activity",
+                        "relatedEntityJoinField": "relatedEntityJoinField"
+                    },
+                    {
+                        "label": "label",
+                        "relatedEntity": "Remessa_Para_Reclamacao__c",
+                        "relatedEntityJoinField": "relatedEntityJoinField"
+                    }
+                ]
+            }
+        ],
+        "scopeInfo": {
+            "defaultValue": "user",
+            "values": [
+                {
+                    "allowsDivision": false,
+                    "label": "label",
+                    "value": "value"
+                },
+                {
+                    "allowsDivision": true,
+                    "label": "label",
+                    "value": "value"
+                },
+                {
+                    "allowsDivision": true,
+                    "label": "label",
+                    "value": "value"
+                },
+                {
+                    "allowsDivision": false,
+                    "label": "label",
+                    "value": "value"
+                },
+                {
+                    "allowsDivision": false,
+                    "label": "label",
+                    "value": "value"
+                },
+                {
+                    "allowsDivision": false,
+                    "label": "label",
+                    "value": "value"
+                }
+            ]
+        },
+        "standardDateFilterDurationGroups": [
+            {
+                "label": "label",
+                "standardDateFilterDurations": [
+                    {
+                        "endDate": "2020-02-13",
+                        "label": "label",
+                        "startDate": "2020-02-14",
+                        "value": "value"
+                    }
+                ]
+            },
+            {
+                "label": "label",
+                "standardDateFilterDurations": [
+                    {
+                        "endDate": "2020-12-31",
+                        "label": "label",
+                        "startDate": "2020-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2019-12-31",
+                        "label": "label",
+                        "startDate": "2019-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2019-12-31",
+                        "label": "label",
+                        "startDate": "2018-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2018-12-31",
+                        "label": "label",
+                        "startDate": "2018-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2021-12-31",
+                        "label": "label",
+                        "startDate": "2021-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-12-31",
+                        "label": "label",
+                        "startDate": "2019-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-12-31",
+                        "label": "label",
+                        "startDate": "2018-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2021-12-31",
+                        "label": "label",
+                        "startDate": "2020-01-01",
+                        "value": "value"
+                    }
+                ]
+            },
+            {
+                "label": "label",
+                "standardDateFilterDurations": [
+                    {
+                        "endDate": "2020-03-31",
+                        "label": "label",
+                        "startDate": "2020-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-06-30",
+                        "label": "label",
+                        "startDate": "2020-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-03-31",
+                        "label": "label",
+                        "startDate": "2019-10-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-06-30",
+                        "label": "label",
+                        "startDate": "2020-04-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2019-12-31",
+                        "label": "label",
+                        "startDate": "2019-10-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-12-31",
+                        "label": "label",
+                        "startDate": "2020-01-01",
+                        "value": "value"
+                    }
+                ]
+            },
+            {
+                "label": "label",
+                "standardDateFilterDurations": [
+                    {
+                        "endDate": "2020-12-31",
+                        "label": "label",
+                        "startDate": "2020-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2019-12-31",
+                        "label": "label",
+                        "startDate": "2019-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2019-12-31",
+                        "label": "label",
+                        "startDate": "2018-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2018-12-31",
+                        "label": "label",
+                        "startDate": "2018-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2021-12-31",
+                        "label": "label",
+                        "startDate": "2021-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-12-31",
+                        "label": "label",
+                        "startDate": "2019-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-12-31",
+                        "label": "label",
+                        "startDate": "2018-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2021-12-31",
+                        "label": "label",
+                        "startDate": "2020-01-01",
+                        "value": "value"
+                    }
+                ]
+            },
+            {
+                "label": "label",
+                "standardDateFilterDurations": [
+                    {
+                        "endDate": "2020-03-31",
+                        "label": "label",
+                        "startDate": "2020-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-06-30",
+                        "label": "label",
+                        "startDate": "2020-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-03-31",
+                        "label": "label",
+                        "startDate": "2019-10-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-06-30",
+                        "label": "label",
+                        "startDate": "2020-04-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2019-12-31",
+                        "label": "label",
+                        "startDate": "2019-10-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-12-31",
+                        "label": "label",
+                        "startDate": "2020-01-01",
+                        "value": "value"
+                    }
+                ]
+            },
+            {
+                "label": "label",
+                "standardDateFilterDurations": [
+                    {
+                        "endDate": "2020-01-31",
+                        "label": "label",
+                        "startDate": "2020-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-02-29",
+                        "label": "label",
+                        "startDate": "2020-02-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-03-31",
+                        "label": "label",
+                        "startDate": "2020-03-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-02-29",
+                        "label": "label",
+                        "startDate": "2020-01-01",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-03-31",
+                        "label": "label",
+                        "startDate": "2020-02-01",
+                        "value": "value"
+                    }
+                ]
+            },
+            {
+                "label": "label",
+                "standardDateFilterDurations": [
+                    {
+                        "endDate": "2020-02-08",
+                        "label": "label",
+                        "startDate": "2020-02-02",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-02-15",
+                        "label": "label",
+                        "startDate": "2020-02-09",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-02-22",
+                        "label": "label",
+                        "startDate": "2020-02-16",
+                        "value": "value"
+                    }
+                ]
+            },
+            {
+                "label": "label",
+                "standardDateFilterDurations": [
+                    {
+                        "endDate": "2020-02-13",
+                        "label": "label",
+                        "startDate": "2020-02-13",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-02-14",
+                        "label": "label",
+                        "startDate": "2020-02-14",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-02-15",
+                        "label": "label",
+                        "startDate": "2020-02-15",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-02-14",
+                        "label": "label",
+                        "startDate": "2020-02-08",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-02-14",
+                        "label": "label",
+                        "startDate": "2020-01-16",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-02-14",
+                        "label": "label",
+                        "startDate": "2019-12-17",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-02-14",
+                        "label": "label",
+                        "startDate": "2019-11-17",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-02-14",
+                        "label": "label",
+                        "startDate": "2019-10-18",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-02-20",
+                        "label": "label",
+                        "startDate": "2020-02-14",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-03-14",
+                        "label": "label",
+                        "startDate": "2020-02-14",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-04-13",
+                        "label": "label",
+                        "startDate": "2020-02-14",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-05-13",
+                        "label": "label",
+                        "startDate": "2020-02-14",
+                        "value": "value"
+                    },
+                    {
+                        "endDate": "2020-06-12",
+                        "label": "label",
+                        "startDate": "2020-02-14",
+                        "value": "value"
+                    }
+                ]
+            }
+        ],
+        "standardFilterInfos": null,
+        "supportsJoinedFormat": true
+    }
+}
