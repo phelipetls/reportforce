@@ -120,6 +120,22 @@ def tabular_report_generator(
         yield report_cells
 
 
+def get_matrix_report(report_id, metadata, session):
+    url = base_url.format(session.instance_url, session.version, report_id)
+    matrix = request.request_report(url, headers=session.headers, json=metadata)
+
+    indices = pd.MultiIndex.from_tuples(
+        parsers.get_groups(matrix["groupingsDown"]["groupings"])
+    )
+    columns = pd.MultiIndex.from_tuples(
+        parsers.get_groups(matrix["groupingsAcross"]["groupings"])
+    )
+
+    cells = np.array(parsers.get_matrix_cells(matrix))
+    cells.shape = (len(indices), len(columns))
+    return pd.DataFrame(cells, index=indices, columns=columns)
+
+
 @functools.lru_cache(maxsize=8)
 def get_metadata(report_id, session=None):
     """
