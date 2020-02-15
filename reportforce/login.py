@@ -9,9 +9,10 @@ class Login(object):
     A Salesforce session instance
     """
 
-    def __init__(self, username, password, security_token, **kwargs):
+    def __init__(self, username, password, security_token, version="47.0", **kwargs):
+        self.version = version
         self.session_id, self.instance_url = soap_login(
-            username, password, security_token, **kwargs
+            username, password, security_token, version=version, **kwargs
         )
         self.headers = {"Authorization": "Bearer " + self.session_id}
 
