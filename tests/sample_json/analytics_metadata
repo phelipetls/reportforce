@@ -102,7 +102,7 @@
                 "value": "value"
             }
         ],
-        "reportFormat": "reportFormat",
+        "reportFormat": "TABULAR",
         "reportType": {
             "label": "label",
             "type": "type"
