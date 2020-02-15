@@ -29,8 +29,12 @@ def set_logic(logic, metadata):
     metadata["reportBooleanFilter"] = logic
 
 
-def set_period(start, end, metadata):
+def set_period(start, end, column, metadata):
     date_filter = metadata["reportMetadata"]["standardDateFilter"]
-    date_filter["startDate"] = parser.parse(start).strftime("%Y-%m-%d")
-    date_filter["endDate"] = parser.parse(end).strftime("%Y-%m-%d")
     date_filter["durationValue"] = "CUSTOM"
+    if column:
+        date_filter["column"] = parsers.get_column_labels(metadata)[column]
+    if start:
+        date_filter["startDate"] = parser.parse(start).strftime("%Y-%m-%d")
+    if end:
+        date_filter["endDate"] = parser.parse(end).strftime("%Y-%m-%d")

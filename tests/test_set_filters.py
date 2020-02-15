@@ -30,7 +30,8 @@ class TestSalesforce(unittest.TestCase):
         set_filters(self.filters, self.metadata)
 
         start, end = self.period
-        set_period(start, end, self.metadata)
+        date_column = "Fiscal Period"
+        set_period(start, end, date_column, self.metadata)
 
         set_logic(self.logic, self.metadata)
 
@@ -42,7 +43,7 @@ class TestSalesforce(unittest.TestCase):
     def test_date_filter(self):
         test = self.metadata["reportMetadata"]["standardDateFilter"]
         expected = {
-            "column": "column",
+            "column": "FISCAL_QUARTER",
             "durationValue": "CUSTOM",
             "startDate": "2020-01-01",
             "endDate": "2020-01-31",
