@@ -10,6 +10,25 @@ def get_tabular_cells(report):
     return cells
 
 
+def get_matrix_cells(matrix):
+    factmap = matrix["factMap"]
+
+    n_rows = len(matrix["reportMetadata"]["groupingsDown"])
+    n_cols = len(matrix["reportMetadata"]["groupingsAcross"])
+
+    row_pattern = r"_".join(["[0-9]"] * n_rows)
+    col_pattern = r"_".join(["[0-9]"] * n_cols)
+
+    sort_func = lambda x: x.split("!")[0] + x.split("!")[1]
+
+    values = []
+    for group in sorted(factmap, key=sort_func):
+        row_key, col_key = group.split("!")
+        if re.search(row_pattern, row_key) and re.search(col_pattern, col_key):
+            values.append(factmap[group]["aggregates"][0]["label"])
+    return values
+
+
 def get_summary_cells(report):
     factmap = report["factMap"]
     cells = []
@@ -33,20 +52,6 @@ def get_summary_cells(report):
 def get_column_labels(metadata):
     columns_info = metadata["reportExtendedMetadata"]["detailColumnInfo"]
     return {info["label"]: column for column, info in columns_info.items()}
-
-
-def get_matrix_cells(matrix):
-    n_rows = len(matrix["reportMetadata"]["groupingsDown"])
-    n_cols = len(matrix["reportMetadata"]["groupingsAcross"])
-
-    values = []
-    for key, value in sorted(matrix["factMap"].items()):
-        row_groups, col_groups = key.split("!")
-        row_condition = re.search(r"\d_?" * n_rows, row_groups)
-        col_condition = re.search(r"\d_?" * n_cols, col_groups)
-        if row_condition and col_condition:
-            values.append(value["aggregates"][0]["label"])
-    return values
 
 
 def get_groups(groups):
