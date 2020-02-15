@@ -136,6 +136,27 @@ def get_matrix_report(report_id, metadata, session):
     return pd.DataFrame(cells, index=indices, columns=columns)
 
 
+def get_summary_report(report_id, metadata, session):
+    url = base_url.format(session.instance_url, session.version, report_id)
+    summary = request.request_report(url, headers=session.headers, json=metadata)
+
+    cells, number_cell_by_group = parsers.get_summary_cells(summary)
+
+    groups = parsers.get_groups(summary["groupingsDown"]["groupings"])
+
+    repeat_groups = lambda x, z: x * z
+    groups_frequency_pairs = zip(groups, number_cell_by_group)
+    repeated_groups = itertools.chain.from_iterable(
+        itertools.starmap(itertools.repeat, groups_frequency_pairs)
+    )
+
+    multi_index = pd.MultiIndex.from_tuples(repeated_groups)
+
+    columns = parsers.get_column_labels(metadata)
+
+    return pd.DataFrame(cells, index=multi_index, columns=columns)
+
+
 @functools.lru_cache(maxsize=8)
 def get_metadata(report_id, session=None):
     """
