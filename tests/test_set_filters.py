@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from reportforce.report import set_filters, set_period, set_logic  # noqa: E402
+from reportforce.helpers.filtering import set_filters, set_period, set_logic  # noqa: E402
 
 
 def get_mocked_metadata(*args, **kwargs):

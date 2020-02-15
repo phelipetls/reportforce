@@ -95,7 +95,6 @@ def get_tabular_report(report_id, id_column, metadata, session):
     return pd.concat(tabular_generator)
 
 
-
 def tabular_report_generator(report_id, id_column=None, metadata=None, session=None):
     """
     Auxiliary function to generate tabular reports until

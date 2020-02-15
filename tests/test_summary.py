@@ -34,7 +34,9 @@ def get_json(json_file):
     with open(path, "r") as f:
         return json.loads(f.read())
 
+
 jsons = [get_json("analytics_summary_initial"), get_json("analytics_summary")]
+
 
 class TestSalesforce(unittest.TestCase):
     @patch("reportforce.report.get_metadata", get_mocked_metadata)

@@ -2,6 +2,7 @@ import requests
 
 s = requests.Session()
 
+
 def request_report(url, **kwargs):
     """
     A wrapper around requests.post designed
@@ -23,6 +24,7 @@ def request_report(url, **kwargs):
         raise ReportError(report[0]["errorCode"], report[0]["message"])
     except KeyError:
         return report
+
 
 class ReportError(Exception):
     def __init__(self, code, msg):

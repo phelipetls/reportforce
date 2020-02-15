@@ -1,6 +1,5 @@
 import re
 import itertools
-import collections
 
 
 def get_tabular_cells(report):
@@ -18,7 +17,7 @@ def get_matrix_cells(matrix):
     """
     Auxiliary function to get all cells
     from a matrix report.
-    
+
     This is much more complicated because we need
     to get the row and columns groups also.
 
@@ -45,7 +44,7 @@ def get_matrix_cells(matrix):
 
     # used to filter the factMap keys, i.e., to get
     # 0_0!0_1, 0_0!0_2, ..., 10_0!10_0, 10_0!10_1
-    sort_func = lambda x: x.split("!")[0] + x.split("!")[1]
+    sort_func = lambda x: x.split("!")[0] + x.split("!")[1]  # noqa: E731
 
     values = []
     for group in sorted(factmap, key=sort_func):
@@ -78,7 +77,7 @@ def get_summary_cells(report):
     # filter out all keys not matching the pattern
     groups = itertools.filterfalse(lambda x: not re.search(pattern, x), factmap)
 
-    sort_func = lambda x: list(map(int, x.rstrip("!T").split("_")))
+    sort_func = lambda x: list(map(int, x.rstrip("!T").split("_")))  # noqa: E731
     for group in sorted(groups, key=sort_func):
         rows = factmap[group]["rows"]
         for row in rows:
