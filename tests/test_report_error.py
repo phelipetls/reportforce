@@ -24,7 +24,7 @@ class FakeLogin:
 
 
 def get_mocked_metadata(*args, **kwargs):
-    path = Path(__file__).resolve().parent / "sample_json" / "analytics_metadata"
+    path = Path(__file__).resolve().parent / "sample_json" / "analytics_tabular_metadata"
     with open(path, "r") as f:
         return json.loads(f.read())
 

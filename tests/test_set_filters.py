@@ -11,7 +11,7 @@ from reportforce.report import set_filters, set_period, set_logic  # noqa: E402
 
 
 def get_mocked_metadata(*args, **kwargs):
-    path = Path(__file__).resolve().parent / "sample_json" / "analytics_metadata"
+    path = Path(__file__).resolve().parent / "sample_json" / "analytics_tabular_metadata"
     with open(path, "r") as f:
         return json.loads(f.read())
 

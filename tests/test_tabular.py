@@ -21,7 +21,7 @@ class FakeLogin:
 
 
 def get_mocked_metadata(*args, **kwargs):
-    path = Path(__file__).resolve().parent / "sample_json" / "analytics_metadata"
+    path = Path(__file__).resolve().parent / "sample_json" / "analytics_tabular_metadata"
     with open(path, "r") as f:
         return json.loads(f.read())
 
@@ -32,7 +32,7 @@ def get_json(json_file):
         return json.loads(f.read())
 
 
-jsons = [get_json("analytics_report_initial"), get_json("analytics_report")]
+jsons = [get_json("analytics_tabular_initial"), get_json("analytics_tabular")]
 
 
 class TestSalesforce(unittest.TestCase):
@@ -47,7 +47,6 @@ class TestSalesforce(unittest.TestCase):
     def test_columns(self):
         test = self.report.columns.tolist()
         expected = [
-            "index",
             "Opportunity Name",
             "Amount",
             "Lead Source",

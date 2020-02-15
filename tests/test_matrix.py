@@ -26,7 +26,7 @@ def get_json(json_file):
     with open(path, "r") as f:
         return json.loads(f.read())
 
-mocked_metadata = Mock(return_value = get_json("analytics_metadata_matrix"))
+mocked_metadata = Mock(return_value = get_json("analytics_matrix_metadata"))
 
 mocked_report = Mock(return_value = get_json("analytics_matrix"))
 

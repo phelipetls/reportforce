@@ -34,22 +34,23 @@ def get_json(json_file):
     with open(path, "r") as f:
         return json.loads(f.read())
 
+jsons = [get_json("analytics_summary_initial"), get_json("analytics_summary")]
 
 class TestSalesforce(unittest.TestCase):
     @patch("reportforce.report.get_metadata", get_mocked_metadata)
     @patch("reportforce.helpers.request.request_report")
     def setUp(self, mocked_request):
-        mocked_request.return_value = get_json("analytics_summary")
-        self.report = get_report("report_id", session=FakeLogin)
+        mocked_request.side_effect = jsons
+        self.report = get_report("report_id", id_column="label1", session=FakeLogin)
 
     def test_summary_length(self):
         length = len(self.report)
-        expected_length = 162
+        expected_length = 324
         self.assertEqual(length, expected_length)
 
     def test_summary_index(self):
         index = self.report.index.tolist()
-        expected_index = itertools.chain.from_iterable([[("label",) * 3] * 162])
+        expected_index = itertools.chain.from_iterable([[("label",) * 3] * 324])
         self.assertListEqual(index, list(expected_index))
 
     def test_summary_columns(self):
