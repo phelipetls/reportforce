@@ -86,40 +86,47 @@ def get_report(
 
 
 def get_tabular_report(report_id, id_column, metadata, session):
-    column_labels = parsers.get_column_labels(metadata)
-    id_index = list(column_labels.keys()).index(id_column) if id_column else None
-    return pd.concat(
-        map(
-            lambda x: pd.DataFrame(x, columns=column_labels),
-            tabular_report_generator(report_id, id_column, id_index, metadata, session),
-        )
-    ).reset_index()
-
-
-def tabular_report_generator(
-    report_id, id_column=None, id_index=None, metadata=None, session=None
-):
     """
-    Auxiliary function to generate reports until
+    Auxiliary function to deal with tabular reports
+    """
+    tabular_generator = tabular_report_generator(
+        report_id, id_column, metadata, session
+    )
+    return pd.concat(tabular_generator)
+
+
+
+def tabular_report_generator(report_id, id_column=None, metadata=None, session=None):
+    """
+    Auxiliary function to generate tabular reports until
     all data is returned, i.e. until "allData" in the
     JSON response body is "true".
     """
     url = base_url.format(session.instance_url, session.version, report_id)
 
-    report = request.request_report(url, headers=session.headers, json=metadata)
-    report_cells = parsers.get_tabular_cells(report)
-    yield report_cells
-
     already_seen = ""
-    while not report["allData"] and id_column:
-        already_seen += ",".join(cell[id_index] for cell in report_cells)
-        filtering.set_filters([(id_column, "!=", already_seen)], metadata)
+    columns_labels = parsers.get_column_labels(metadata)
+    if id_column:
+        id_index = list(columns_labels.keys()).index(id_column)
+    while True:
+        # getting what is need to build the dataframe
         report = request.request_report(url, headers=session.headers, json=metadata)
         report_cells = parsers.get_tabular_cells(report)
-        yield report_cells
+
+        # filtering out already seen values
+        if id_column:
+            already_seen += ",".join(cell[id_index] for cell in report_cells)
+            filtering.set_filters([(id_column, "!=", already_seen)], metadata)
+
+        yield pd.DataFrame(report_cells, columns=columns_labels)
+        if report["allData"] or not id_column:
+            break
 
 
 def get_matrix_report(report_id, metadata, session):
+    """
+    Auxiliary function to deal with matrix reports
+    """
     url = base_url.format(session.instance_url, session.version, report_id)
     matrix = request.request_report(url, headers=session.headers, json=metadata)
 
@@ -130,9 +137,9 @@ def get_matrix_report(report_id, metadata, session):
         parsers.get_groups(matrix["groupingsAcross"]["groupings"])
     )
 
-    cells = np.array(parsers.get_matrix_cells(matrix))
-    cells.shape = (len(indices), len(columns))
-    return pd.DataFrame(cells, index=indices, columns=columns)
+    report_cells = np.array(parsers.get_matrix_cells(matrix))
+    report_cells.shape = (len(indices), len(columns))
+    return pd.DataFrame(report_cells, index=indices, columns=columns)
 
 
 def get_summary_report(report_id, id_column, metadata, session):
@@ -186,6 +193,9 @@ def get_metadata(report_id, session=None):
     Function to get a report metadata information,
     which is used for filtering reports.
     """
+    if not session:
+        raise SessionNotFound
+
     url = (
         base_url.format(session.instance_url, session.version, report_id) + "/describe"
     )
