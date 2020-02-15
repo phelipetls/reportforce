@@ -56,9 +56,8 @@ def get_report(
         it can also be useful in general.
 
     session : object
-        A simple_salesforce's Salesforce object or
-        a reportforce.login.Login object, needed for
-        authentication.
+        An instance of simple_salesforce.Salesforce or
+        reportforce.login.Login, needed for authentication.
 
     Returns
     -------

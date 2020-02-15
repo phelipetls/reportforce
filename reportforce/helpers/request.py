@@ -3,6 +3,21 @@ import requests
 s = requests.Session()
 
 def request_report(url, **kwargs):
+    """
+    A wrapper around requests.post designed
+    to extract data from Salesforce.
+
+    Returns
+    -------
+    dict
+        A dictionary with the response body
+        contents to the requested report.
+
+    Raises
+    ------
+    ReportError
+        If the response body is an error JSON.
+    """
     report = s.post(url, **kwargs).json()
     try:
         raise ReportError(report[0]["errorCode"], report[0]["message"])
