@@ -1,11 +1,13 @@
 import copy
-import dateutil
 import requests
 import functools
+import itertools
+import numpy as np
 import pandas as pd
 
-from .helpers import parser
+from .helpers import parsers
 from .helpers import request
+from .helpers import filtering
 
 base_url = "https://{}/services/data/v{}/analytics/reports/{}"
 
@@ -70,24 +72,32 @@ def get_report(
     metadata = copy.deepcopy(get_metadata(report_id, session))
 
     if start and end:
-        set_period(start, end, metadata)
+        filtering.set_period(start, end, metadata)
     if logic:
-        set_logic(logic, metadata)
+        filtering.set_logic(logic, metadata)
     if filters:
-        set_filters(filters, metadata)
+        filtering.set_filters(filters, metadata)
 
-    column_labels = parser.get_column_labels_dict(metadata)
+    if metadata["reportMetadata"]["reportFormat"] == "TABULAR":
+        return get_tabular_report(report_id, id_column, metadata, session)
+    elif metadata["reportMetadata"]["reportFormat"] == "SUMMARY":
+        return get_summary_report(report_id, metadata, session)
+    elif metadata["reportMetadata"]["reportFormat"] == "MATRIX":
+        return get_matrix_report(report_id, metadata, session)
+
+
+def get_tabular_report(report_id, id_column, metadata, session):
+    column_labels = parsers.get_column_labels(metadata)
     id_index = list(column_labels.keys()).index(id_column) if id_column else None
-
     return pd.concat(
         map(
             lambda x: pd.DataFrame(x, columns=column_labels),
-            report_generator(report_id, id_column, id_index, metadata, session),
+            tabular_report_generator(report_id, id_column, id_index, metadata, session),
         )
     ).reset_index()
 
 
-def report_generator(
+def tabular_report_generator(
     report_id, id_column=None, id_index=None, metadata=None, session=None
 ):
     """
@@ -98,15 +108,15 @@ def report_generator(
     url = base_url.format(session.instance_url, session.version, report_id)
 
     report = request.request_report(url, headers=session.headers, json=metadata)
-    report_cells = parser.get_cells(report)
+    report_cells = parsers.get_tabular_cells(report)
     yield report_cells
 
     already_seen = ""
     while not report["allData"] and id_column:
         already_seen += ",".join(cell[id_index] for cell in report_cells)
-        set_filters([(id_column, "!=", already_seen)], metadata)
+        filtering.set_filters([(id_column, "!=", already_seen)], metadata)
         report = request.request_report(url, headers=session.headers, json=metadata)
-        report_cells = parser.get_cells(report)
+        report_cells = parsers.get_tabular_cells(report)
         yield report_cells
 
 
