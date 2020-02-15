@@ -9,6 +9,8 @@ operators_dict = {
     ">=": "greaterOrEqual",
     "<=": "lessOrEqual",
     "contains": "contains",
+    "not contains": "notContain",
+    "startswith": "startsWith",
 }
 
 
