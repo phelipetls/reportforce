@@ -80,7 +80,7 @@ def get_report(
     if metadata["reportMetadata"]["reportFormat"] == "TABULAR":
         return get_tabular_report(report_id, id_column, metadata, session)
     elif metadata["reportMetadata"]["reportFormat"] == "SUMMARY":
-        return get_summary_report(report_id, metadata, session)
+        return get_summary_report(report_id, id_column, metadata, session)
     elif metadata["reportMetadata"]["reportFormat"] == "MATRIX":
         return get_matrix_report(report_id, metadata, session)
 
@@ -135,25 +135,49 @@ def get_matrix_report(report_id, metadata, session):
     return pd.DataFrame(cells, index=indices, columns=columns)
 
 
-def get_summary_report(report_id, metadata, session):
+def get_summary_report(report_id, id_column, metadata, session):
+    """
+    Auxiliary function to deal with summary reports
+    """
+    summary_generator = summary_report_generator(
+        report_id, id_column, metadata, session
+    )
+    return pd.concat(summary_generator)
+
+
+def summary_report_generator(report_id, id_column, metadata, session):
     url = base_url.format(session.instance_url, session.version, report_id)
-    summary = request.request_report(url, headers=session.headers, json=metadata)
 
-    cells, number_cell_by_group = parsers.get_summary_cells(summary)
+    already_seen = ""
+    columns_labels = parsers.get_column_labels(metadata)
+    if id_column:
+        id_index = list(columns_labels.keys()).index(id_column)
+    while True:
+        summary = request.request_report(url, headers=session.headers, json=metadata)
 
+        # getting what is need to build dataframe
+        report_cells, cells_by_group = parsers.get_summary_cells(summary)
+        multi_index = summary_get_indices(summary, cells_by_group)
+
+        # filtering out already seen values
+        if id_column:
+            already_seen += ",".join(cell[id_index] for cell in report_cells)
+            filtering.set_filters([(id_column, "!=", already_seen)], metadata)
+
+        yield pd.DataFrame(report_cells, index=multi_index, columns=columns_labels)
+        if summary["allData"] or not id_column:
+            break
+
+
+def summary_get_indices(summary, cells_by_group):
     groups = parsers.get_groups(summary["groupingsDown"]["groupings"])
+    groups_frequency_pairs = zip(groups, cells_by_group)
 
-    repeat_groups = lambda x, z: x * z
-    groups_frequency_pairs = zip(groups, number_cell_by_group)
     repeated_groups = itertools.chain.from_iterable(
         itertools.starmap(itertools.repeat, groups_frequency_pairs)
     )
 
-    multi_index = pd.MultiIndex.from_tuples(repeated_groups)
-
-    columns = parsers.get_column_labels(metadata)
-
-    return pd.DataFrame(cells, index=multi_index, columns=columns)
+    return pd.MultiIndex.from_tuples(repeated_groups)
 
 
 @functools.lru_cache(maxsize=8)
