@@ -50,9 +50,9 @@ Now, if your report is less than 2000 lines. No need to worry much, this
 is all you need to do:
 
 ``` python
-from reportforce.report import get_report
+from reportforce import report
 
-get_report("REPORTID", session=session)
+report.get_report("00O1a000001YtFG", session=session)
 ```
 
 This will handle all report types.
@@ -66,7 +66,7 @@ Unfortunately, this is needed because the API doesn't provide a way to
 limit by a number of rows or something like that.
 
 ``` python
-get_report("REPORTID", id_column="COLUMN_WITH_UNIQUE_VALUES", session=session)
+report.get_report("00O1a000001YtFG", id_column="COLUMN_WITH_UNIQUE_VALUES", session=session)
 ```
 
 ### Filtering by dates
@@ -74,7 +74,7 @@ get_report("REPORTID", id_column="COLUMN_WITH_UNIQUE_VALUES", session=session)
 You can also filter the report by dates on the fly:
 
 ``` python
-get_report("REPORTID", start="01 December, 2019", end="31/01/2020", session=session)
+report.get_report("00O1a000001YtFG", start="01 December, 2019", end="31/01/2020", session=session)
 ```
 
 Note though that, to avoid ambiguity, the day must come first.
@@ -88,8 +88,11 @@ If you want to filter a report field, you may do it by passing
 a list of tuples to the filters parameter:
 
 ``` python
-get_report("REPORTID", filters=[("COLUMN_NAME", ">=", "VALUE")]
+report.get_report("00O1a000001YtFG", filters=[("COLUMN_NAME", ">=", "VALUE")]
 ```
+
+You can use your the typical logical operators as you would in Python, e.g.
+"!=", "==" etc., but also "contains", "not contains" and "startswith".
 
 ### Adding filter logic
 
@@ -98,7 +101,7 @@ already one in the report. Otherwise, you will get an error. You can do
 it as follows:
 
 ``` python
-get_report("REPORTID", logic="1 AND 2")
+report.get_report("00O1a000001YtFG", logic="1 AND 2")
 ```
 
 ## License
@@ -108,7 +111,8 @@ get_report("REPORTID", logic="1 AND 2")
 ## Contributing
 
 If you find a bug, an issue would be much welcomed!
-Likewise, if you think something could be improved, feel free to open a pull request.
+Likewise, if you think something could be improved,
+feel free to open a pull request.
 
 ## Support
 
