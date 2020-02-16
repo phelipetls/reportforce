@@ -1,6 +1,5 @@
 import re
 import copy
-import requests
 import functools
 import itertools
 import numpy as np
@@ -151,11 +150,18 @@ def tabular_report_generator(report_id, id_column=None, metadata=None, session=N
     """
     url = base_url.format(session.instance_url, session.version, report_id)
 
-    already_seen = ""
+    report = request_report.POST(url, headers=session.headers, json=metadata).json()
+    report_cells = parsers.get_tabular_cells(report)
     columns_labels = parsers.get_column_labels(metadata)
+
+    yield pd.DataFrame(report_cells, columns=columns_labels)
+
     if id_column:
+        already_seen = ""
+        filtering.set_filters([(id_column, "!=", already_seen)], metadata)
         id_index = list(columns_labels.keys()).index(id_column)
-    while True:
+
+    while not report["allData"] or not id_column:
         # getting what is need to build the dataframe
         report = request_report.POST(url, headers=session.headers, json=metadata).json()
         report_cells = parsers.get_tabular_cells(report)
@@ -163,11 +169,9 @@ def tabular_report_generator(report_id, id_column=None, metadata=None, session=N
         # filtering out already seen values
         if id_column:
             already_seen += ",".join(cell[id_index] for cell in report_cells)
-            filtering.set_filters([(id_column, "!=", already_seen)], metadata)
+            filtering.update_filter(-1, "value", already_seen, metadata)
 
         yield pd.DataFrame(report_cells, columns=columns_labels)
-        if report["allData"] or not id_column:
-            break
 
 
 def get_matrix_report(report_id, metadata, session):
@@ -202,27 +206,33 @@ def get_summary_report(report_id, id_column, metadata, session):
 def summary_report_generator(report_id, id_column, metadata, session):
     url = base_url.format(session.instance_url, session.version, report_id)
 
-    already_seen = ""
+    summary = request_report.POST(url, headers=session.headers, json=metadata).json()
+    summary_cells, cells_by_group = parsers.get_summary_cells(summary)
+    indices = summary_get_indices(summary, cells_by_group)
     columns_labels = parsers.get_column_labels(metadata)
+
+    yield pd.DataFrame(summary_cells, index=indices, columns=columns_labels)
+
     if id_column:
+        already_seen = ""
+        filtering.set_filters([(id_column, "!=", already_seen)], metadata)
         id_index = list(columns_labels.keys()).index(id_column)
-    while True:
+
+    while not summary["allData"] or not id_column:
         summary = request_report.POST(
             url, headers=session.headers, json=metadata
         ).json()
 
         # getting what is need to build dataframe
-        report_cells, cells_by_group = parsers.get_summary_cells(summary)
-        multi_index = summary_get_indices(summary, cells_by_group)
+        summary_cells, cells_by_group = parsers.get_summary_cells(summary)
+        indices = summary_get_indices(summary, cells_by_group)
 
         # filtering out already seen values
         if id_column:
-            already_seen += ",".join(cell[id_index] for cell in report_cells)
-            filtering.set_filters([(id_column, "!=", already_seen)], metadata)
+            already_seen += ",".join(cell[id_index] for cell in summary_cells)
+            filtering.update_filter(-1, "value", already_seen, metadata)
 
-        yield pd.DataFrame(report_cells, index=multi_index, columns=columns_labels)
-        if summary["allData"] or not id_column:
-            break
+        yield pd.DataFrame(summary_cells, index=indices, columns=columns_labels)
 
 
 def summary_get_indices(summary, cells_by_group):

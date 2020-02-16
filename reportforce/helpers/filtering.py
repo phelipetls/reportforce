@@ -25,6 +25,10 @@ def set_filters(filters, metadata):
         metadata["reportMetadata"]["reportFilters"].append(filter_dict)
 
 
+def update_filter(index, key, value, metadata):
+    metadata["reportMetadata"]["reportFilters"][index][key] = value
+
+
 def set_logic(logic, metadata):
     metadata["reportBooleanFilter"] = logic
 
