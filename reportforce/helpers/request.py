@@ -25,6 +25,15 @@ def request_report(url, **kwargs):
     except KeyError:
         return report
 
+def request_excel(url, **kwargs):
+    """
+    A wrapper around requests.get designed
+    to extract data from Salesforce.
+    """
+    report = s.get(url, **kwargs)
+    report.raise_for_status()
+    return report
+
 
 class ReportError(Exception):
     def __init__(self, code, msg):

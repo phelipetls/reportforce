@@ -1,3 +1,4 @@
+import re
 import copy
 import requests
 import functools
@@ -21,6 +22,7 @@ def get_report(
     filters=[],
     logic=None,
     session=None,
+    excel=None,
 ):
     """
     Function to retrieve a Salesforce tabular report
@@ -68,6 +70,9 @@ def get_report(
     if not session:
         raise SessionNotFound
 
+    if excel:
+        return get_excel(report_id, excel, session)
+
     metadata = copy.deepcopy(get_metadata(report_id, session))
 
     if start and end:
@@ -83,6 +88,47 @@ def get_report(
         return get_summary_report(report_id, id_column, metadata, session)
     elif metadata["reportMetadata"]["reportFormat"] == "MATRIX":
         return get_matrix_report(report_id, metadata, session)
+
+
+def get_excel(report_id, excel, session):
+    """
+    Auxiliary function to download a formatted
+    Excel spreadsheet of the report.
+
+    Parameters
+    ----------
+    report_id : str
+
+    excel : bool or str
+        If a non-empty string, it will serve as the filename.
+        If True, it will write to the filename Salesforce provides.
+
+    session : object
+        An instance of simple_salesforce.Salesforce or
+        reportforce.login.Login, needed for authentication.
+    """
+    url = base_url.format(session.instance_url, session.version, report_id)
+
+    spreadsheet_header = {
+        "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    }
+
+    headers = session.headers.copy()
+    headers.update(spreadsheet_header)
+
+    excel = request.request_excel(url, headers=headers)
+
+    if isinstance(excel, str):
+        filename = excel
+    else:
+        string = excel.headers["Content-Disposition"]
+        pattern = 'filename="(.*)"'
+        filename = re.search(pattern, string).group(1)
+
+    with open(filename, "wb") as excel_file:
+        excel_file.write(excel.content)
+
+    return
 
 
 def get_tabular_report(report_id, id_column, metadata, session):
