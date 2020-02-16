@@ -92,7 +92,7 @@ def get_tabular_report(report_id, id_column, metadata, session):
     tabular_generator = tabular_report_generator(
         report_id, id_column, metadata, session
     )
-    return pd.concat(tabular_generator)
+    return pd.concat(tabular_generator).reset_index()
 
 
 def tabular_report_generator(report_id, id_column=None, metadata=None, session=None):
