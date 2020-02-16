@@ -117,17 +117,17 @@ def get_excel(report_id, excel, session):
     headers = session.headers.copy()
     headers.update(spreadsheet_header)
 
-    excel = request_report.GET(url, headers=headers)
+    response = request_report.GET(url, headers=headers)
 
     if isinstance(excel, str):
         filename = excel
     else:
-        string = excel.headers["Content-Disposition"]
+        string = response.headers["Content-Disposition"]
         pattern = 'filename="(.*)"'
         filename = re.search(pattern, string).group(1)
 
     with open(filename, "wb") as excel_file:
-        excel_file.write(excel.content)
+        excel_file.write(response.content)
 
     return
 
