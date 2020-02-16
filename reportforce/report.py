@@ -70,9 +70,6 @@ def get_report(
     if not session:
         raise SessionNotFound
 
-    if excel:
-        return get_excel(report_id, excel, session)
-
     metadata = copy.deepcopy(get_metadata(report_id, session))
 
     if start and end:
@@ -82,11 +79,16 @@ def get_report(
     if filters:
         filtering.set_filters(filters, metadata)
 
-    if metadata["reportMetadata"]["reportFormat"] == "TABULAR":
+    if excel:
+        return get_excel(report_id, excel, metadata, session)
+
+    report_format = metadata["reportMetadata"]["reportFormat"]
+
+    if report_format == "TABULAR":
         return get_tabular_report(report_id, id_column, metadata, session)
-    elif metadata["reportMetadata"]["reportFormat"] == "SUMMARY":
+    elif report_format == "SUMMARY":
         return get_summary_report(report_id, id_column, metadata, session)
-    elif metadata["reportMetadata"]["reportFormat"] == "MATRIX":
+    elif report_format == "MATRIX":
         return get_matrix_report(report_id, metadata, session)
 
 
