@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from reportforce.report import get_report  # noqa: E402
+from reportforce.report import get_report, get_metadata # noqa: E402
 from reportforce.report import SessionNotFound  # noqa: E402
 from reportforce.helpers.request_report import ReportError  # noqa: E402
 
@@ -43,7 +43,12 @@ class TestSalesforce(unittest.TestCase):
         with self.assertRaises(ReportError):
             get_report("report_id", session=FakeLogin)
 
-    def test_if_raises_session_not_found(self):
+    def test_if_raises_session_not_found_metadata(self):
+        with self.assertRaises(SessionNotFound):
+            get_metadata("report_id")
+
+
+    def test_if_raises_session_not_found_report(self):
         with self.assertRaises(SessionNotFound):
             get_report("report_id")
 
