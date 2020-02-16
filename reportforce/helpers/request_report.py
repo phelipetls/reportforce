@@ -3,7 +3,27 @@ import requests
 s = requests.Session()
 
 
-def request_report(url, **kwargs):
+def handle_error(request):
+    """
+    Decorator to handle Salesforce request errors.
+    """
+
+    def handler(*args, **kwargs):
+        response = request(*args, **kwargs)
+        if response.status_code != 200:
+            try:
+                error = response.json()[0]
+                raise ReportError(error["errorCode"], error["message"])
+            except KeyError:
+                response.raise_for_status()
+        else:
+            return response
+
+    return handler
+
+
+@handle_error
+def POST(url, **kwargs):
     """
     A wrapper around requests.post designed
     to extract data from Salesforce.
@@ -19,20 +39,16 @@ def request_report(url, **kwargs):
     ReportError
         If the response body is an error JSON.
     """
-    report = s.post(url, **kwargs).json()
-    try:
-        raise ReportError(report[0]["errorCode"], report[0]["message"])
-    except KeyError:
-        return report
+    return s.post(url, **kwargs)
 
-def request_excel(url, **kwargs):
+
+@handle_error
+def GET(url, **kwargs):
     """
     A wrapper around requests.get designed
     to extract data from Salesforce.
     """
-    report = s.get(url, **kwargs)
-    report.raise_for_status()
-    return report
+    return s.get(url, **kwargs)
 
 
 class ReportError(Exception):

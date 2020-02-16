@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from reportforce.report import get_report  # noqa: E402
 from reportforce.report import SessionNotFound  # noqa: E402
-from reportforce.helpers.request import ReportError  # noqa: E402
+from reportforce.helpers.request_report import ReportError  # noqa: E402
 
 
 class FakeLogin:

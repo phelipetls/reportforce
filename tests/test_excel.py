@@ -32,7 +32,7 @@ headers = {
 
 
 class TestSalesforce(unittest.TestCase):
-    @patch("reportforce.helpers.request.request_excel")
+    @patch("reportforce.helpers.request_report.GET")
     def setUp(self, mocked_request):
         mocked_request.return_value = Mock(headers=headers, content=b"1,2,3\na,b,c")
 

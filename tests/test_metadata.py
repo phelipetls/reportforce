@@ -31,7 +31,7 @@ class TestSalesforce(unittest.TestCase):
     url = "https://dummy.salesforce.com/services/data/v47.0/analytics/reports/ID/describe"
     headers = {"Authorization": "Bearer sessionId"}
 
-    @patch("reportforce.report.requests.get")
+    @patch("reportforce.report.request_report.GET")
     def test_request_call_to_get_metadata(self, mockrequest):
         get_metadata("ID", session=FakeLogin)
         mockrequest.assert_called_with(self.url, headers=self.headers)

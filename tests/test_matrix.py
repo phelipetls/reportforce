@@ -21,23 +21,25 @@ class FakeLogin:
     headers = {"Authorization": "Bearer sessionId"}
 
 
+def get_metadata(*args, **kwargs):
+    path = Path(__file__).resolve().parent / "sample_json" / "analytics_matrix_metadata"
+    with open(path, "r") as f:
+        return json.loads(f.read())
+
+
 def get_json(json_file):
     path = Path(__file__).resolve().parent / "sample_json" / json_file
     with open(path, "r") as f:
         return json.loads(f.read())
 
 
-mocked_metadata = Mock(return_value=get_json("analytics_matrix_metadata"))
-
-mocked_report = Mock(return_value=get_json("analytics_matrix"))
-
-
 class TestMatrixReport(unittest.TestCase):
     maxDiff = None
 
-    @patch("reportforce.report.get_metadata", mocked_metadata)
-    @patch("reportforce.report.request.request_report", mocked_report)
-    def test_dataframe(self):
+    @patch("reportforce.report.get_metadata", get_metadata)
+    @patch("reportforce.report.request_report.POST")
+    def test_dataframe(self, mocked_report):
+        mocked_report().json.return_value = get_json("analytics_matrix")
         indices = pd.MultiIndex.from_tuples(
             [
                 ("Supervisor1", "Worker1"),

@@ -40,9 +40,9 @@ jsons = [get_json("analytics_summary_initial"), get_json("analytics_summary")]
 
 class TestSalesforce(unittest.TestCase):
     @patch("reportforce.report.get_metadata", get_mocked_metadata)
-    @patch("reportforce.helpers.request.request_report")
+    @patch("reportforce.helpers.request_report.POST")
     def setUp(self, mocked_request):
-        mocked_request.side_effect = jsons
+        mocked_request().json.side_effect = jsons
         self.report = get_report("report_id", id_column="label1", session=FakeLogin)
 
     def test_summary_length(self):
@@ -70,6 +70,6 @@ class TestSalesforce(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(failfast=True)
 
 # vi: nowrap

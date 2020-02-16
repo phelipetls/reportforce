@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 from .helpers import parsers
-from .helpers import request
+from .helpers import request_report
 from .helpers import filtering
 
 base_url = "https://{}/services/data/v{}/analytics/reports/{}"
@@ -118,7 +118,7 @@ def get_excel(report_id, excel, session):
     headers = session.headers.copy()
     headers.update(spreadsheet_header)
 
-    excel = request.request_excel(url, headers=headers)
+    excel = request_report.GET(url, headers=headers)
 
     if isinstance(excel, str):
         filename = excel
@@ -157,7 +157,7 @@ def tabular_report_generator(report_id, id_column=None, metadata=None, session=N
         id_index = list(columns_labels.keys()).index(id_column)
     while True:
         # getting what is need to build the dataframe
-        report = request.request_report(url, headers=session.headers, json=metadata)
+        report = request_report.POST(url, headers=session.headers, json=metadata).json()
         report_cells = parsers.get_tabular_cells(report)
 
         # filtering out already seen values
@@ -175,7 +175,7 @@ def get_matrix_report(report_id, metadata, session):
     Auxiliary function to deal with matrix reports
     """
     url = base_url.format(session.instance_url, session.version, report_id)
-    matrix = request.request_report(url, headers=session.headers, json=metadata)
+    matrix = request_report.POST(url, headers=session.headers, json=metadata).json()
 
     indices = pd.MultiIndex.from_tuples(
         parsers.get_groups(matrix["groupingsDown"]["groupings"])
@@ -207,7 +207,9 @@ def summary_report_generator(report_id, id_column, metadata, session):
     if id_column:
         id_index = list(columns_labels.keys()).index(id_column)
     while True:
-        summary = request.request_report(url, headers=session.headers, json=metadata)
+        summary = request_report.POST(
+            url, headers=session.headers, json=metadata
+        ).json()
 
         # getting what is need to build dataframe
         report_cells, cells_by_group = parsers.get_summary_cells(summary)
@@ -246,7 +248,7 @@ def get_metadata(report_id, session=None):
     url = (
         base_url.format(session.instance_url, session.version, report_id) + "/describe"
     )
-    return requests.get(url, headers=session.headers).json()
+    return request_report.GET(url, headers=session.headers).json()
 
 
 class SessionNotFound(Exception):
