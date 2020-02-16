@@ -92,7 +92,7 @@
         "presentationOptions": {
             "hasStackedSummaries": true
         },
-        "reportBooleanFilter": "reportBooleanFilter",
+        "reportBooleanFilter": "(((1 AND 2) AND 3) OR 4)",
         "reportFilters": [
             {
                 "column": "column",

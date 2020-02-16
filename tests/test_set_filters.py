@@ -64,6 +64,11 @@ class TestSalesforce(unittest.TestCase):
         ]
         self.assertEqual(test, expected)
 
+    def test_increment_logical_filter(self):
+        test = self.metadata["reportMetadata"]["reportBooleanFilter"]
+        expected = "(((1 AND 2) AND 3) OR 4) AND 5"
+        self.assertEqual(test, expected)
+
 
 if __name__ == "__main__":
     unittest.main()

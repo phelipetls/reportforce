@@ -1,3 +1,5 @@
+import re
+
 from . import parsers
 from dateutil import parser
 
@@ -27,6 +29,14 @@ def set_filters(filters, metadata):
 
 def update_filter(index, key, value, metadata):
     metadata["reportMetadata"]["reportFilters"][index][key] = value
+
+
+def increment_logical_filter(metadata):
+    logic = metadata["reportMetadata"]["reportBooleanFilter"]
+    if logic:
+        last_number = re.search(r"(\d)\)*$", logic).group(1)
+        new_logic = logic + " AND {}".format(int(last_number) + 1)
+        metadata["reportMetadata"]["reportBooleanFilter"] = new_logic
 
 
 def set_logic(logic, metadata):

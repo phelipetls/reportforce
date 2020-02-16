@@ -157,9 +157,11 @@ def tabular_report_generator(report_id, id_column=None, metadata=None, session=N
     yield pd.DataFrame(report_cells, columns=columns_labels)
 
     if id_column:
+        id_index = list(columns_labels.keys()).index(id_column)
+
         already_seen = ""
         filtering.set_filters([(id_column, "!=", already_seen)], metadata)
-        id_index = list(columns_labels.keys()).index(id_column)
+        filtering.increment_logical_filter(metadata)
 
     while not report["allData"] or not id_column:
         # getting what is need to build the dataframe
@@ -214,9 +216,11 @@ def summary_report_generator(report_id, id_column, metadata, session):
     yield pd.DataFrame(summary_cells, index=indices, columns=columns_labels)
 
     if id_column:
+        id_index = list(columns_labels.keys()).index(id_column)
+
         already_seen = ""
         filtering.set_filters([(id_column, "!=", already_seen)], metadata)
-        id_index = list(columns_labels.keys()).index(id_column)
+        filtering.increment_logical_filter(metadata)
 
     while not summary["allData"] or not id_column:
         summary = request_report.POST(
