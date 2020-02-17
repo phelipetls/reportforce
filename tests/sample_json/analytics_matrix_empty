@@ -1,0 +1,386 @@
+{
+    "attributes": {
+        "describeUrl": "/services/data/v47.0/analytics/reports/randomID/describe",
+        "instancesUrl": "/services/data/v47.0/analytics/reports/randomID/instances",
+        "reportId": "reportId",
+        "reportName": "reportName",
+        "type": "Report"
+    },
+    "allData": true,
+    "factMap": {
+        "T!T": {
+            "aggregates": [
+                {
+                    "label": "1",
+                    "value": 1.0
+                }
+            ],
+            "rows": []
+        }
+    },
+    "groupingsAcross": {
+        "groupings": [
+            {
+                "groupings": [
+                    {
+                        "groupings": [],
+                        "key": "0_0",
+                        "label": "DeliveryDay1",
+                        "value": "DeliveryDay1"
+                    },
+                    {
+                        "groupings": [],
+                        "key": "0_1",
+                        "label": "DeliveryDay2",
+                        "value": "DeliveryDay2"
+                    },
+                    {
+                        "groupings": [],
+                        "key": "0_2",
+                        "label": "DeliveryDay3",
+                        "value": "DeliveryDay3"
+                    },
+                    {
+                        "groupings": [],
+                        "key": "0_3",
+                        "label": "DeliveryDay4",
+                        "value": "DeliveryDay4"
+                    }
+                ],
+                "key": "0",
+                "label": "Product",
+                "value": "ProductValue"
+            }
+        ]
+    },
+    "groupingsDown": {
+        "groupings": [
+            {
+                "groupings": [
+                    {
+                        "groupings": [],
+                        "key": "0_0",
+                        "label": "Worker1",
+                        "value": "randomID"
+                    },
+                    {
+                        "groupings": [],
+                        "key": "0_1",
+                        "label": "Worker2",
+                        "value": "randomID"
+                    }
+                ],
+                "key": "0",
+                "label": "Supervisor1",
+                "value": "randomID"
+            },
+            {
+                "groupings": [
+                    {
+                        "groupings": [],
+                        "key": "1_0",
+                        "label": "Worker3",
+                        "value": "randomID"
+                    },
+                    {
+                        "groupings": [],
+                        "key": "1_1",
+                        "label": "Worker4",
+                        "value": "randomID"
+                    },
+                    {
+                        "groupings": [],
+                        "key": "1_2",
+                        "label": "Worker5",
+                        "value": "randomID"
+                    },
+                    {
+                        "groupings": [],
+                        "key": "1_3",
+                        "label": "Worker6",
+                        "value": "randomID"
+                    },
+                    {
+                        "groupings": [],
+                        "key": "1_4",
+                        "label": "Worker7",
+                        "value": "randomID"
+                    },
+                    {
+                        "groupings": [],
+                        "key": "1_5",
+                        "label": "Worker8",
+                        "value": "randomID"
+                    }
+                ],
+                "key": "1",
+                "label": "Supervisor2",
+                "value": "randomID"
+            },
+            {
+                "groupings": [
+                    {
+                        "groupings": [],
+                        "key": "2_0",
+                        "label": "Worker9",
+                        "value": "randomID"
+                    }
+                ],
+                "key": "2",
+                "label": "Supervisor3",
+                "value": "randomID"
+            },
+            {
+                "groupings": [
+                    {
+                        "groupings": [],
+                        "key": "3_0",
+                        "label": "Worker10",
+                        "value": "randomID"
+                    },
+                    {
+                        "groupings": [],
+                        "key": "3_1",
+                        "label": "Worker11",
+                        "value": "randomID"
+                    },
+                    {
+                        "groupings": [],
+                        "key": "3_2",
+                        "label": "Worker12",
+                        "value": "randomID"
+                    }
+                ],
+                "key": "3",
+                "label": "Supervisor4",
+                "value": "randomID"
+            }
+        ]
+    },
+    "hasDetailRows": true,
+    "picklistColors": {},
+    "reportExtendedMetadata": {
+        "aggregateColumnInfo": {
+            "aggregate": {
+                "dataType": "double",
+                "label": "label"
+            }
+        },
+        "availableDashboardSettings": null,
+        "detailColumnInfo": {
+            "column": {
+                "dataType": "double",
+                "filterValues": [],
+                "filterable": true,
+                "inactiveFilterValues": [],
+                "isLookup": false,
+                "label": "label",
+                "uniqueCountable": true
+            }
+        },
+        "groupingColumnInfo": {
+            "column1": {
+                "dataType": "string",
+                "filterValues": [],
+                "filterable": true,
+                "groupingLevel": 0,
+                "inactiveFilterValues": [],
+                "isLookup": true,
+                "label": "label",
+                "uniqueCountable": true
+            },
+            "column2": {
+                "dataType": "string",
+                "filterValues": [],
+                "filterable": true,
+                "groupingLevel": 1,
+                "inactiveFilterValues": [],
+                "isLookup": true,
+                "label": "label",
+                "uniqueCountable": true
+            },
+            "column3": {
+                "dataType": "string",
+                "filterValues": [],
+                "filterable": true,
+                "groupingLevel": 0,
+                "inactiveFilterValues": [],
+                "isLookup": false,
+                "label": "label",
+                "uniqueCountable": true
+            },
+            "column4": {
+                "dataType": "string",
+                "filterValues": [],
+                "filterable": true,
+                "groupingLevel": 1,
+                "inactiveFilterValues": [],
+                "isLookup": false,
+                "label": "label",
+                "uniqueCountable": true
+            }
+        }
+    },
+    "reportMetadata": {
+        "aggregates": [
+            "aggregate"
+        ],
+        "chart": {
+            "chartType": "Pie",
+            "combineSmallGroups": false,
+            "groupings": [
+                "grouping"
+            ],
+            "hasLegend": true,
+            "legendPosition": "OnChart",
+            "referenceLineColors": [
+                null
+            ],
+            "referenceLineValues": [
+                null
+            ],
+            "showChartPercentages": false,
+            "showChartTotal": false,
+            "showChartValues": true,
+            "summaries": [
+                "summary"
+            ],
+            "summaryAxisLocations": [
+                "Y"
+            ],
+            "summaryColors": [
+                null
+            ],
+            "summaryVisualizationTypes": [
+                "Column"
+            ],
+            "title": "title"
+        },
+        "crossFilters": [],
+        "currency": null,
+        "dashboardSetting": null,
+        "description": null,
+        "detailColumns": [
+            "column"
+        ],
+        "developerName": "developerName",
+        "division": null,
+        "folderId": "randomID",
+        "groupingsAcross": [
+            {
+                "dateGranularity": "None",
+                "name": "Product",
+                "sortAggregate": null,
+                "sortOrder": "Asc"
+            },
+            {
+                "dateGranularity": "None",
+                "name": "Delivery Day",
+                "sortAggregate": null,
+                "sortOrder": "Asc"
+            }
+        ],
+        "groupingsDown": [
+            {
+                "dateGranularity": "None",
+                "name": "Supervisor",
+                "sortAggregate": null,
+                "sortOrder": "Asc"
+            },
+            {
+                "dateGranularity": "None",
+                "name": "Worker",
+                "sortAggregate": null,
+                "sortOrder": "Asc"
+            }
+        ],
+        "hasDetailRows": true,
+        "hasRecordCount": false,
+        "historicalSnapshotDates": [],
+        "id": "randomID",
+        "name": "DIAS ENTREGA OG SUPERVISOR",
+        "presentationOptions": {
+            "hasStackedSummaries": true
+        },
+        "reportBooleanFilter": null,
+        "reportFilters": [
+            {
+                "column": "column",
+                "filterType": "fieldValue",
+                "isRunPageEditable": false,
+                "operator": "equals",
+                "value": "value"
+            },
+            {
+                "column": "column",
+                "filterType": "fieldValue",
+                "isRunPageEditable": false,
+                "operator": "contains",
+                "value": "value"
+            },
+            {
+                "column": "column",
+                "filterType": "fieldValue",
+                "isRunPageEditable": false,
+                "operator": "equals",
+                "value": "value"
+            },
+            {
+                "column": "column",
+                "filterType": "fieldValue",
+                "isRunPageEditable": false,
+                "operator": "equals",
+                "value": "value"
+            },
+            {
+                "column": "column",
+                "filterType": "fieldValue",
+                "isRunPageEditable": true,
+                "operator": "equals",
+                "value": "value"
+            },
+            {
+                "column": "column",
+                "filterType": "fieldValue",
+                "isRunPageEditable": true,
+                "operator": "notEqual",
+                "value": "value"
+            },
+            {
+                "column": "column",
+                "filterType": "fieldValue",
+                "isRunPageEditable": true,
+                "operator": "equals",
+                "value": "value"
+            }
+        ],
+        "reportFormat": "MATRIX",
+        "reportType": {
+            "label": "ReportName",
+            "type": "ReportNameAPI"
+        },
+        "saveRoleHierarchy": false,
+        "scope": "organization",
+        "showGrandTotal": true,
+        "showSubtotals": true,
+        "sortBy": [],
+        "standardDateFilter": {
+            "column": "CLOSE_DATE",
+            "durationValue": "CUSTOM",
+            "endDate": "2019-04-15",
+            "startDate": "2019-04-15"
+        },
+        "standardFilters": [
+            {
+                "name": "open",
+                "value": "all"
+            },
+            {
+                "name": "probability",
+                "value": ">0"
+            }
+        ],
+        "supportsRoleHierarchy": true,
+        "userOrHierarchyFilterId": null
+    }
+}

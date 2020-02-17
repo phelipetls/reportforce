@@ -163,14 +163,17 @@ def get_matrix_report(report_id, metadata, session):
     url = base_url.format(session.instance_url, session.version, report_id)
     matrix = request_report.POST(url, headers=session.headers, json=metadata).json()
 
-    indices = pd.MultiIndex.from_tuples(
-        parsers.get_groups(matrix["groupingsDown"]["groupings"])
-    )
-    columns = pd.MultiIndex.from_tuples(
-        parsers.get_groups(matrix["groupingsAcross"]["groupings"])
-    )
+    if len(matrix["factMap"]) == 1:
+        return pd.DataFrame()
 
     report_cells = np.array(parsers.get_matrix_cells(matrix))
+
+    groupings_down = matrix["groupingsDown"]["groupings"]
+    groupings_across = matrix["groupingsAcross"]["groupings"]
+
+    indices = pd.MultiIndex.from_tuples(parsers.get_groups(groupings_down))
+    columns = pd.MultiIndex.from_tuples(parsers.get_groups(groupings_across))
+
     report_cells.shape = (len(indices), len(columns))
     return pd.DataFrame(report_cells, index=indices, columns=columns)
 

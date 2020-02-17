@@ -86,6 +86,14 @@ class TestMatrixReport(unittest.TestCase):
         pd.testing.assert_frame_equal(expected_df, df)
 
 
+    @patch("reportforce.report.get_metadata", get_metadata)
+    @patch("reportforce.report.request_report.POST")
+    def test_empty_dataframe(self, mocked_report):
+        mocked_report().json.return_value = get_json("analytics_matrix_empty")
+        df = reportforce.report.get_report("ReportID", session=FakeLogin)
+        self.assertTrue(df.empty)
+
+
 if __name__ == "__main__":
     unittest.main()
 
