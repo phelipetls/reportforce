@@ -1,0 +1,35 @@
+import pandas as pd
+
+from .. import helpers
+
+base_url = "https://{}/services/data/v{}/analytics/reports/{}"
+
+
+def report_generator(get_report):
+    def generator(report_id, id_column, metadata, session):
+        url = base_url.format(session.instance_url, session.version, report_id)
+
+        report, report_cells, indices = get_report(url, metadata, session)
+        columns_labels = helpers.parsers.get_column_labels(metadata)
+
+        yield pd.DataFrame(report_cells, index=indices, columns=columns_labels)
+
+        if id_column:
+            id_index = list(columns_labels.keys()).index(id_column)
+
+            already_seen = ""
+            helpers.filtering.set_filters([(id_column, "!=", already_seen)], metadata)
+            helpers.filtering.increment_logical_filter(metadata)
+
+            while not report["allData"]:
+                # getting what is need to build the dataframe
+                report, report_cells, indices = get_report(url, metadata, session)
+
+                # helpers.filtering out already seen values
+                if id_column:
+                    already_seen += ",".join(cell[id_index] for cell in report_cells)
+                    helpers.filtering.update_filter(-1, "value", already_seen, metadata)
+
+                yield pd.DataFrame(report_cells, index=indices, columns=columns_labels)
+
+    return generator

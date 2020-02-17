@@ -8,6 +8,7 @@ import pandas as pd
 from .helpers import parsers
 from .helpers import request_report
 from .helpers import filtering
+from .helpers import report_generator
 
 base_url = "https://{}/services/data/v{}/analytics/reports/{}"
 
@@ -142,38 +143,17 @@ def get_tabular_report(report_id, id_column, metadata, session):
     return pd.concat(tabular_generator).reset_index(drop=True)
 
 
-def tabular_report_generator(report_id, id_column=None, metadata=None, session=None):
+@report_generator.report_generator
+def tabular_report_generator(url, metadata=None, session=None):
     """
     Auxiliary function to generate tabular reports until
     all data is returned, i.e. until "allData" in the
     JSON response body is "true".
     """
-    url = base_url.format(session.instance_url, session.version, report_id)
-
-    report = request_report.POST(url, headers=session.headers, json=metadata).json()
-    report_cells = parsers.get_tabular_cells(report)
-    columns_labels = parsers.get_column_labels(metadata)
-
-    yield pd.DataFrame(report_cells, columns=columns_labels)
-
-    if id_column:
-        id_index = list(columns_labels.keys()).index(id_column)
-
-        already_seen = ""
-        filtering.set_filters([(id_column, "!=", already_seen)], metadata)
-        filtering.increment_logical_filter(metadata)
-
-    while not report["allData"] or not id_column:
-        # getting what is need to build the dataframe
-        report = request_report.POST(url, headers=session.headers, json=metadata).json()
-        report_cells = parsers.get_tabular_cells(report)
-
-        # filtering out already seen values
-        if id_column:
-            already_seen += ",".join(cell[id_index] for cell in report_cells)
-            filtering.update_filter(-1, "value", already_seen, metadata)
-
-        yield pd.DataFrame(report_cells, columns=columns_labels)
+    tabular = request_report.POST(url, headers=session.headers, json=metadata).json()
+    tabular_cells = parsers.get_tabular_cells(tabular)
+    indices = None
+    return tabular, tabular_cells, indices
 
 
 def get_matrix_report(report_id, metadata, session):
@@ -205,38 +185,13 @@ def get_summary_report(report_id, id_column, metadata, session):
     return pd.concat(summary_generator)
 
 
-def summary_report_generator(report_id, id_column, metadata, session):
-    url = base_url.format(session.instance_url, session.version, report_id)
-
+@report_generator.report_generator
+def summary_report_generator(url, metadata, session):
     summary = request_report.POST(url, headers=session.headers, json=metadata).json()
     summary_cells, cells_by_group = parsers.get_summary_cells(summary)
     indices = summary_get_indices(summary, cells_by_group)
-    columns_labels = parsers.get_column_labels(metadata)
 
-    yield pd.DataFrame(summary_cells, index=indices, columns=columns_labels)
-
-    if id_column:
-        id_index = list(columns_labels.keys()).index(id_column)
-
-        already_seen = ""
-        filtering.set_filters([(id_column, "!=", already_seen)], metadata)
-        filtering.increment_logical_filter(metadata)
-
-    while not summary["allData"] or not id_column:
-        summary = request_report.POST(
-            url, headers=session.headers, json=metadata
-        ).json()
-
-        # getting what is need to build dataframe
-        summary_cells, cells_by_group = parsers.get_summary_cells(summary)
-        indices = summary_get_indices(summary, cells_by_group)
-
-        # filtering out already seen values
-        if id_column:
-            already_seen += ",".join(cell[id_index] for cell in summary_cells)
-            filtering.update_filter(-1, "value", already_seen, metadata)
-
-        yield pd.DataFrame(summary_cells, index=indices, columns=columns_labels)
+    return summary, summary_cells, indices
 
 
 def summary_get_indices(summary, cells_by_group):
