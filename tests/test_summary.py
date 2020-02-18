@@ -35,15 +35,16 @@ def get_json(json_file):
         return json.loads(f.read())
 
 
-jsons = [get_json("analytics_summary_initial"), get_json("analytics_summary")]
-
-
 class TestSalesforce(unittest.TestCase):
     @patch("reportforce.report.get_metadata", get_mocked_metadata)
     @patch("reportforce.helpers.request_report.POST")
     def setUp(self, mocked_request):
-        mocked_request().json.side_effect = jsons
-        self.report = get_report("report_id", id_column="label1", session=FakeLogin)
+        mocked_report = get_json("analytics_summary")
+
+        with patch.dict(mocked_report, mocked_report, allData = False, clear=True):
+            mocked_request().json.side_effect = [mocked_report] * 2
+
+            self.report = get_report("report_id", id_column="label1", session=FakeLogin)
 
     def test_summary_length(self):
         length = len(self.report)
