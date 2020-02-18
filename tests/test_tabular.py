@@ -34,17 +34,18 @@ def get_json(json_file):
         return json.loads(f.read())
 
 
-jsons = [get_json("analytics_tabular_initial"), get_json("analytics_tabular")]
-
-
 class TestSalesforce(unittest.TestCase):
     @patch("reportforce.report.get_metadata", get_mocked_metadata)
     @patch("reportforce.helpers.request_report.POST")
     def setUp(self, mocked_request):
-        mocked_request().json.side_effect = jsons
-        self.report = get_report(
-            "report_id", id_column="Opportunity Name", session=FakeLogin
-        )
+        mocked_report = get_json("analytics_tabular")
+
+        with patch.dict(mocked_report, mocked_report, allData=False, clear=True):
+            mocked_request().json.side_effect = [mocked_report] * 2
+
+            self.report = get_report(
+                "report_id", id_column="Opportunity Name", session=FakeLogin
+            )
 
     def test_columns(self):
         test = self.report.columns.tolist()
