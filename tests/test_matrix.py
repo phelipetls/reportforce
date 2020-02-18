@@ -85,13 +85,19 @@ class TestMatrixReport(unittest.TestCase):
         df = reportforce.report.get_report("ReportID", session=FakeLogin)
         pd.testing.assert_frame_equal(expected_df, df)
 
-
     @patch("reportforce.report.get_metadata", get_metadata)
     @patch("reportforce.report.request_report.POST")
-    def test_empty_dataframe(self, mocked_report):
-        mocked_report().json.return_value = get_json("analytics_matrix_empty")
-        df = reportforce.report.get_report("ReportID", session=FakeLogin)
-        self.assertTrue(df.empty)
+    def test_empty_dataframe(self, mocked_request):
+        mocked_report = get_json("analytics_matrix")
+        mocked_factmap = {
+            "T!T": {"aggregates": {"label": "label", "value": "value"}, "rows": []}
+        }
+
+        with patch.dict(mocked_report, mocked_report, factMap=mocked_factmap):
+            mocked_request().json.return_value = mocked_report
+
+            df = reportforce.report.get_report("ReportID", session=FakeLogin)
+            self.assertTrue(df.empty)
 
 
 if __name__ == "__main__":
