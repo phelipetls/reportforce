@@ -21,7 +21,9 @@ class FakeLogin:
 
 
 def get_mocked_metadata(*args, **kwargs):
-    path = Path(__file__).resolve().parent / "sample_json" / "analytics_tabular_metadata"
+    path = (
+        Path(__file__).resolve().parent / "sample_json" / "analytics_tabular_metadata"
+    )
     with open(path, "r") as f:
         return json.loads(f.read())
 
@@ -64,6 +66,26 @@ class TestSalesforce(unittest.TestCase):
         test = len(self.report)
         expected = 2
         self.assertEqual(test, expected)
+
+
+class TestEmptyReport(unittest.TestCase):
+    @patch("reportforce.report.get_metadata", get_mocked_metadata)
+    @patch("reportforce.helpers.request_report.POST")
+    def setUp(self, mocked_request):
+        mocked_report = get_json("analytics_tabular")
+        mocked_factmap = {
+            "factMap": {"T!T": {"aggregates": {"label": 0, "value": 0}, "rows": []}}
+        }
+
+        with patch.dict(mocked_report, mocked_factmap):
+            mocked_request().json.return_value = mocked_report
+
+            self.report = get_report(
+                "report_id", id_column="Opportunity Name", session=FakeLogin
+            )
+
+    def test_empty_report(self):
+        self.assertTrue(self.report.empty)
 
 
 if __name__ == "__main__":
