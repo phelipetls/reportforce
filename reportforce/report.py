@@ -191,6 +191,10 @@ def get_summary_report(report_id, id_column, metadata, session):
 @report_generator.report_generator
 def summary_report_generator(url, metadata, session):
     summary = request_report.POST(url, headers=session.headers, json=metadata).json()
+
+    if len(summary["factMap"]) == 1:
+        return summary, [], None
+
     summary_cells, cells_by_group = parsers.get_summary_cells(summary)
     indices = summary_get_indices(summary, cells_by_group)
 

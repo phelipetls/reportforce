@@ -11,8 +11,6 @@ def report_generator(get_report):
 
         report, report_cells, indices = get_report(url, metadata, session)
 
-        if len(report["factMap"]) == 1:
-            return pd.DataFrame()
 
         columns_labels = helpers.parsers.get_column_labels(metadata)
 
