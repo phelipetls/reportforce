@@ -69,6 +69,23 @@ class TestSalesforce(unittest.TestCase):
         self.assertEqual(columns, expected_columns)
 
 
+class TestEmptyReport(unittest.TestCase):
+    @patch("reportforce.report.get_metadata", get_mocked_metadata)
+    @patch("reportforce.helpers.request_report.POST")
+    def setUp(self, mocked_request):
+
+        mocked_report = get_json("analytics_summary")
+        mocked_factmap = {'factMap': {'T!T': {'aggregates': {'label': 0, 'value': 0}}}}
+
+        with patch.dict(mocked_report, mocked_factmap):
+            mocked_request().json.return_value = mocked_report
+
+            self.report = get_report("report_id", id_column="label1", session=FakeLogin)
+
+    def test_if_report_is_empty(self):
+        self.assertTrue(self.report.empty)
+
+
 if __name__ == "__main__":
     unittest.main(failfast=True)
 
