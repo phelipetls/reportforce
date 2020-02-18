@@ -11,10 +11,9 @@ def report_generator(get_report):
 
         report, report_cells, indices = get_report(url, metadata, session)
 
+        columns = helpers.parsers.get_column_labels(metadata)
 
-        columns_labels = helpers.parsers.get_column_labels(metadata)
-
-        df = pd.DataFrame(report_cells, index=indices, columns=columns_labels)
+        df = pd.DataFrame(report_cells, index=indices, columns=columns)
         yield df
 
         if id_column:
@@ -31,7 +30,7 @@ def report_generator(get_report):
                     already_seen += ",".join(df[id_column].values)
                     helpers.filtering.update_filter(-1, "value", already_seen, metadata)
 
-                df = pd.DataFrame(report_cells, index=indices, columns=columns_labels)
+                df = pd.DataFrame(report_cells, index=indices, columns=columns)
                 yield df
 
     return generator
