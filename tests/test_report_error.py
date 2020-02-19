@@ -1,47 +1,31 @@
 import os
 import sys
-import json
 import unittest
 import requests
 
-from pathlib import Path
 from unittest.mock import patch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from reportforce.report import get_report  # noqa: E402
+from utils import mocks  # noqa: E402
 from reportforce.report import SessionNotFound  # noqa: E402
 from reportforce.helpers.request_report import ReportError  # noqa: E402
 
-
-class FakeLogin:
-    """Fake Salesforce session object"""
-
-    version = "47.0"
-    session_id = "sessionId"
-    instance_url = "dummy.salesforce.com"
-    headers = {"Authorization": "Bearer sessionId"}
-
-
-def get_mocked_metadata(*args, **kwargs):
-    path = Path(__file__).resolve().parent / "sample_json" / "analytics_tabular_metadata"
-    with open(path, "r") as f:
-        return json.loads(f.read())
-
-
-def get_json(json_file):
-    path = Path(__file__).resolve().parent / "sample_json" / json_file
-    with open(path, "r") as f:
-        return json.loads(f.read())
+metadata = mocks.get_json("analytics_tabular_metadata")
+error = [{"errorCode": "errorCode", "message": "message"}]
 
 
 class TestSalesforce(unittest.TestCase):
-    @patch("reportforce.report.get_metadata", get_mocked_metadata)
+    @patch("reportforce.report.get_metadata")
     @patch.object(requests.Session, "post")
-    def test_if_raises_report_error(self, mocked_session):
-        mocked_session().json.return_value = get_json("analytics_error")
+    def test_if_raises_report_error(self, mocked_session, mocked_metadata):
+
+        mocked_metadata.return_value = metadata
+
+        mocked_session().json.return_value = error
         with self.assertRaises(ReportError):
-            get_report("report_id", session=FakeLogin)
+            get_report("report_id", session=mocks.FakeLogin)
 
     def test_if_raises_session_not_found(self):
         with self.assertRaises(SessionNotFound):

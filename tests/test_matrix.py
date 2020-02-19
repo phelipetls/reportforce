@@ -10,36 +10,22 @@ from unittest.mock import Mock, patch
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import reportforce  # noqa: E402
+from utils import mocks  # noqa: E402
 
-
-class FakeLogin:
-    """Fake Salesforce session object"""
-
-    version = "47.0"
-    session_id = "sessionId"
-    instance_url = "dummy.salesforce.com"
-    headers = {"Authorization": "Bearer sessionId"}
-
-
-def get_metadata(*args, **kwargs):
-    path = Path(__file__).resolve().parent / "sample_json" / "analytics_matrix_metadata"
-    with open(path, "r") as f:
-        return json.loads(f.read())
-
-
-def get_json(json_file):
-    path = Path(__file__).resolve().parent / "sample_json" / json_file
-    with open(path, "r") as f:
-        return json.loads(f.read())
+metadata = mocks.get_json("analytics_matrix_metadata")
+report = mocks.get_json("analytics_matrix")
 
 
 class TestMatrixReport(unittest.TestCase):
     maxDiff = None
 
-    @patch("reportforce.report.get_metadata", get_metadata)
+    @patch("reportforce.report.get_metadata")
     @patch("reportforce.report.request_report.POST")
-    def test_dataframe(self, mocked_report):
-        mocked_report().json.return_value = get_json("analytics_matrix")
+    def test_dataframe(self, mocked_report, mocked_metadata):
+
+        mocked_metadata.return_value = metadata
+        mocked_report().json.return_value = report
+
         indices = pd.MultiIndex.from_tuples(
             [
                 ("Supervisor1", "Worker1"),
@@ -82,13 +68,16 @@ class TestMatrixReport(unittest.TestCase):
             index=indices,
             columns=columns,
         )
-        df = reportforce.report.get_report("ReportID", session=FakeLogin)
+        df = reportforce.report.get_report("ReportID", session=mocks.FakeLogin)
         pd.testing.assert_frame_equal(expected_df, df)
 
-    @patch("reportforce.report.get_metadata", get_metadata)
+    @patch("reportforce.report.get_metadata")
     @patch("reportforce.report.request_report.POST")
-    def test_empty_dataframe(self, mocked_request):
-        mocked_report = get_json("analytics_matrix")
+    def test_empty_dataframe(self, mocked_request, mocked_metadata):
+
+        mocked_metadata.return_value = metadata
+        mocked_report = report
+
         mocked_factmap = {
             "T!T": {"aggregates": {"label": "label", "value": "value"}, "rows": []}
         }
@@ -96,7 +85,7 @@ class TestMatrixReport(unittest.TestCase):
         with patch.dict(mocked_report, mocked_report, factMap=mocked_factmap):
             mocked_request().json.return_value = mocked_report
 
-            df = reportforce.report.get_report("ReportID", session=FakeLogin)
+            df = reportforce.report.get_report("ReportID", session=mocks.FakeLogin)
             self.assertTrue(df.empty)
 
 

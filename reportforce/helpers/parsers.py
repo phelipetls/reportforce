@@ -70,8 +70,8 @@ def get_summary_cells(report):
     cells_by_group = []
 
     n_groups = len(report["reportMetadata"]["groupingsDown"])
-    # pattern to get only single values
-    # not sub/grandtotals
+
+    # pattern to filter out sub/grandtotals
     pattern = r"_".join(["[0-9]"] * n_groups)
 
     # filter out all keys not matching the pattern

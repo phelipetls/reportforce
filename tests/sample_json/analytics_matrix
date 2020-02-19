@@ -1415,7 +1415,7 @@
         "hasRecordCount": false,
         "historicalSnapshotDates": [],
         "id": "randomID",
-        "name": "DIAS ENTREGA OG SUPERVISOR",
+        "name": "name",
         "presentationOptions": {
             "hasStackedSummaries": true
         },

@@ -7,13 +7,8 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from reportforce.helpers import filtering # noqa: E402
-
-
-def get_mocked_metadata(*args, **kwargs):
-    path = Path(__file__).resolve().parent / "sample_json" / "analytics_tabular_metadata"
-    with open(path, "r") as f:
-        return json.loads(f.read())
+from reportforce.helpers import filtering  # noqa: E402
+from utils import mocks
 
 
 class TestSalesforce(unittest.TestCase):
@@ -25,7 +20,7 @@ class TestSalesforce(unittest.TestCase):
     logic = "1 AND 2"
 
     def setUp(self):
-        self.metadata = get_mocked_metadata()
+        self.metadata = mocks.get_json("analytics_tabular_metadata")
 
         filtering.set_filters(self.filters, self.metadata)
 
@@ -38,8 +33,8 @@ class TestSalesforce(unittest.TestCase):
         filtering.increment_logical_filter(self.metadata)
 
     def test_logic(self):
-        test = self.metadata["reportBooleanFilter"]
-        expected = "1 AND 2"
+        test = self.metadata["reportMetadata"]["reportBooleanFilter"]
+        expected = "1 AND 2 AND 3"
         self.assertEqual(test, expected)
 
     def test_date_filter(self):
@@ -66,13 +61,8 @@ class TestSalesforce(unittest.TestCase):
         ]
         self.assertEqual(test, expected)
 
-    def test_increment_logical_filter(self):
-        test = self.metadata["reportMetadata"]["reportBooleanFilter"]
-        expected = "(((1 AND 2) AND 3) OR 4) AND 5"
-        self.assertEqual(test, expected)
-
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(failfast=True)
 
 # vi: nowrap
