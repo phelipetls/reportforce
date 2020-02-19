@@ -15,7 +15,7 @@ from utils import mocks
 headers = {"Content-Disposition": 'attachment; filename="spreadsheet.xlsx"'}
 
 
-class TestSalesforce(unittest.TestCase):
+class TestExcelWithoutFilename(unittest.TestCase):
     @patch("reportforce.helpers.request_report.GET")
     def setUp(self, mocked_request):
         mocked_request.return_value = Mock(headers=headers, content=b"1,2,3\na,b,c")
@@ -28,7 +28,7 @@ class TestSalesforce(unittest.TestCase):
         self.m.assert_called_once_with("spreadsheet.xlsx", "wb")
 
 
-class Test(unittest.TestCase):
+class TestExcelWithFileName(unittest.TestCase):
     @patch("reportforce.helpers.request_report.GET")
     def setUp(self, mocked_request):
         mocked_request.return_value = Mock(headers=headers, content=b"1,2,3\na,b,c")

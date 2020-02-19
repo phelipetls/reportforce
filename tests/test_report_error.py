@@ -16,7 +16,7 @@ metadata = mocks.get_json("analytics_tabular_metadata")
 error = [{"errorCode": "errorCode", "message": "message"}]
 
 
-class TestSalesforce(unittest.TestCase):
+class TestExceptions(unittest.TestCase):
     @patch("reportforce.report.get_metadata")
     @patch.object(requests.Session, "post")
     def test_if_raises_report_error(self, mocked_session, mocked_metadata):

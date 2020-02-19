@@ -12,7 +12,7 @@ from reportforce.report import get_metadata  # noqa: E402
 from utils import mocks
 
 
-class TestSalesforce(unittest.TestCase):
+class TestGetMetadata(unittest.TestCase):
 
     url = "https://dummy.salesforce.com/services/data/v47.0/analytics/reports/ID/describe"
     headers = {"Authorization": "Bearer sessionId"}

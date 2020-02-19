@@ -73,7 +73,7 @@ class TestMatrixReport(unittest.TestCase):
 
     @patch("reportforce.report.get_metadata")
     @patch("reportforce.report.request_report.POST")
-    def test_empty_dataframe(self, mocked_request, mocked_metadata):
+    def TestEmptyMatrix(self, mocked_request, mocked_metadata):
 
         mocked_metadata.return_value = metadata
         mocked_report = report

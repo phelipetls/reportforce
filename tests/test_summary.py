@@ -14,7 +14,7 @@ metadata = mocks.get_json("analytics_summary_metadata")
 report = mocks.get_json("analytics_summary")
 
 
-class TestSalesforce(unittest.TestCase):
+class TestSummaryReport(unittest.TestCase):
     @patch("reportforce.report.get_metadata")
     @patch("reportforce.helpers.request_report.POST")
     def setUp(self, mocked_request, mocked_metadata):
@@ -51,7 +51,7 @@ class TestSalesforce(unittest.TestCase):
         self.assertEqual(columns, expected_columns)
 
 
-class TestEmptyReport(unittest.TestCase):
+class TestEmptySummary(unittest.TestCase):
     @patch("reportforce.report.get_metadata")
     @patch("reportforce.helpers.request_report.POST")
     def setUp(self, mocked_request, mocked_metadata):

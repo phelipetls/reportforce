@@ -11,7 +11,7 @@ from reportforce.helpers import filtering  # noqa: E402
 from utils import mocks
 
 
-class TestSalesforce(unittest.TestCase):
+class TestFiltersSetters(unittest.TestCase):
 
     maxdiff = None
 
