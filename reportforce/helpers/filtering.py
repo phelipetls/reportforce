@@ -40,7 +40,7 @@ def increment_logical_filter(metadata):
 
 
 def set_logic(logic, metadata):
-    metadata["reportBooleanFilter"] = logic
+    metadata["reportMetadata"]["reportBooleanFilter"] = logic
 
 
 def set_period(start, end, column, metadata):
