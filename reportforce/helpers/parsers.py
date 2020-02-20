@@ -34,7 +34,7 @@ def get_matrix_cells(matrix):
     n_cols = len(matrix["reportMetadata"]["groupingsAcross"])
 
     # patterns to filter out subtotals and grandtotals
-    # if there is 2 row groups, then get keys matching
+    # e.g, if there are 2 row groups, then get keys matching
     # the pattern [0-9]_[0-9], and if there is only
     # 1 column group, match the pattern [0-9]. this
     # will exclude any totals (denoted by "T") and also
@@ -42,7 +42,7 @@ def get_matrix_cells(matrix):
     row_pattern = r"_".join(["[0-9]"] * n_rows)
     col_pattern = r"_".join(["[0-9]"] * n_cols)
 
-    # used to filter the factMap keys, i.e., to get
+    # used to filter the factMap keys, e.g., to get
     # 0_0!0_1, 0_0!0_2, ..., 10_0!10_0, 10_0!10_1
     sort_func = lambda x: x.split("!")[0] + x.split("!")[1]  # noqa: E731
 
@@ -69,15 +69,14 @@ def get_summary_cells(report):
     cells = []
     cells_by_group = []
 
-    n_groups = len(report["reportMetadata"]["groupingsDown"])
-
     # pattern to filter out sub/grandtotals
+    n_groups = len(report["reportMetadata"]["groupingsDown"])
     pattern = r"_".join(["[0-9]"] * n_groups)
 
     # filter out all keys not matching the pattern
     groups = itertools.filterfalse(lambda x: not re.search(pattern, x), factmap)
 
-    sort_func = lambda x: list(map(int, x.rstrip("!T").split("_")))  # noqa: E731
+    sort_func = lambda x: [int(n) for n in x.rstrip("!T").split("_")]  # noqa: E731
     for group in sorted(groups, key=sort_func):
         rows = factmap[group]["rows"]
         for row in rows:

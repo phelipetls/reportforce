@@ -8,7 +8,6 @@ from unittest.mock import Mock, patch
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from reportforce.login import soap_login, AuthenticationError  # noqa: E402
-from utils import mocks
 
 
 expected_url = "https://login.salesforce.com/services/Soap/u/47.0"
