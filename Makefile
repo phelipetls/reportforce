@@ -17,3 +17,9 @@ lint:
 
 cov:
 	pytest --cov=reportforce --cov-report term-missing
+
+fix:
+	nvim -q <(flake8 .)
+
+ctags:
+	.git/hooks/ctags
