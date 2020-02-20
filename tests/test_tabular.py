@@ -1,15 +1,13 @@
 import os
 import sys
-import json
 import unittest
 
-from pathlib import Path
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from reportforce.report import get_report  # noqa: E402
-from utils import mocks
+from utils import mocks  # noqa: E402
 
 metadata = mocks.get_json("analytics_tabular_metadata")
 report = mocks.get_json("analytics_tabular")

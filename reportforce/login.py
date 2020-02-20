@@ -17,14 +17,6 @@ class Login(object):
         self.headers = {"Authorization": "Bearer " + self.session_id}
 
 
-class AuthenticationError(Exception):
-    def __init__(self, msg):
-        self.msg = msg
-
-    def __str__(self):
-        return self.msg
-
-
 def soap_login(username, password, security_token, domain="login", version="47.0"):
     """
     Helper function to login into Salesforce via SOAP API.
@@ -78,3 +70,11 @@ def soap_login(username, password, security_token, domain="login", version="47.0
         msg = read_failed_response(response.text)
         raise AuthenticationError(msg)
     return read_successful_response(response.text)
+
+
+class AuthenticationError(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
+    def __str__(self):
+        return self.msg
