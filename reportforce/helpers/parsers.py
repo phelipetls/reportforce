@@ -2,6 +2,8 @@ import re
 import itertools
 import pandas as pd
 
+from distutils.version import LooseVersion
+
 
 def get_tabular_cells(report):
     """
@@ -40,15 +42,13 @@ def get_matrix_cells(matrix):
     # 1 column group, match the pattern [0-9]. this
     # will exclude any totals (denoted by "T") and also
     # subtotals, e.g. 0!0.
-    row_pattern = r"_".join(["[0-9]"] * n_rows)
-    col_pattern = r"_".join(["[0-9]"] * n_cols)
+    row_pattern = r"_".join(["[0-9]+"] * n_rows)
+    col_pattern = r"_".join(["[0-9]+"] * n_cols)
 
-    # used to filter the factMap keys, e.g., to get
-    # 0_0!0_1, 0_0!0_2, ..., 10_0!10_0, 10_0!10_1
-    sort_func = lambda x: x.split("!")[0] + x.split("!")[1]  # noqa: E731
+    groups = [group for group in factmap if re.search(row_pattern + "!" + col_pattern, group)]
 
     values = []
-    for group in sorted(factmap, key=sort_func):
+    for group in sorted(groups, key=LooseVersion):
         row_key, col_key = group.split("!")
         if re.search(row_pattern, row_key) and re.search(col_pattern, col_key):
             values.append(factmap[group]["aggregates"][0]["label"])
