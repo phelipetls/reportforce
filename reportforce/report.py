@@ -89,7 +89,7 @@ def get_report(
     elif report_format == "SUMMARY":
         return get_summary_report(report_id, id_column, metadata, session)
     elif report_format == "MATRIX":
-        return get_matrix_report(report_id, metadata, session)
+        return get_matrix_report(report_id, id_column, metadata, session)
 
 
 def get_excel(report_id, excel, session):
@@ -156,26 +156,31 @@ def tabular_report_generator(url, metadata=None, session=None):
     return tabular, tabular_cells, indices
 
 
-def get_matrix_report(report_id, metadata, session):
+
+def get_matrix_report(report_id, id_column, metadata, session):
     """
     Auxiliary function to deal with matrix reports
     """
-    url = base_url.format(session.instance_url, session.version, report_id)
+    matrix_generator = matrix_report_generator(report_id, id_column, metadata, session)
+    return pd.concat(matrix_generator)
+
+
+@report_generator.report_generator
+def matrix_report_generator(url, metadata, session):
     matrix = request_report.POST(url, headers=session.headers, json=metadata).json()
 
     if len(matrix["factMap"]) == 1:
         return pd.DataFrame()
 
-    report_cells = np.array(parsers.get_matrix_cells(matrix))
+    matrix_cells = np.array(parsers.get_matrix_cells(matrix))
 
     groupings_down = matrix["groupingsDown"]["groupings"]
-    groupings_across = matrix["groupingsAcross"]["groupings"]
-
     indices = pd.MultiIndex.from_tuples(parsers.get_groups(groupings_down))
-    columns = pd.MultiIndex.from_tuples(parsers.get_groups(groupings_across))
 
-    report_cells.shape = (len(indices), len(columns))
-    return pd.DataFrame(report_cells, index=indices, columns=columns)
+    columns = parsers.get_columns(matrix)
+
+    matrix_cells.shape = (len(indices), len(columns))
+    return matrix, matrix_cells, indices
 
 
 def get_summary_report(report_id, id_column, metadata, session):

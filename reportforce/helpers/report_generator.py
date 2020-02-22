@@ -11,7 +11,7 @@ def report_generator(get_report):
 
         report, report_cells, indices = get_report(url, metadata, session)
 
-        columns = helpers.parsers.get_column_labels(metadata)
+        columns = helpers.parsers.get_columns(report)
 
         df = pd.DataFrame(report_cells, index=indices, columns=columns)
         yield df

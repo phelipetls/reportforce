@@ -1,5 +1,6 @@
 import re
 import itertools
+import pandas as pd
 
 
 def get_tabular_cells(report):
@@ -86,7 +87,7 @@ def get_summary_cells(report):
     return cells, cells_by_group
 
 
-def get_column_labels(metadata):
+def get_column_labels(report):
     """
     Auxiliary function to get a dict that maps
     a column label (which is shown in the browser)
@@ -95,8 +96,17 @@ def get_column_labels(metadata):
     The api name is the one that should be
     used in the request body.
     """
-    columns_info = metadata["reportExtendedMetadata"]["detailColumnInfo"]
+    columns_info = report["reportExtendedMetadata"]["detailColumnInfo"]
     return {info["label"]: column for column, info in columns_info.items()}
+
+
+def get_columns(report):
+    if report["reportMetadata"]["reportFormat"] == "MATRIX":
+        groupings_across = report["groupingsAcross"]["groupings"]
+        multi_columns = get_groups(groupings_across)
+        return pd.MultiIndex.from_tuples(multi_columns)
+    else:
+        return get_column_labels(report)
 
 
 def get_groups(groups):

@@ -55,15 +55,12 @@ class TestEmptyTabular(unittest.TestCase):
     @patch("reportforce.helpers.request_report.POST")
     def setUp(self, mocked_request, mocked_metadata):
 
-        mocked_report = report
         mocked_metadata.return_value = metadata
 
-        mocked_factmap = {
-            "factMap": {"T!T": {"aggregates": {"label": 0, "value": 0}, "rows": []}}
-        }
+        mocked_factmap = {"T!T": {"aggregates": {"label": 0, "value": 0}, "rows": []}}
 
-        with patch.dict(mocked_report, mocked_factmap):
-            mocked_request().json.return_value = mocked_report
+        with patch.dict(report, values=report, factMap = mocked_factmap):
+            mocked_request().json.return_value = report
 
             self.report = get_report(
                 "report_id", id_column="Opportunity Name", session=mocks.FakeLogin

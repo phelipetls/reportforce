@@ -72,271 +72,271 @@
                     ]
                 }
             ]
-        },
-        "groupingsAcross": {
-            "groupings": [
-                {
-                    "groupings": [
-                        {
-                            "groupings": [],
-                            "key": "0_0",
-                            "label": "Existing Business",
-                            "value": "Existing Business"
-                        }
-                    ],
-                    "key": "0",
-                    "label": "July 2015",
-                    "value": "2015-07-01"
-                },
-                {
-                    "groupings": [
-                        {
-                            "groupings": [],
-                            "key": "1_0",
-                            "label": "Existing Business",
-                            "value": "Existing Business"
-                        },
-                        {
-                            "groupings": [],
-                            "key": "1_1",
-                            "label": "New Business",
-                            "value": "New Business"
-                        }
-                    ],
-                    "key": "1",
-                    "label": "August 2015",
-                    "value": "2015-08-01"
-                },
-                {
-                    "groupings": [
-                        {
-                            "groupings": [],
-                            "key": "2_0",
-                            "label": "Existing Business",
-                            "value": "Existing Business"
-                        }
-                    ],
-                    "key": "2",
-                    "label": "September 2015",
-                    "value": "2015-09-01"
-                }
-            ]
-        },
-        "groupingsDown": {
-            "groupings": [
-                {
-                    "groupings": [],
-                    "key": "0",
-                    "label": "Acme",
-                    "value": "001R0000002GuzsIAC"
-                },
-                {
-                    "groupings": [],
-                    "key": "1",
-                    "label": "Facebook",
-                    "value": "001R0000001nUAmIAM"
-                },
-                {
-                    "groupings": [],
-                    "key": "2",
-                    "label": "Home Depot",
-                    "value": "001R0000002Gv5zIAC"
-                },
-                {
-                    "groupings": [],
-                    "key": "3",
-                    "label": "Mircosoft",
-                    "value": "001R0000002Gv5QIAS"
-                }
-            ]
-        },
-        "hasDetailRows": true,
-        "reportExtendedMetadata": {
-            "aggregateColumnInfo": {
-                "s!AMOUNT": {
-                    "acrossGroupingContext": null,
-                    "dataType": "currency",
-                    "downGroupingContext": null,
-                    "label": "Sum of Amount"
-                },
-                "a!AMOUNT": {
-                    "acrossGroupingContext": null,
-                    "dataType": "currency",
-                    "downGroupingContext": null,
-                    "label": "Average Amount"
-                },
-                "RowCount": {
-                    "acrossGroupingContext": null,
-                    "dataType": "int",
-                    "downGroupingContext": null,
-                    "label": "Record Count"
-                }
+        }
+    },
+    "groupingsAcross": {
+        "groupings": [
+            {
+                "groupings": [
+                    {
+                        "groupings": [],
+                        "key": "0_0",
+                        "label": "Existing Business",
+                        "value": "Existing Business"
+                    }
+                ],
+                "key": "0",
+                "label": "July 2015",
+                "value": "2015-07-01"
             },
-            "detailColumnInfo": {
-                "OPPORTUNITY_NAME": {
-                    "dataType": "string",
-                    "label": "Opportunity Name"
-                },
-                "AMOUNT": {
-                    "dataType": "currency",
-                    "label": "Amount"
-                },
-                "LEAD_SOURCE": {
-                    "dataType": "picklist",
-                    "label": "Lead Source"
-                },
-                "NEXT_STEP": {
-                    "dataType": "string",
-                    "label": "Next Step"
-                },
-                "PROBABILITY": {
-                    "dataType": "percent",
-                    "label": "Probability (%)"
-                },
-                "FISCAL_QUARTER": {
-                    "dataType": "string",
-                    "label": "Fiscal Period"
-                },
-                "AGE": {
-                    "dataType": "int",
-                    "label": "Age"
-                },
-                "CREATED_DATE": {
-                    "dataType": "datetime",
-                    "label": "Created Date"
-                },
-                "FULL_NAME": {
-                    "dataType": "string",
-                    "label": "Opportunity Owner"
-                },
-                "ROLLUP_DESCRIPTION": {
-                    "dataType": "string",
-                    "label": "Owner Role"
-                }
+            {
+                "groupings": [
+                    {
+                        "groupings": [],
+                        "key": "1_0",
+                        "label": "Existing Business",
+                        "value": "Existing Business"
+                    },
+                    {
+                        "groupings": [],
+                        "key": "1_1",
+                        "label": "New Business",
+                        "value": "New Business"
+                    }
+                ],
+                "key": "1",
+                "label": "August 2015",
+                "value": "2015-08-01"
             },
-            "groupingColumnInfo": {
-                "ACCOUNT_NAME": {
-                    "dataType": "string",
-                    "groupingLevel": 0,
-                    "label": "Account Name"
-                },
-                "CLOSE_DATE": {
-                    "dataType": "date",
-                    "groupingLevel": 0,
-                    "label": "Close Date"
-                },
-                "TYPE": {
-                    "dataType": "picklist",
-                    "groupingLevel": 1,
-                    "label": "Type"
-                }
+            {
+                "groupings": [
+                    {
+                        "groupings": [],
+                        "key": "2_0",
+                        "label": "Existing Business",
+                        "value": "Existing Business"
+                    }
+                ],
+                "key": "2",
+                "label": "September 2015",
+                "value": "2015-09-01"
+            }
+        ]
+    },
+    "groupingsDown": {
+        "groupings": [
+            {
+                "groupings": [],
+                "key": "0",
+                "label": "Acme",
+                "value": "001R0000002GuzsIAC"
+            },
+            {
+                "groupings": [],
+                "key": "1",
+                "label": "Facebook",
+                "value": "001R0000001nUAmIAM"
+            },
+            {
+                "groupings": [],
+                "key": "2",
+                "label": "Home Depot",
+                "value": "001R0000002Gv5zIAC"
+            },
+            {
+                "groupings": [],
+                "key": "3",
+                "label": "Mircosoft",
+                "value": "001R0000002Gv5QIAS"
+            }
+        ]
+    },
+    "hasDetailRows": true,
+    "reportExtendedMetadata": {
+        "aggregateColumnInfo": {
+            "s!AMOUNT": {
+                "acrossGroupingContext": null,
+                "dataType": "currency",
+                "downGroupingContext": null,
+                "label": "Sum of Amount"
+            },
+            "a!AMOUNT": {
+                "acrossGroupingContext": null,
+                "dataType": "currency",
+                "downGroupingContext": null,
+                "label": "Average Amount"
+            },
+            "RowCount": {
+                "acrossGroupingContext": null,
+                "dataType": "int",
+                "downGroupingContext": null,
+                "label": "Record Count"
             }
         },
-        "reportMetadata": {
-            "aggregates": [
-                "s!AMOUNT",
-                "a!AMOUNT",
-                "RowCount"
-            ],
-            "chart": {
-                "chartType": "Donut",
-                "groupings": [
-                    "CLOSE_DATE"
-                ],
-                "hasLegend": true,
-                "showChartValues": false,
-                "summaries": [
-                    "s!AMOUNT"
-                ],
-                "summaryAxisLocations": [
-                    "Y"
-                ],
-                "title": "Pipeline by Stage and Type"
+        "detailColumnInfo": {
+            "OPPORTUNITY_NAME": {
+                "dataType": "string",
+                "label": "Opportunity Name"
             },
-            "currency": null,
-            "description": null,
-            "detailColumns": [
-                "OPPORTUNITY_NAME",
-                "AMOUNT",
-                "LEAD_SOURCE",
-                "NEXT_STEP",
-                "PROBABILITY",
-                "FISCAL_QUARTER",
-                "AGE",
-                "CREATED_DATE",
-                "FULL_NAME",
-                "ROLLUP_DESCRIPTION"
-            ],
-            "developerName": "Deals_Closing_This_Quarter",
-            "division": null,
-            "folderId": "00lR0000000M8IiIAK",
-            "groupingsAcross": [
-                {
-                    "dateGranularity": "Month",
-                    "name": "CLOSE_DATE",
-                    "sortAggregate": null,
-                    "sortOrder": "Asc"
-                },
-                {
-                    "dateGranularity": "None",
-                    "name": "TYPE",
-                    "sortAggregate": null,
-                    "sortOrder": "Asc"
-                }
-            ],
-            "groupingsDown": [
-                {
-                    "dateGranularity": "None",
-                    "name": "ACCOUNT_NAME",
-                    "sortAggregate": null,
-                    "sortOrder": "Asc"
-                }
-            ],
-            "hasDetailRows": true,
-            "hasRecordCount": true,
-            "historicalSnapshotDates": [],
-            "id": "00OR0000000K2UeMAK",
-            "name": "Deals Closing This Quarter",
-            "reportBooleanFilter": null,
-            "reportFilters": [
-                {
-                    "column": "BucketField_36625466",
-                    "isRunPageEditable": true,
-                    "operator": "equals",
-                    "value": "Early,Late"
-                },
-                {
-                    "column": "TYPE",
-                    "isRunPageEditable": true,
-                    "operator": "equals",
-                    "value": "Existing Business,New Business"
-                }
-            ],
-            "reportFormat": "MATRIX",
-            "reportType": {
-                "label": "Opportunities",
-                "type": "Opportunity"
+            "AMOUNT": {
+                "dataType": "currency",
+                "label": "Amount"
             },
-            "scope": "organization",
-            "showGrandTotal": true,
-            "showSubtotals": true,
-            "sortBy": [],
-            "standardDateFilter": {
-                "column": "CLOSE_DATE",
-                "durationValue": "THIS_FISCAL_QUARTER",
-                "endDate": "2015-09-30",
-                "startDate": "2015-07-01"
+            "LEAD_SOURCE": {
+                "dataType": "picklist",
+                "label": "Lead Source"
             },
-            "standardFilters": [
-                {
-                    "name": "open",
-                    "value": "all"
-                },
-                {
-                    "name": "probability",
-                    "value": ">0"
-                }
-            ]
+            "NEXT_STEP": {
+                "dataType": "string",
+                "label": "Next Step"
+            },
+            "PROBABILITY": {
+                "dataType": "percent",
+                "label": "Probability (%)"
+            },
+            "FISCAL_QUARTER": {
+                "dataType": "string",
+                "label": "Fiscal Period"
+            },
+            "AGE": {
+                "dataType": "int",
+                "label": "Age"
+            },
+            "CREATED_DATE": {
+                "dataType": "datetime",
+                "label": "Created Date"
+            },
+            "FULL_NAME": {
+                "dataType": "string",
+                "label": "Opportunity Owner"
+            },
+            "ROLLUP_DESCRIPTION": {
+                "dataType": "string",
+                "label": "Owner Role"
+            }
+        },
+        "groupingColumnInfo": {
+            "ACCOUNT_NAME": {
+                "dataType": "string",
+                "groupingLevel": 0,
+                "label": "Account Name"
+            },
+            "CLOSE_DATE": {
+                "dataType": "date",
+                "groupingLevel": 0,
+                "label": "Close Date"
+            },
+            "TYPE": {
+                "dataType": "picklist",
+                "groupingLevel": 1,
+                "label": "Type"
+            }
         }
+    },
+    "reportMetadata": {
+        "aggregates": [
+            "s!AMOUNT",
+            "a!AMOUNT",
+            "RowCount"
+        ],
+        "chart": {
+            "chartType": "Donut",
+            "groupings": [
+                "CLOSE_DATE"
+            ],
+            "hasLegend": true,
+            "showChartValues": false,
+            "summaries": [
+                "s!AMOUNT"
+            ],
+            "summaryAxisLocations": [
+                "Y"
+            ],
+            "title": "Pipeline by Stage and Type"
+        },
+        "currency": null,
+        "description": null,
+        "detailColumns": [
+            "OPPORTUNITY_NAME",
+            "AMOUNT",
+            "LEAD_SOURCE",
+            "NEXT_STEP",
+            "PROBABILITY",
+            "FISCAL_QUARTER",
+            "AGE",
+            "CREATED_DATE",
+            "FULL_NAME",
+            "ROLLUP_DESCRIPTION"
+        ],
+        "developerName": "Deals_Closing_This_Quarter",
+        "division": null,
+        "folderId": "00lR0000000M8IiIAK",
+        "groupingsAcross": [
+            {
+                "dateGranularity": "Month",
+                "name": "CLOSE_DATE",
+                "sortAggregate": null,
+                "sortOrder": "Asc"
+            },
+            {
+                "dateGranularity": "None",
+                "name": "TYPE",
+                "sortAggregate": null,
+                "sortOrder": "Asc"
+            }
+        ],
+        "groupingsDown": [
+            {
+                "dateGranularity": "None",
+                "name": "ACCOUNT_NAME",
+                "sortAggregate": null,
+                "sortOrder": "Asc"
+            }
+        ],
+        "hasDetailRows": true,
+        "hasRecordCount": true,
+        "historicalSnapshotDates": [],
+        "id": "00OR0000000K2UeMAK",
+        "name": "Deals Closing This Quarter",
+        "reportBooleanFilter": null,
+        "reportFilters": [
+            {
+                "column": "BucketField_36625466",
+                "isRunPageEditable": true,
+                "operator": "equals",
+                "value": "Early,Late"
+            },
+            {
+                "column": "TYPE",
+                "isRunPageEditable": true,
+                "operator": "equals",
+                "value": "Existing Business,New Business"
+            }
+        ],
+        "reportFormat": "TABULAR",
+        "reportType": {
+            "label": "Opportunities",
+            "type": "Opportunity"
+        },
+        "scope": "organization",
+        "showGrandTotal": true,
+        "showSubtotals": true,
+        "sortBy": [],
+        "standardDateFilter": {
+            "column": "CLOSE_DATE",
+            "durationValue": "THIS_FISCAL_QUARTER",
+            "endDate": "2015-09-30",
+            "startDate": "2015-07-01"
+        },
+        "standardFilters": [
+            {
+                "name": "open",
+                "value": "all"
+            },
+            {
+                "name": "probability",
+                "value": ">0"
+            }
+        ]
     }
 }

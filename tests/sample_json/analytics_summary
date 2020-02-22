@@ -6768,37 +6768,37 @@
                 "filterable": true,
                 "inactiveFilterValues": [],
                 "isLookup": false,
-                "label": "label",
+                "label": "label1",
                 "uniqueCountable": true
             },
-            "Column1": {
+            "Column2": {
                 "dataType": "date",
                 "filterValues": [],
                 "filterable": true,
                 "inactiveFilterValues": [],
                 "isLookup": false,
-                "label": "label",
+                "label": "label2",
                 "uniqueCountable": true
             },
-            "Column1": {
+            "Column3": {
                 "dataType": "string",
                 "filterValues": [],
                 "filterable": true,
                 "inactiveFilterValues": [],
                 "isLookup": false,
-                "label": "label",
+                "label": "label3",
                 "uniqueCountable": true
             },
-            "Column1": {
+            "Column4": {
                 "dataType": "string",
                 "filterValues": [],
                 "filterable": true,
                 "inactiveFilterValues": [],
                 "isLookup": false,
-                "label": "label",
+                "label": "label4",
                 "uniqueCountable": true
             },
-            "Column1": {
+            "Column5": {
                 "dataType": "picklist",
                 "filterValues": [
                     {
@@ -6810,25 +6810,25 @@
                 "filterable": true,
                 "inactiveFilterValues": [],
                 "isLookup": false,
-                "label": "label",
+                "label": "label5",
                 "uniqueCountable": true
             },
-            "Column1": {
+            "Column6": {
                 "dataType": "string",
                 "filterValues": [],
                 "filterable": true,
                 "inactiveFilterValues": [],
                 "isLookup": false,
-                "label": "label",
+                "label": "label6",
                 "uniqueCountable": true
             },
-            "Column1": {
+            "Column7": {
                 "dataType": "string",
                 "filterValues": [],
                 "filterable": true,
                 "inactiveFilterValues": [],
                 "isLookup": false,
-                "label": "label",
+                "label": "label7",
                 "uniqueCountable": true
             }
         },
