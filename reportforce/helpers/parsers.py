@@ -96,7 +96,10 @@ def get_column_labels(report):
     The api name is the one that should be
     used in the request body.
     """
-    columns_info = report["reportExtendedMetadata"]["detailColumnInfo"]
+    if report["reportMetadata"]["reportFormat"] == "MATRIX":
+        columns_info = report["reportExtendedMetadata"]["groupingColumnInfo"]
+    else:
+        columns_info = report["reportExtendedMetadata"]["detailColumnInfo"]
     return {info["label"]: column for column, info in columns_info.items()}
 
 
