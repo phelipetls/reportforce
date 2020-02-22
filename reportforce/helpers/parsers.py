@@ -10,75 +10,51 @@ def get_tabular_cells(report):
     Auxiliary function to get all cells
     from tabular report.
     """
-    factmap = report["factMap"]
-    rows = factmap["T!T"]["rows"]
-    cells = [[cell["label"] for cell in row["dataCells"]] for row in rows]
-    return cells
+    rows = report["factMap"]["T!T"]["rows"]
+    return [[cell["label"] for cell in row["dataCells"]] for row in rows]
 
 
 def get_matrix_cells(matrix):
     """
     Auxiliary function to get all cells
     from a matrix report.
-
-    This is much more complicated because we need
-    to get the row and columns groups also.
-
-    Besides, we also need to filter out the cells
-    corresponding to subtotals and grand totals.
-
-    It is also needed to sort the factMap keys to
-    so that it first get the first row and all its
-    columns, then jump to the next one.
     """
     factmap = matrix["factMap"]
 
     n_rows = len(matrix["reportMetadata"]["groupingsDown"])
     n_cols = len(matrix["reportMetadata"]["groupingsAcross"])
 
-    # patterns to filter out subtotals and grandtotals
-    # e.g, if there are 2 row groups, then get keys matching
-    # the pattern [0-9]_[0-9], and if there is only
-    # 1 column group, match the pattern [0-9]. this
-    # will exclude any totals (denoted by "T") and also
-    # subtotals, e.g. 0!0.
+    # patterns to filter out sub/grandtotals
     row_pattern = r"_".join(["[0-9]+"] * n_rows)
     col_pattern = r"_".join(["[0-9]+"] * n_cols)
+    pattern = row_pattern + "!" + col_pattern
 
     groups = [group for group in factmap if re.search(row_pattern + "!" + col_pattern, group)]
 
-    values = []
+    cells = []
     for group in sorted(groups, key=LooseVersion):
-        row_key, col_key = group.split("!")
-        if re.search(row_pattern, row_key) and re.search(col_pattern, col_key):
-            values.append(factmap[group]["aggregates"][0]["label"])
-    return values
+        cells.extend([agg["label"] for agg in factmap[group]["aggregates"]])
+
+    return cells
 
 
-def get_summary_cells(report):
+def get_summary_cells(summary):
     """
     Auxiliary function to get all cells
     from a summary report.
-
-    This is a lot similar to get_matrix_cells
-    except that there aren't column groups.
-
-    We still need to get the row_groups and filter
-    out the sub/grandtotals.
     """
-    factmap = report["factMap"]
+    factmap = summary["factMap"]
     cells = []
     cells_by_group = []
 
     # pattern to filter out sub/grandtotals
-    n_groups = len(report["reportMetadata"]["groupingsDown"])
+    n_groups = len(summary["reportMetadata"]["groupingsDown"])
     pattern = r"_".join(["[0-9]"] * n_groups)
 
     # filter out all keys not matching the pattern
-    groups = itertools.filterfalse(lambda x: not re.search(pattern, x), factmap)
+    groups = [group for group in factmap if re.search(pattern, group)]
 
-    sort_func = lambda x: [int(n) for n in x.rstrip("!T").split("_")]  # noqa: E731
-    for group in sorted(groups, key=sort_func):
+    for group in sorted(groups, key=LooseVersion):
         rows = factmap[group]["rows"]
         for row in rows:
             cells.append([cell["label"] for cell in row["dataCells"]])
@@ -87,14 +63,48 @@ def get_summary_cells(report):
     return cells, cells_by_group
 
 
+def get_summary_indices(summary, cells_by_group):
+    """
+    Auxiliary function to get summary report
+    MultiIndex.
+    """
+    groups = get_groups(summary["groupingsDown"]["groupings"])
+    groups_frequency_pairs = zip(groups, cells_by_group)
+
+    repeated_groups = itertools.chain.from_iterable(
+        itertools.starmap(itertools.repeat, groups_frequency_pairs)
+    )
+
+    return pd.MultiIndex.from_tuples(repeated_groups)
+
+
+dtypes = {
+    "datetime": "datetime64",
+    "date": "datetime64",
+    "time": "datetime64",
+    "string": "string",
+    "boolean": "boolean",
+    "currency": "currency",
+    "percent": "percent",
+    "picklist": "string",
+    "int": "int"
+}
+
+
+def get_columns_types(metadata):
+    if metadata["reportMetadata"]["reportFormat"] == "MATRIX":
+        columns_info = metadata["reportExtendedMetadata"]["groupingColumnInfo"]
+    else:
+        columns_info = metadata["reportExtendedMetadata"]["detailColumnInfo"]
+    return [dtypes.get(info["dataType"], "object") for info in columns_info.values()]
+
+
 def get_column_labels(report):
     """
-    Auxiliary function to get a dict that maps
-    a column label (which is shown in the browser)
-    to its api name (which is only internal).
+    Auxiliary function to get a dict that maps a column label (which is shown
+    in the browser) to its api name (which is only internal).
 
-    The api name is the one that should be
-    used in the request body.
+    The api name is the one that should be used in the request body.
     """
     if report["reportMetadata"]["reportFormat"] == "MATRIX":
         columns_info = report["reportExtendedMetadata"]["groupingColumnInfo"]
@@ -106,7 +116,17 @@ def get_column_labels(report):
 def get_columns(report):
     if report["reportMetadata"]["reportFormat"] == "MATRIX":
         groupings_across = report["groupingsAcross"]["groupings"]
-        multi_columns = get_groups(groupings_across)
+
+        aggregate_info = report["reportExtendedMetadata"]["aggregateColumnInfo"]
+        aggs = [agg["label"] for agg in aggregate_info.values()]
+
+        column_groups = get_groups(groupings_across)
+
+        multi_columns = []
+        for col in column_groups:
+            for agg in aggs:
+                multi_columns.append((agg,) + col)
+
         return pd.MultiIndex.from_tuples(multi_columns)
     else:
         return get_column_labels(report)
@@ -114,13 +134,11 @@ def get_columns(report):
 
 def get_groups(groups):
     """
-    Auxiliary function to iterate through a
-    GroupingsDown or GroupingsAcross, which
-    stores a list of groupings that contains
-    other groupings etc.
+    Auxiliary function to iterate through a GroupingsDown or GroupingsAcross,
+    which stores a list of groupings that may contain other groupings etc.
 
-    It tries to return a list of tuples which
-    is the product of the values inside the group.
+    It tries to return a list of tuples which results from the product of the
+    values inside the group.
     """
     indices = []
     for group in groups:
@@ -131,12 +149,10 @@ def get_groups(groups):
 
 def get_groups_values(groups, L=[]):
     """
-    Auxiliary function to recursively iterate through
-    a grouping, which is a list of dictionary, extract
-    theirs labels and append them into a list.
+    Auxiliary function to recursively iterate through a grouping, which is a
+    list of dictionary, extract theirs labels and append them into a list.
 
-    The function stops when there are no more groupings
-    inside a group.
+    The function stops when there are no more groupings inside a group.
     """
     L.append([group["label"] for group in groups])
     for group in groups:

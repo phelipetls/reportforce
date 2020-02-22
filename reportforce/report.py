@@ -85,17 +85,17 @@ def get_report(
     report_format = metadata["reportMetadata"]["reportFormat"]
 
     if report_format == "TABULAR":
-        return get_tabular_report(report_id, id_column, metadata, session)
+        return get_tabular_reports(report_id, id_column, metadata, session)
     elif report_format == "SUMMARY":
-        return get_summary_report(report_id, id_column, metadata, session)
+        return get_summary_reports(report_id, id_column, metadata, session)
     elif report_format == "MATRIX":
-        return get_matrix_report(report_id, id_column, metadata, session)
+        return get_matrix_reports(report_id, id_column, metadata, session)
 
 
 def get_excel(report_id, excel, session):
     """
-    Auxiliary function to download a formatted
-    Excel spreadsheet of the report.
+    Auxiliary function to download report as
+    a formatted Excel spreadsheet.
 
     Parameters
     ----------
@@ -133,40 +133,25 @@ def get_excel(report_id, excel, session):
     return
 
 
-def get_tabular_report(report_id, id_column, metadata, session):
-    """
-    Auxiliary function to deal with tabular reports
-    """
-    tabular_generator = tabular_report_generator(
-        report_id, id_column, metadata, session
-    )
-    return pd.concat(tabular_generator).reset_index(drop=True)
-
-
 @report_generator.report_generator
-def tabular_report_generator(url, metadata=None, session=None):
+def get_tabular_reports(url, metadata=None, session=None):
     """
-    Auxiliary function to generate tabular reports until
-    all data is returned, i.e. until "allData" in the
-    JSON response body is "true".
+    Generator object to return one tabular report
+    at a time until all data has been returned.
     """
     tabular = request_report.POST(url, headers=session.headers, json=metadata).json()
     tabular_cells = parsers.get_tabular_cells(tabular)
-    indices = None
+    indices = None  # no meaningful indices here
+
     return tabular, tabular_cells, indices
 
 
-
-def get_matrix_report(report_id, id_column, metadata, session):
-    """
-    Auxiliary function to deal with matrix reports
-    """
-    matrix_generator = matrix_report_generator(report_id, id_column, metadata, session)
-    return pd.concat(matrix_generator)
-
-
 @report_generator.report_generator
-def matrix_report_generator(url, metadata, session):
+def get_matrix_reports(url, metadata, session):
+    """
+    Generator object to return one matrix report
+    at a time until all data has been returned.
+    """
     matrix = request_report.POST(url, headers=session.headers, json=metadata).json()
 
     if len(matrix["factMap"]) == 1:
@@ -183,38 +168,21 @@ def matrix_report_generator(url, metadata, session):
     return matrix, matrix_cells, indices
 
 
-def get_summary_report(report_id, id_column, metadata, session):
-    """
-    Auxiliary function to deal with summary reports
-    """
-    summary_generator = summary_report_generator(
-        report_id, id_column, metadata, session
-    )
-    return pd.concat(summary_generator)
-
-
 @report_generator.report_generator
-def summary_report_generator(url, metadata, session):
+def get_summary_reports(url, metadata, session):
+    """
+    Generator object to return one summary report
+    at a time until all data has been returned.
+    """
     summary = request_report.POST(url, headers=session.headers, json=metadata).json()
 
     if len(summary["factMap"]) == 1:
         return summary, [], None
 
     summary_cells, cells_by_group = parsers.get_summary_cells(summary)
-    indices = summary_get_indices(summary, cells_by_group)
+    indices = parsers.get_summary_indices(summary, cells_by_group)
 
     return summary, summary_cells, indices
-
-
-def summary_get_indices(summary, cells_by_group):
-    groups = parsers.get_groups(summary["groupingsDown"]["groupings"])
-    groups_frequency_pairs = zip(groups, cells_by_group)
-
-    repeated_groups = itertools.chain.from_iterable(
-        itertools.starmap(itertools.repeat, groups_frequency_pairs)
-    )
-
-    return pd.MultiIndex.from_tuples(repeated_groups)
 
 
 @functools.lru_cache(maxsize=8)

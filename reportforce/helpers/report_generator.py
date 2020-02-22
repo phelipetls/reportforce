@@ -33,4 +33,7 @@ def report_generator(get_report):
                 df = pd.DataFrame(report_cells, index=indices, columns=columns)
                 yield df
 
-    return generator
+    def concat(*args, **kwargs):
+        return pd.concat(generator(*args, **kwargs))
+
+    return concat
