@@ -6763,7 +6763,7 @@
         "availableDashboardSettings": null,
         "detailColumnInfo": {
             "Column1": {
-                "dataType": "datetime",
+                "dataType": "string",
                 "filterValues": [],
                 "filterable": true,
                 "inactiveFilterValues": [],
@@ -6772,7 +6772,7 @@
                 "uniqueCountable": true
             },
             "Column2": {
-                "dataType": "date",
+                "dataType": "string",
                 "filterValues": [],
                 "filterable": true,
                 "inactiveFilterValues": [],

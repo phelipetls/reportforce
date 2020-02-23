@@ -1,6 +1,7 @@
 import os
 import sys
 import unittest
+import pandas as pd
 
 from unittest.mock import patch
 
@@ -11,6 +12,60 @@ from utils import mocks  # noqa: E402
 
 metadata = mocks.get_json("analytics_tabular_metadata")
 report = mocks.get_json("analytics_tabular")
+
+df = pd.DataFrame(
+    [
+        [
+            "Acme - 200 Widgets",
+            16000.01,
+            "Word of mouth",
+            "Need estimate",
+            0.6,
+            "Q3-2015",
+            12,
+            "2015-07-31",
+            "Fred Wiliamson",
+            "-",
+        ],
+        [
+            "Acme - 200 Widgets",
+            16000.01,
+            "Word of mouth",
+            "Need estimate",
+            0.6,
+            "Q3-2015",
+            12,
+            "2015-07-31",
+            "Fred Wiliamson",
+            "-",
+        ],
+    ],
+    columns=[
+        "Opportunity Name",
+        "Amount",
+        "Lead Source",
+        "Next Step",
+        "Probability (%)",
+        "Fiscal Period",
+        "Age",
+        "Created Date",
+        "Opportunity Owner",
+        "Owner Role",
+    ]
+).astype(
+    {
+        "Opportunity Name": "string",
+        "Amount": "float64",
+        "Lead Source": "string",
+        "Next Step": "string",
+        "Probability (%)": "float64",
+        "Fiscal Period": "string",
+        "Age": "int",
+        "Created Date": "datetime64",
+        "Opportunity Owner": "string",
+        "Owner Role": "string",
+    }
+)
 
 
 class TestTabularReport(unittest.TestCase):
@@ -28,26 +83,10 @@ class TestTabularReport(unittest.TestCase):
                 "report_id", id_column="Opportunity Name", session=mocks.FakeLogin
             )
 
-    def test_columns(self):
-        test = self.report.columns.tolist()
-        expected = [
-            "Opportunity Name",
-            "Amount",
-            "Lead Source",
-            "Next Step",
-            "Probability (%)",
-            "Fiscal Period",
-            "Age",
-            "Created Date",
-            "Opportunity Owner",
-            "Owner Role",
-        ]
-        self.assertListEqual(test, expected)
-
-    def test_length(self):
-        test = len(self.report)
-        expected = 2
-        self.assertEqual(test, expected)
+    def test_dataframe(self):
+        test = self.report
+        expected = df
+        pd.testing.assert_frame_equal(test, expected)
 
 
 class TestEmptyTabular(unittest.TestCase):

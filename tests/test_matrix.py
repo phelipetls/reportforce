@@ -67,7 +67,7 @@ class TestMatrixReport(unittest.TestCase):
             columns=columns,
         )
         df = reportforce.report.get_report("ReportID", session=mocks.FakeLogin)
-        pd.testing.assert_frame_equal(expected_df, df)
+        pd.testing.assert_frame_equal(expected_df, df, check_dtype=False)
 
     @patch("reportforce.report.get_metadata")
     @patch("reportforce.report.request_report.POST")
