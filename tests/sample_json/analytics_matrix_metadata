@@ -9,8 +9,8 @@
     "reportExtendedMetadata": {
         "aggregateColumnInfo": {
             "RowCount": {
-                "dataType": "dataType",
-                "label": "label"
+                "dataType": "string",
+                "label": "Row Sum"
             }
         },
         "availableDashboardSettings": null,
@@ -60,7 +60,7 @@
     },
     "reportMetadata": {
         "aggregates": [
-            "RowCount"
+            "rowCount"
         ],
         "chart": null,
         "crossFilters": [],

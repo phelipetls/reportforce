@@ -1278,9 +1278,9 @@
     "picklistColors": {},
     "reportExtendedMetadata": {
         "aggregateColumnInfo": {
-            "aggregate": {
-                "dataType": "double",
-                "label": "label"
+            "rowCount": {
+                "dataType": "string",
+                "label": "Row Sum"
             }
         },
         "availableDashboardSettings": null,
@@ -1340,7 +1340,7 @@
     },
     "reportMetadata": {
         "aggregates": [
-            "aggregate"
+            "rowCount"
         ],
         "chart": {
             "chartType": "Pie",

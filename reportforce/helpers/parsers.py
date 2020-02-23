@@ -114,22 +114,27 @@ def get_column_labels(report):
 
 
 def get_columns(report):
+    """Auxiliary function to get a report column names."""
+
     if report["reportMetadata"]["reportFormat"] == "MATRIX":
+        # get columns groups tuples
         groupings_across = report["groupingsAcross"]["groupings"]
-
-        aggregate_info = report["reportExtendedMetadata"]["aggregateColumnInfo"]
-        aggs = [agg["label"] for agg in aggregate_info.values()]
-
         column_groups = get_groups(groupings_across)
 
+        # get aggregate columns
+        aggregates_info = report["reportExtendedMetadata"]["aggregateColumnInfo"]
+        aggregates_labels = [
+            aggregates_info[agg]["label"]
+            for agg in report["reportMetadata"]["aggregates"]
+        ]
+
         multi_columns = []
-        for col in column_groups:
-            for agg in aggs:
+        for col in column_groups:  # append aggregates to groups
+            for agg in aggregates_labels:
                 multi_columns.append((agg,) + col)
 
         return pd.MultiIndex.from_tuples(multi_columns)
-    else:
-        return get_column_labels(report)
+    return get_column_labels(report)
 
 
 def get_groups(groups):
