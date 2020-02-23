@@ -61,6 +61,8 @@ def report_generator(get_report):
             elif dtype != "object":
                 df[col] = df[col].astype(dtype)
 
+        if not isinstance(df.index, pd.MultiIndex):
+            df = df.reset_index(drop=True)
 
         return df
 
