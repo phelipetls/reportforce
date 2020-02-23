@@ -98,7 +98,7 @@ class TestEmptyTabular(unittest.TestCase):
 
         mocked_factmap = {"T!T": {"aggregates": {"label": 0, "value": 0}, "rows": []}}
 
-        with patch.dict(report, values=report, factMap = mocked_factmap):
+        with patch.dict(report, values=report, factMap=mocked_factmap):
             mocked_request().json.return_value = report
 
             self.report = get_report(

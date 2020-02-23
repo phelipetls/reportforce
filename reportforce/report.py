@@ -140,6 +140,7 @@ def get_tabular_reports(url, metadata=None, session=None):
     at a time until all data has been returned.
     """
     tabular = request_report.POST(url, headers=session.headers, json=metadata).json()
+
     tabular_cells = parsers.get_tabular_cells(tabular)
     indices = None  # no meaningful indices here
 

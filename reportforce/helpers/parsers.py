@@ -29,7 +29,7 @@ def get_matrix_cells(matrix):
     col_pattern = r"_".join(["[0-9]+"] * n_cols)
     pattern = row_pattern + "!" + col_pattern
 
-    groups = [group for group in factmap if re.search(row_pattern + "!" + col_pattern, group)]
+    groups = [group for group in factmap if re.search(pattern, group)]
 
     cells = []
     for group in sorted(groups, key=LooseVersion):
