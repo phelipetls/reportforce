@@ -6,7 +6,6 @@ base_url = "https://{}/services/data/v{}/analytics/reports/{}"
 
 
 def report_generator(get_report):
-    dtypes = {}
     """
     Decorator function to generate reports until the allData element of the
     response body is 'true', while filtering out already seen values of
@@ -23,9 +22,6 @@ def report_generator(get_report):
         report, report_cells, indices = get_report(url, metadata, session)
 
         columns = helpers.parsers.get_columns(report)
-
-        nonlocal dtypes
-        dtypes = helpers.parsers.get_columns_types(report)
 
         df = pd.DataFrame(report_cells, index=indices, columns=columns)
         yield df
@@ -50,16 +46,6 @@ def report_generator(get_report):
     def concat(*args, **kwargs):
         """Concantenate reports and convert columns dtypes."""
         df = pd.concat(generator(*args, **kwargs))
-
-        for col, dtype in zip(df, dtypes):
-            if dtype == "percent":
-                df[col] = pd.to_numeric(df[col].str.rstrip("%")) / 100
-            elif dtype == "currency":
-                df[col] = pd.to_numeric(df[col].str.replace("[^.0-9]", ""))
-            elif dtype.startswith("date"):
-                df[col] = pd.to_datetime(df[col])
-            elif dtype != "object":
-                df[col] = df[col].astype(dtype)
 
         if not isinstance(df.index, pd.MultiIndex):
             df = df.reset_index(drop=True)

@@ -4,6 +4,26 @@ import pandas as pd
 
 from distutils.version import LooseVersion
 
+numbers = ["double", "percent", "int"]
+dates = ["datetime", "date", "time"]
+
+
+def get_value(cell, dtype):
+    """Auxiliary function to get cell value according to data type."""
+    if dtype in numbers:
+        return cell["value"]
+
+    elif dtype in dates:
+        return pd.Timestamp(cell["value"])
+
+    elif dtype == "currency":
+        try:
+            return cell["value"]["amount"]
+        except TypeError:
+            return cell["value"]
+
+    return cell["label"]
+
 
 def get_tabular_cells(report):
     """
@@ -11,7 +31,15 @@ def get_tabular_cells(report):
     from tabular report.
     """
     rows = report["factMap"]["T!T"]["rows"]
-    return [[cell["label"] for cell in row["dataCells"]] for row in rows]
+    dtypes = get_columns_dtypes(report)
+
+    cells = []
+    for row in rows:
+        L = []
+        for cell, dtype in zip(row["dataCells"], dtypes):
+            L.append(get_value(cell, dtype))
+        cells.append(L)
+    return cells
 
 
 def get_matrix_cells(matrix):
@@ -31,10 +59,13 @@ def get_matrix_cells(matrix):
 
     groups = [group for group in factmap if re.search(pattern, group)]
 
+    dtypes = get_columns_dtypes(matrix)
+
     cells = []
     for group in sorted(groups, key=LooseVersion):
-        cells.extend([agg["label"] for agg in factmap[group]["aggregates"]])
-
+        aggregates = factmap[group]["aggregates"]
+        for agg, dtype in zip(aggregates, dtypes):
+            cells.append(get_value(agg, dtype))
     return cells
 
 
@@ -53,11 +84,15 @@ def get_summary_cells(summary):
 
     # filter out all keys not matching the pattern
     groups = [group for group in factmap if re.search(pattern, group)]
+    dtypes = get_columns_dtypes(summary)
 
     for group in sorted(groups, key=LooseVersion):
         rows = factmap[group]["rows"]
         for row in rows:
-            cells.append([cell["label"] for cell in row["dataCells"]])
+            data_cells = row["dataCells"]
+            cells.append(
+                [get_value(cell, dtype) for cell, dtype in zip(data_cells, dtypes)]
+            )
         cells_by_group.append(len(rows))
 
     return cells, cells_by_group
@@ -78,25 +113,18 @@ def get_summary_indices(summary, cells_by_group):
     return pd.MultiIndex.from_tuples(repeated_groups)
 
 
-dtypes = {
-    "datetime": "datetime64",
-    "date": "datetime64",
-    "time": "datetime64",
-    "string": "string",
-    "boolean": "boolean",
-    "currency": "currency",
-    "percent": "percent",
-    "picklist": "string",
-    "int": "int"
-}
+def get_columns_dtypes(report):
+    """Get columns types"""
+    report_format = report["reportMetadata"]["reportFormat"]
 
+    if report_format == "MATRIX":
+        info = report["reportExtendedMetadata"]["aggregateColumnInfo"]
+        aggregates = report["reportMetadata"]["aggregates"]
+        return [info[col]["dataType"] for col in aggregates]
 
-def get_columns_types(metadata):
-    if metadata["reportMetadata"]["reportFormat"] == "MATRIX":
-        columns_info = metadata["reportExtendedMetadata"]["groupingColumnInfo"]
-    else:
-        columns_info = metadata["reportExtendedMetadata"]["detailColumnInfo"]
-    return [dtypes.get(info["dataType"], "object") for info in columns_info.values()]
+    info = report["reportExtendedMetadata"]["detailColumnInfo"]
+    columns = report["reportMetadata"]["detailColumns"]
+    return [info[col]["dataType"] for col in columns]
 
 
 def get_column_labels(report):

@@ -20,10 +20,10 @@ df = pd.DataFrame(
             16000.01,
             "Word of mouth",
             "Need estimate",
-            0.6,
+            60,
             "Q3-2015",
             12,
-            "2015-07-31",
+            pd.Timestamp("2015-07-31"),
             "Fred Wiliamson",
             "-",
         ],
@@ -32,10 +32,10 @@ df = pd.DataFrame(
             16000.01,
             "Word of mouth",
             "Need estimate",
-            0.6,
+            60,
             "Q3-2015",
             12,
-            "2015-07-31",
+            pd.Timestamp("2015-07-31"),
             "Fred Wiliamson",
             "-",
         ],
@@ -52,19 +52,6 @@ df = pd.DataFrame(
         "Opportunity Owner",
         "Owner Role",
     ]
-).astype(
-    {
-        "Opportunity Name": "string",
-        "Amount": "float64",
-        "Lead Source": "string",
-        "Next Step": "string",
-        "Probability (%)": "float64",
-        "Fiscal Period": "string",
-        "Age": "int",
-        "Created Date": "datetime64",
-        "Opportunity Owner": "string",
-        "Owner Role": "string",
-    }
 )
 
 
