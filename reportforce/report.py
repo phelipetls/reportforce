@@ -156,7 +156,7 @@ def get_matrix_reports(url, metadata, session):
     matrix = request_report.POST(url, headers=session.headers, json=metadata).json()
 
     if len(matrix["factMap"]) == 1:
-        return pd.DataFrame()
+        return matrix, [], None
 
     matrix_cells = np.array(parsers.get_matrix_cells(matrix))
 

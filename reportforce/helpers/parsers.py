@@ -161,7 +161,7 @@ def get_columns(report):
             for agg in aggregates_labels:
                 multi_columns.append((agg,) + col)
 
-        return pd.MultiIndex.from_tuples(multi_columns)
+        return pd.MultiIndex.from_tuples(multi_columns) if multi_columns else None
     return get_column_labels(report)
 
 
