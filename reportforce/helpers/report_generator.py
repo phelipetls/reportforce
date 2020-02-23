@@ -27,7 +27,7 @@ def report_generator(get_report):
         yield df
 
         if id_column:
-            already_seen = ""
+            already_seen = ",".join(df[id_column].values)
             helpers.filtering.set_filters([(id_column, "!=", already_seen)], metadata)
             helpers.filtering.increment_logical_filter(metadata)
 
