@@ -29,18 +29,20 @@ def report_generator(get_report):
         if id_column:
             already_seen = ",".join(df[id_column].values)
             helpers.filtering.set_filters([(id_column, "!=", already_seen)], metadata)
+
             helpers.filtering.increment_logical_filter(metadata)
 
             while not report["allData"]:
                 # getting what is needed to build the dataframe
                 report, report_cells, indices = get_report(url, metadata, session)
 
+                df = pd.DataFrame(report_cells, index=indices, columns=columns)
+
                 # filtering out already seen values
                 if id_column:
                     already_seen += ",".join(df[id_column].values)
                     helpers.filtering.update_filter(-1, "value", already_seen, metadata)
 
-                df = pd.DataFrame(report_cells, index=indices, columns=columns)
                 yield df
 
     def concat(*args, **kwargs):
