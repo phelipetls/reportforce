@@ -51,7 +51,7 @@ def increment_logical_filter(metadata):
     logic = metadata["reportMetadata"]["reportBooleanFilter"]
     if logic:
         # get last number, for example, get 3 in '(1 AND (2 OR 3))'
-        last_number = re.search(r"(\d)\)*$", logic).group(1)
+        last_number = re.search(r"(\d+)\)*$", logic).group(1)
         # turn filter into '(1 AND (2 OR 3)) AND 4'
         new_logic = logic + " AND {}".format(int(last_number) + 1)
 
