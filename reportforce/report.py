@@ -75,7 +75,7 @@ def get_report(
 
     metadata = copy.deepcopy(get_metadata(report_id, session))
 
-    if start and end:
+    if start or end:
         filtering.set_period(start, end, date_column, metadata)
     if logic:
         filtering.set_logic(logic, metadata)
