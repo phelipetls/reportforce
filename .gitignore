@@ -7,6 +7,9 @@ venv*
 # ctags
 tags
 
+# cpython stuff
+*.pyc
+
 # Distribution / packaging
 .Python
 env/
@@ -42,3 +45,12 @@ docs/source/auto_examples/
 
 # flake
 .flake8
+
+# profiling
+profil*
+
+# scrath files
+scratch.py
+
+# excel files
+*.xls*
