@@ -68,7 +68,7 @@ def get_report(
     DataFrame
         A DataFrame contaning the records from the report.
     """
-    if not session:
+    if session is None:
         raise SessionNotFound
 
     if excel:
@@ -207,7 +207,7 @@ def get_metadata(report_id, session=None):
     dict
         The JSON response body as a dictionary.
     """
-    if not session:
+    if session is None:
         raise SessionNotFound
 
     url = (
