@@ -1,7 +1,6 @@
 import re
 import copy
 import functools
-import itertools
 import numpy as np
 import pandas as pd
 
@@ -25,47 +24,49 @@ def get_report(
     excel=None,
 ):
     """
-    Function to retrieve a Salesforce tabular report
-    into a DataFrame.
+    Function to get a Salesforce tabular report into a DataFrame.
 
     Parameters
     ----------
     report_id : str
-        Report unique identifier.
+        A report unique identifier.
 
-    id_column : str
-        Column name (label) which has unique values
-        for each row, i.e., a key. This is needed to
-        as a workaround the Analytics API's 2000 row
-        limitation.
+    id_column : str (optional)
+        Column name which has unique values for each row. This is needed as
+        a workaround to the Analytics API's 2000 row limitation.
 
-    date_column : str
-        Date column name (label).
+    date_column : str (optional)
+        Date column name.
 
-    start : str
-        Initial date string, passed into dateutil.parser.parse.
+    start : str (optional)
+        Initial date string, passed into dateutil.parser.parse. Must start with
+        the day.
 
-    end : str
-        Final date string, passed into dateutil.parser.parse.
+    end : str (optional)
+        End date string, passed into dateutil.parser.parse. Must start with
+        the day.
 
-    filters : list
-        List of tuples, each of which represents
-        a filter: [("COL", ">=", "VALUE")].
+    filters : list (optional)
+        List of tuples, each of which represents a filter:
+        [("column", ">=", "value")].
 
-    logic : str
-        Logical filter. This is commonly needed if
-        the report already has a report filter, but
-        it can also be useful in general.
+    logic : str (optional)
+        Logical filter. This is commonly needed if the report already has a
+        report filter, but it can also be useful in case you add more filters.
 
-    session : object
-        An instance of simple_salesforce.Salesforce or
-        reportforce.login.Login, needed for authentication.
+    excel : bool, str (optional)
+        Whether or not you want to save the report in a Excel file. If a
+        non-empty string is passed, it will be used as the filename. If True,
+        the workbook will be automatically named.
+
+    session : object (optional)
+        An instance of simple_salesforce.Salesforce or reportforce.login.Login
+        to authenticate the requests.
 
     Returns
     -------
     DataFrame
-        A DataFrame contaning the records from
-        the report.
+        A DataFrame contaning the records from the report.
     """
     if not session:
         raise SessionNotFound
@@ -100,10 +101,11 @@ def get_excel(report_id, excel, session):
     Parameters
     ----------
     report_id : str
+        A report unique identifier.
 
     excel : bool or str
-        If a non-empty string, it will serve as the filename.
-        If True, it will write to the filename Salesforce provides.
+        If a non-empty string, it will be used as the filename.
+        If True, the workbook is automatically named.
 
     session : object
         An instance of simple_salesforce.Salesforce or
@@ -130,14 +132,12 @@ def get_excel(report_id, excel, session):
     with open(filename, "wb") as excel_file:
         excel_file.write(response.content)
 
-    return
-
 
 @report_generator.report_generator
 def get_tabular_reports(url, metadata=None, session=None):
     """
-    Generator object to return one tabular report
-    at a time until all data has been returned.
+    Generator object to return one tabular report at a time until all data has
+    been returned.
     """
     tabular = request_report.POST(url, headers=session.headers, json=metadata).json()
 
@@ -150,8 +150,8 @@ def get_tabular_reports(url, metadata=None, session=None):
 @report_generator.report_generator
 def get_matrix_reports(url, metadata, session):
     """
-    Generator object to return one matrix report
-    at a time until all data has been returned.
+    Generator object to return one matrix report at a time until all data has
+    been returned.
     """
     matrix = request_report.POST(url, headers=session.headers, json=metadata).json()
 
@@ -173,8 +173,8 @@ def get_matrix_reports(url, metadata, session):
 @report_generator.report_generator
 def get_summary_reports(url, metadata, session):
     """
-    Generator object to return one summary report
-    at a time until all data has been returned.
+    Generator object to return one summary report at a time until all data has
+    been returned.
     """
     summary = request_report.POST(url, headers=session.headers, json=metadata).json()
 
@@ -190,8 +190,22 @@ def get_summary_reports(url, metadata, session):
 @functools.lru_cache(maxsize=8)
 def get_metadata(report_id, session=None):
     """
-    Function to get a report metadata information,
-    which is used for filtering reports.
+    Function to get a report metadata information, which is used for filtering
+    reports.
+
+    Parameters
+    ----------
+    report_id : str
+        A report unique identifier.
+
+    session : object (optional)
+        An instance of simple_salesforce.Salesforce or reportforce.login.Login
+        to authenticate the requests.
+
+    Returns
+    -------
+    dict
+        The JSON response body as a dictionary.
     """
     if not session:
         raise SessionNotFound

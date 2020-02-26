@@ -9,7 +9,7 @@ dates = ["datetime", "date", "time"]
 
 
 def get_value(cell, dtype):
-    """Auxiliary function to get cell value according to data type."""
+    """ Auxiliary function to get cell value according to data type. """
     if dtype in numbers:
         return cell["value"]
 
@@ -26,10 +26,7 @@ def get_value(cell, dtype):
 
 
 def get_tabular_cells(report):
-    """
-    Auxiliary function to get all cells
-    from tabular report.
-    """
+    """ Auxiliary function to get all cells from tabular report. """
     rows = report["factMap"]["T!T"]["rows"]
     dtypes = get_columns_dtypes(report)
 
@@ -43,10 +40,7 @@ def get_tabular_cells(report):
 
 
 def get_matrix_cells(matrix):
-    """
-    Auxiliary function to get all cells
-    from a matrix report.
-    """
+    """ Auxiliary function to get all cells from a matrix report. """
     factmap = matrix["factMap"]
 
     n_rows = len(matrix["reportMetadata"]["groupingsDown"])
@@ -70,10 +64,7 @@ def get_matrix_cells(matrix):
 
 
 def get_summary_cells(summary):
-    """
-    Auxiliary function to get all cells
-    from a summary report.
-    """
+    """ Auxiliary function to get all cells from a summary report. """
     factmap = summary["factMap"]
     cells = []
     cells_by_group = []
@@ -99,10 +90,7 @@ def get_summary_cells(summary):
 
 
 def get_summary_indices(summary, cells_by_group):
-    """
-    Auxiliary function to get summary report
-    MultiIndex.
-    """
+    """ Auxiliary function to get summary report MultiIndex. """
     groups = get_groups(summary["groupingsDown"]["groupings"])
     groups_frequency_pairs = zip(groups, cells_by_group)
 

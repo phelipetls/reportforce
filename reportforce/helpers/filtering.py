@@ -18,9 +18,8 @@ operators_dict = {
 
 def set_filters(filters, metadata):
     """
-    Auxiliary function to append a dictionary
-    (that represents a column filter) into a
-    list of dicts.
+    Auxiliary function to append a dictionary (that represents a column filter)
+    into a list of dicts.
     """
     for filter_ in filters:
         column, operator, value = filter_
@@ -34,19 +33,18 @@ def set_filters(filters, metadata):
 
 def update_filter(index, key, value, metadata):
     """
-    Auxiliary function to update an arbitrary
-    dictionary in a list of dicts.
+    Auxiliary function to update an arbitrary filter component in the filters
+    list.
     """
     metadata["reportMetadata"]["reportFilters"][index][key] = value
 
 
 def increment_logical_filter(metadata):
     """
-    Auxiliary function to increment the current
-    logical filter. This is needed because we add
-    an additional filter and, if there is one,
-    we need to add it into the filter logic, otherwise
-    an error is thrown.
+    Auxiliary function to increment the current logical filter.
+
+    This is needed because we add an additional filter and, if there is one, we
+    need to add it into the filter logic, otherwise an error is thrown.
     """
     logic = metadata["reportMetadata"]["reportBooleanFilter"]
     if logic:
@@ -59,14 +57,12 @@ def increment_logical_filter(metadata):
 
 
 def set_logic(logic, metadata):
-    """
-    Auxiliary function to update the logical
-    filter value.
-    """
+    """ Auxiliary function to update the logical filter value. """
     metadata["reportMetadata"]["reportBooleanFilter"] = logic
 
 
 def set_period(start, end, column, metadata):
+    """ Auxiliary function to set Date-related filter parameters. """
     date_filter = metadata["reportMetadata"]["standardDateFilter"]
     date_filter["durationValue"] = "CUSTOM"
     if column:
