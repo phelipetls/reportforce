@@ -12,11 +12,19 @@ from utils import mocks  # noqa: E402
 
 headers = {"Content-Disposition": 'attachment; filename="spreadsheet.xlsx"'}
 
+mocked_response = Mock(headers=headers)
+mocked_response.iter_content = lambda chunk_size: b"1,2,3\na,b,c"
+
+metadata = mocks.get_json("analytics_tabular_metadata")
+
 
 class TestExcelWithoutFilename(unittest.TestCase):
-    @patch("reportforce.helpers.request_report.GET")
-    def setUp(self, mocked_request):
-        mocked_request.return_value = Mock(headers=headers, content=b"1,2,3\na,b,c")
+    @patch("reportforce.report.get_metadata")
+    @patch("reportforce.helpers.request_report.POST")
+    def setUp(self, mocked_request, mocked_metadata):
+        mocked_metadata.return_value = metadata
+
+        mocked_request.return_value.__enter__.return_value = mocked_response
 
         self.m = mock_open()
         with patch("reportforce.report.open", self.m, create=True):
@@ -27,13 +35,18 @@ class TestExcelWithoutFilename(unittest.TestCase):
 
 
 class TestExcelWithFileName(unittest.TestCase):
-    @patch("reportforce.helpers.request_report.GET")
-    def setUp(self, mocked_request):
-        mocked_request.return_value = Mock(headers=headers, content=b"1,2,3\na,b,c")
+    @patch("reportforce.report.get_metadata")
+    @patch("reportforce.helpers.request_report.POST")
+    def setUp(self, mocked_request, mocked_metadata):
+        mocked_metadata.return_value = metadata
+
+        mocked_request.return_value.__enter__.return_value = mocked_response
 
         self.m = mock_open()
         with patch("reportforce.report.open", self.m, create=True):
-            self.excel = get_report("report_id", excel="filename.xlsx", session=mocks.FakeLogin)
+            self.excel = get_report(
+                "report_id", excel="filename.xlsx", session=mocks.FakeLogin
+            )
 
     def test_get_excel_report_specific_filename(self):
         self.m.assert_called_once_with("filename.xlsx", "wb")

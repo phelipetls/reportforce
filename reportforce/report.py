@@ -71,9 +71,6 @@ def get_report(
     if session is None:
         raise SessionNotFound
 
-    if excel:
-        return get_excel(report_id, excel, session)
-
     metadata = copy.deepcopy(get_metadata(report_id, session))
 
     if start or end:
@@ -82,6 +79,9 @@ def get_report(
         filtering.set_logic(logic, metadata)
     if filters:
         filtering.set_filters(filters, metadata)
+
+    if excel:
+        return get_excel(report_id, excel, metadata, session)
 
     report_format = metadata["reportMetadata"]["reportFormat"]
 
@@ -93,7 +93,7 @@ def get_report(
         return get_matrix_reports(report_id, id_column, metadata, session)
 
 
-def get_excel(report_id, excel, session):
+def get_excel(report_id, excel, metadata, session):
     """
     Auxiliary function to download report as
     a formatted Excel spreadsheet.
@@ -113,24 +113,23 @@ def get_excel(report_id, excel, session):
     """
     url = base_url.format(session.instance_url, session.version, report_id)
 
-    spreadsheet_header = {
-        "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    }
-
     headers = session.headers.copy()
-    headers.update(spreadsheet_header)
 
-    response = request_report.GET(url, headers=headers)
+    spreadsheet_headers = {"Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+    headers.update(spreadsheet_headers)
 
-    if isinstance(excel, str):
-        filename = excel
-    else:
-        string = response.headers["Content-Disposition"]
-        pattern = 'filename="(.*)"'
-        filename = re.search(pattern, string).group(1)
+    with request_report.POST(url, headers=headers, json=metadata, stream=True) as r:
+        if isinstance(excel, str):
+            filename = excel
+        else:
+            string = r.headers["Content-Disposition"]
+            pattern = 'filename="(.*)"'
+            filename = re.search(pattern, string).group(1)
 
-    with open(filename, "wb") as excel_file:
-        excel_file.write(response.content)
+        with open(filename, "wb") as excel_file:
+            for chunk in r.iter_content(chunk_size=512 * 1024):
+                if chunk:
+                    excel_file.write(chunk)
 
 
 @report_generator.report_generator
