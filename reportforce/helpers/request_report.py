@@ -1,13 +1,13 @@
+import functools
 import requests
 
 s = requests.Session()
 
 
 def handle_error(request):
-    """
-    Decorator to handle Salesforce request errors.
-    """
+    """ Decorator to handle Salesforce request errors. """
 
+    @functools.wraps(request)
     def handler(*args, **kwargs):
         response = request(*args, **kwargs)
         if response.status_code != 200:

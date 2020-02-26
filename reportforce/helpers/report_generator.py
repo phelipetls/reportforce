@@ -1,3 +1,4 @@
+import functools
 import pandas as pd
 
 from .. import helpers
@@ -44,6 +45,7 @@ def report_generator(get_report):
 
                 yield df
 
+    @functools.wraps(get_report)
     def concat(*args, **kwargs):
         """ Concantenate reports. """
         df = pd.concat(generator(*args, **kwargs))
