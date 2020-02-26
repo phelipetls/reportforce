@@ -1296,44 +1296,44 @@
             }
         },
         "groupingColumnInfo": {
-            "column1": {
+            "Product": {
                 "dataType": "string",
                 "filterValues": [],
                 "filterable": true,
                 "groupingLevel": 0,
                 "inactiveFilterValues": [],
                 "isLookup": true,
-                "label": "label",
+                "label": "Product",
                 "uniqueCountable": true
             },
-            "column2": {
+            "Delivery Day": {
                 "dataType": "string",
                 "filterValues": [],
                 "filterable": true,
                 "groupingLevel": 1,
                 "inactiveFilterValues": [],
                 "isLookup": true,
-                "label": "label",
+                "label": "Delivery Day",
                 "uniqueCountable": true
             },
-            "column3": {
+            "Supervisor": {
                 "dataType": "string",
                 "filterValues": [],
                 "filterable": true,
                 "groupingLevel": 0,
                 "inactiveFilterValues": [],
                 "isLookup": false,
-                "label": "label",
+                "label": "Supervisor",
                 "uniqueCountable": true
             },
-            "column4": {
+            "Worker": {
                 "dataType": "string",
                 "filterValues": [],
                 "filterable": true,
                 "groupingLevel": 1,
                 "inactiveFilterValues": [],
                 "isLookup": false,
-                "label": "label",
+                "label": "Worker",
                 "uniqueCountable": true
             }
         }

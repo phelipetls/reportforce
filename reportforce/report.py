@@ -161,7 +161,8 @@ def get_matrix_reports(url, metadata, session):
     matrix_cells = np.array(parsers.get_matrix_cells(matrix))
 
     groupings_down = matrix["groupingsDown"]["groupings"]
-    indices = pd.MultiIndex.from_tuples(parsers.get_groups(groupings_down))
+    names = parsers.get_groupings_labels(matrix, "groupingsDown")
+    indices = pd.MultiIndex.from_tuples(parsers.get_groups(groupings_down), names=names)
 
     columns = parsers.get_columns(matrix)
 

@@ -38,7 +38,7 @@ class TestMatrixReport(unittest.TestCase):
                 ("Supervisor4", "Worker10"),
                 ("Supervisor4", "Worker11"),
                 ("Supervisor4", "Worker12"),
-            ]
+            ], names=["Supervisor", "Worker"]
         )
         columns = pd.MultiIndex.from_tuples(
             [
@@ -46,7 +46,7 @@ class TestMatrixReport(unittest.TestCase):
                 ("Row Sum", "Product", "DeliveryDay2"),
                 ("Row Sum", "Product", "DeliveryDay3"),
                 ("Row Sum", "Product", "DeliveryDay4"),
-            ]
+            ], names=["", "Product", "Delivery Day"]
         )
         expected_df = pd.DataFrame(
             [

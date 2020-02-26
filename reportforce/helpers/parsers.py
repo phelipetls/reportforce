@@ -110,7 +110,9 @@ def get_summary_indices(summary, cells_by_group):
         itertools.starmap(itertools.repeat, groups_frequency_pairs)
     )
 
-    return pd.MultiIndex.from_tuples(repeated_groups)
+    names = get_groupings_labels(summary, "groupingsDown")
+
+    return pd.MultiIndex.from_tuples(repeated_groups, names=names)
 
 
 def get_columns_dtypes(report):
@@ -127,12 +129,23 @@ def get_columns_dtypes(report):
     return [info[col]["dataType"] for col in columns]
 
 
+def get_groupings_labels(report, key):
+    """Get groupings labels"""
+    groupings_metadata = report["reportExtendedMetadata"]["groupingColumnInfo"]
+    groups_names = [group["name"] for group in report["reportMetadata"][key]]
+
+    groups_labels = [groupings_metadata[name]["label"] for name in groups_names]
+    return groups_labels
+
+
 def get_columns_labels(report):
     """
     Auxiliary function to get a dict that maps a column label (which is shown
-    in the browser) to its api name (which is only internal).
+    in the browser) to its API name (which is only internal).
 
-    The api name is the one that should be used in the request body.
+    The API name is the one that should be used in the request body.
+
+    This is used to get the corresping label of a given column API name.
     """
     if report["reportMetadata"]["reportFormat"] == "MATRIX":
         columns_info = report["reportExtendedMetadata"]["groupingColumnInfo"]
@@ -142,7 +155,10 @@ def get_columns_labels(report):
 
 
 def get_columns(report):
-    """Auxiliary function to get a report column names."""
+    """
+    Auxiliary function to get a report columns labels in an appropriate
+    format to be passed to the columns argument when creating a DataFrame.
+    """
 
     if report["reportMetadata"]["reportFormat"] == "MATRIX":
         # get columns groups tuples
@@ -161,7 +177,9 @@ def get_columns(report):
             for agg in aggregates_labels:
                 multi_columns.append((agg,) + col)
 
-        return pd.MultiIndex.from_tuples(multi_columns) if multi_columns else None
+        if multi_columns:
+            groups_labels = [""] + get_groupings_labels(report, "groupingsAcross")
+            return pd.MultiIndex.from_tuples(multi_columns, names=groups_labels)
     return get_columns_labels(report)
 
 

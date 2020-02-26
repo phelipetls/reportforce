@@ -6843,7 +6843,7 @@
                 "label": "label",
                 "uniqueCountable": true
             },
-            "Column1": {
+            "Column2": {
                 "dataType": "reference",
                 "filterValues": [
                     {
@@ -6964,7 +6964,7 @@
                 "label": "label",
                 "uniqueCountable": true
             },
-            "Column1": {
+            "Column3": {
                 "dataType": "picklist",
                 "filterValues": [
                     {
@@ -7012,19 +7012,19 @@
         "groupingsDown": [
             {
                 "dateGranularity": "None",
-                "name": "name",
+                "name": "Column1",
                 "sortAggregate": null,
                 "sortOrder": "Asc"
             },
             {
                 "dateGranularity": "None",
-                "name": "name",
+                "name": "Column2",
                 "sortAggregate": null,
                 "sortOrder": "Asc"
             },
             {
                 "dateGranularity": "None",
-                "name": "name",
+                "name": "Column3",
                 "sortAggregate": null,
                 "sortOrder": "Asc"
             }
