@@ -127,7 +127,7 @@ def get_columns_dtypes(report):
     return [info[col]["dataType"] for col in columns]
 
 
-def get_column_labels(report):
+def get_columns_labels(report):
     """
     Auxiliary function to get a dict that maps a column label (which is shown
     in the browser) to its api name (which is only internal).
@@ -162,7 +162,7 @@ def get_columns(report):
                 multi_columns.append((agg,) + col)
 
         return pd.MultiIndex.from_tuples(multi_columns) if multi_columns else None
-    return get_column_labels(report)
+    return get_columns_labels(report)
 
 
 def get_groups(groups):
