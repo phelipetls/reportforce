@@ -7,7 +7,8 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from reportforce.report import Reportforce, get_report  # noqa: E402
+from reportforce import Reportforce  # noqa: E402
+from reportforce.report import get_report  # noqa: E402
 from utils import mocks  # noqa: E402
 
 metadata = mocks.get_json("analytics_tabular_metadata")
