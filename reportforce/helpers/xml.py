@@ -8,14 +8,12 @@ namespace = {
 
 
 def read_successful_response(response):
-    """
-    Helper function to parse XML returned by SOAP
-    API response in case of a successful login.
+    """Parse XML returned by SOAP API response in case of a successful login.
 
     Parameters
     ----------
     response : str
-        SOAP API's response test.
+        SOAP API response in text.
 
     Returns
     -------
@@ -35,14 +33,12 @@ def read_successful_response(response):
 
 
 def read_failed_response(response):
-    """
-    Helper function to parse XML returned by SOAP
-    API response in case of a failed login.
+    """Parse XML returned by SOAP API response in case of a failed login.
 
     Parameters
     ----------
     response : str
-        SOAP API's response test.
+        SOAP API response in text.
 
     Returns
     -------

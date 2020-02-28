@@ -5,9 +5,7 @@ from .helpers.xml import read_failed_response, read_successful_response
 
 
 class Login(object):
-    """
-    A Salesforce session instance
-    """
+    """A Salesforce session instance."""
 
     def __init__(self, username, password, security_token, version="47.0", **kwargs):
         self.version = version
@@ -18,8 +16,7 @@ class Login(object):
 
 
 def soap_login(username, password, security_token, domain="login", version="47.0"):
-    """
-    Helper function to login into Salesforce via SOAP API.
+    """Helper function to login into Salesforce via SOAP API.
 
     Parameters
     ----------

@@ -5,7 +5,7 @@ s = requests.Session()
 
 
 def handle_error(request):
-    """ Decorator to handle Salesforce request errors. """
+    """Decorator to handle Analytics API request errors."""
 
     @functools.wraps(request)
     def handler(*args, **kwargs):
@@ -24,21 +24,18 @@ def handle_error(request):
 
 @handle_error
 def POST(url, **kwargs):
-    """
-    A wrapper around requests.post designed
-    to extract data from Salesforce.
+    """A wrapper around requests.post designed to request data from Salesforce
+    Analytics API.
 
     Returns
     -------
     dict
-        A dictionary with the response body
-        contents to the requested report.
+        A dictionary with the response body contents to the requested report.
 
     Raises
     ------
     ReportError
-        If the response body is a JSON containing
-        an error message.
+        If the response body is a JSON containing an error message.
     """
     return s.post(url, **kwargs)
 
@@ -46,20 +43,18 @@ def POST(url, **kwargs):
 @handle_error
 def GET(url, **kwargs):
     """
-    A wrapper around requests.get designed
-    to extract data from Salesforce.
+    A wrapper around requests.get designed to request data from Salesforce
+    Analytics API.
 
     Returns
     -------
     dict
-        A dictionary with the response body
-        contents to the requested report.
+        A dictionary with the response body contents to the requested report.
 
     Raises
     ------
     ReportError
-        If the response body is a JSON containing
-        an error message.
+        If the response body is a JSON containing an error message.
     """
     return s.get(url, **kwargs)
 

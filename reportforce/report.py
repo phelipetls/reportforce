@@ -23,8 +23,7 @@ def get_report(
     session=None,
     excel=None,
 ):
-    """
-    Function to get a Salesforce tabular report into a DataFrame.
+    """Function to get a Salesforce tabular report into a DataFrame.
 
     Parameters
     ----------
@@ -94,7 +93,7 @@ def get_report(
 
 
 class Reportforce:
-    """Authenticated calls to Salesforce Analytics API."""
+    """Class to easily interact with Salesforce Analytics API."""
 
     def __init__(self, session):
         self.session = session
@@ -108,9 +107,7 @@ class Reportforce:
 
 
 def get_excel(report_id, excel, metadata, session):
-    """
-    Auxiliary function to download report as
-    a formatted Excel spreadsheet.
+    """Download report as formatted Excel spreadsheet.
 
     Parameters
     ----------
@@ -148,9 +145,25 @@ def get_excel(report_id, excel, metadata, session):
 
 @report_generator.report_generator
 def get_tabular_reports(url, metadata=None, session=None):
-    """
-    Generator object to return one tabular report at a time until all data has
-    been returned.
+    """Request and parse a tabular report.
+
+    Parameters
+    ----------
+    url : str
+        Report url.
+
+    metadata : dict
+        Used for filtering.
+
+    session : object
+        Used for authentication.
+
+    Returns
+    -------
+    tuple
+        JSON response body parsed as a dict.
+        Report data cells parsed as a list.
+        Indices to be used in the DataFrame.
     """
     tabular = request_report.POST(url, headers=session.headers, json=metadata).json()
 
@@ -162,9 +175,25 @@ def get_tabular_reports(url, metadata=None, session=None):
 
 @report_generator.report_generator
 def get_matrix_reports(url, metadata, session):
-    """
-    Generator object to return one matrix report at a time until all data has
-    been returned.
+    """Request and parse a matrix report.
+
+    Parameters
+    ----------
+    url : str
+        Report url.
+
+    metadata : dict
+        Used for filtering.
+
+    session : object
+        Used for authentication.
+
+    Returns
+    -------
+    tuple
+        JSON response body parsed as a dict.
+        Report data cells parsed as a list.
+        Indices to be used in the DataFrame.
     """
     matrix = request_report.POST(url, headers=session.headers, json=metadata).json()
 
@@ -185,9 +214,25 @@ def get_matrix_reports(url, metadata, session):
 
 @report_generator.report_generator
 def get_summary_reports(url, metadata, session):
-    """
-    Generator object to return one summary report at a time until all data has
-    been returned.
+    """Request and parse a summary report.
+
+    Parameters
+    ----------
+    url : str
+        Report url.
+
+    metadata : dict
+        Used for filtering.
+
+    session : object
+        Used for authentication.
+
+    Returns
+    -------
+    tuple
+        JSON response body parsed as a dict.
+        Report fact map parsed as a list.
+        Indices to be used in the DataFrame.
     """
     summary = request_report.POST(url, headers=session.headers, json=metadata).json()
 
@@ -202,9 +247,7 @@ def get_summary_reports(url, metadata, session):
 
 @functools.lru_cache(maxsize=8)
 def get_metadata(report_id, session=None):
-    """
-    Function to get a report metadata information, which is used for filtering
-    reports.
+    """Request report metadata.
 
     Parameters
     ----------
@@ -212,8 +255,8 @@ def get_metadata(report_id, session=None):
         A report unique identifier.
 
     session : object (optional)
-        An instance of simple_salesforce.Salesforce or reportforce.login.Login
-        to authenticate the requests.
+        An instance of simple_salesforce.Salesforce or reportforce.login.Login,
+        used for authentication.
 
     Returns
     -------

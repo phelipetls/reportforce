@@ -7,8 +7,7 @@ base_url = "https://{}/services/data/v{}/analytics/reports/{}"
 
 
 def report_generator(get_report):
-    """
-    Decorator function to generate reports until the allData element of the
+    """Decorator function to generate reports until the allData element of the
     response body is 'true', while filtering out already seen values of
     a specified identifier column, given by the id_column parameter.
 
@@ -47,7 +46,6 @@ def report_generator(get_report):
 
     @functools.wraps(get_report)
     def concat(*args, **kwargs):
-        """ Concantenate reports. """
         df = pd.concat(generator(*args, **kwargs))
 
         if not isinstance(df.index, pd.MultiIndex):

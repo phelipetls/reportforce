@@ -9,7 +9,7 @@ dates = ["datetime", "date", "time"]
 
 
 def get_value(cell, dtype):
-    """ Auxiliary function to get cell value according to data type. """
+    """Get a cell value according to the column data type."""
     if dtype in numbers:
         return cell["value"]
 
@@ -26,7 +26,7 @@ def get_value(cell, dtype):
 
 
 def get_tabular_cells(report):
-    """ Auxiliary function to get all cells from tabular report. """
+    """Parse tabular report fact map"""
     rows = report["factMap"]["T!T"]["rows"]
     dtypes = get_columns_dtypes(report)
 
@@ -40,7 +40,7 @@ def get_tabular_cells(report):
 
 
 def get_matrix_cells(matrix):
-    """ Auxiliary function to get all cells from a matrix report. """
+    """Parse matrix report fact map"""
     factmap = matrix["factMap"]
 
     n_rows = len(matrix["reportMetadata"]["groupingsDown"])
@@ -64,7 +64,7 @@ def get_matrix_cells(matrix):
 
 
 def get_summary_cells(summary):
-    """ Auxiliary function to get all cells from a summary report. """
+    """Parse summary report fact map"""
     factmap = summary["factMap"]
     cells = []
     cells_by_group = []
@@ -90,7 +90,7 @@ def get_summary_cells(summary):
 
 
 def get_summary_indices(summary, cells_by_group):
-    """ Auxiliary function to get summary report MultiIndex. """
+    """Get summary report index (groups values for each line)."""
     groups = get_groups(summary["groupingsDown"]["groupings"])
     groups_frequency_pairs = zip(groups, cells_by_group)
 
@@ -104,7 +104,7 @@ def get_summary_indices(summary, cells_by_group):
 
 
 def get_columns_dtypes(report):
-    """Get columns types"""
+    """Get columns types."""
     report_format = report["reportMetadata"]["reportFormat"]
 
     if report_format == "MATRIX":
@@ -127,13 +127,12 @@ def get_groupings_labels(report, key):
 
 
 def get_columns_labels(report):
-    """
-    Auxiliary function to get a dict that maps a column label (which is shown
+    """Get a dict that maps a column label (which is shown
     in the browser) to its API name (which is only internal).
 
     The API name is the one that should be used in the request body.
 
-    This is used to get the corresping label of a given column API name.
+    This is useful to get the corresping label of a given column API name.
     """
     if report["reportMetadata"]["reportFormat"] == "MATRIX":
         columns_info = report["reportExtendedMetadata"]["groupingColumnInfo"]
@@ -143,11 +142,9 @@ def get_columns_labels(report):
 
 
 def get_columns(report):
+    """Get a report columns labels in an format appropriate to be passed to the
+    columns argument when creating a DataFrame.
     """
-    Auxiliary function to get a report columns labels in an appropriate
-    format to be passed to the columns argument when creating a DataFrame.
-    """
-
     if report["reportMetadata"]["reportFormat"] == "MATRIX":
         # get columns groups tuples
         groupings_across = report["groupingsAcross"]["groupings"]
@@ -172,12 +169,11 @@ def get_columns(report):
 
 
 def get_groups(groups):
-    """
-    Auxiliary function to iterate through a GroupingsDown or GroupingsAcross,
-    which stores a list of groupings that may contain other groupings etc.
+    """Iterate through a GroupingsDown or GroupingsAcross, which stores a list
+    of groupings that may contain other groupings etc.
 
     It tries to return a list of tuples which results from the product of the
-    values inside the group.
+    values inside that group.
     """
     indices = []
     for group in groups:
@@ -191,7 +187,7 @@ def get_groups_values(groups, L=[]):
     Auxiliary function to recursively iterate through a grouping, which is a
     list of dictionary, extract theirs labels and append them into a list.
 
-    The function stops when there are no more groupings inside a group.
+    The function stops when there are no more groupings inside the first group.
     """
     L.append([group["label"] for group in groups])
     for group in groups:
