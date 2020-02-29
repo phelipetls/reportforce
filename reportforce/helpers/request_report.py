@@ -1,62 +1,9 @@
-import functools
-import requests
-
-s = requests.Session()
-
-
-def handle_error(request):
-    """Decorator to handle Analytics API request errors."""
-
-    @functools.wraps(request)
-    def handler(*args, **kwargs):
-        response = request(*args, **kwargs)
-        if response.status_code != 200:
-            try:
-                error = response.json()[0]
-                raise ReportError(error["errorCode"], error["message"])
-            except KeyError:
-                response.raise_for_status()
-        else:
-            return response
-
-    return handler
-
-
-@handle_error
-def POST(url, **kwargs):
-    """A wrapper around requests.post designed to request data from Salesforce
-    Analytics API.
-
-    Returns
-    -------
-    dict
-        A dictionary with the response body contents to the requested report.
-
-    Raises
-    ------
-    ReportError
-        If the response body is a JSON containing an error message.
-    """
-    return s.post(url, **kwargs)
-
-
-@handle_error
-def GET(url, **kwargs):
-    """
-    A wrapper around requests.get designed to request data from Salesforce
-    Analytics API.
-
-    Returns
-    -------
-    dict
-        A dictionary with the response body contents to the requested report.
-
-    Raises
-    ------
-    ReportError
-        If the response body is a JSON containing an error message.
-    """
-    return s.get(url, **kwargs)
+def handle_error(r, **kwargs):
+    try:
+        error = r.json()[0]
+        raise ReportError(error["errorCode"], error["message"])
+    except KeyError:
+        return r
 
 
 class ReportError(Exception):

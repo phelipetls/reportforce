@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from reportforce.report import get_report  # noqa: E402
+from reportforce import Reportforce  # noqa: E402
 from utils import mocks  # noqa: E402
 
 metadata = mocks.get_json("analytics_summary_metadata")
@@ -16,7 +16,7 @@ report = mocks.get_json("analytics_summary")
 
 class TestSummaryReport(unittest.TestCase):
     @patch("reportforce.report.get_metadata")
-    @patch("reportforce.helpers.request_report.POST")
+    @patch.object(Reportforce.session, "post")
     def setUp(self, mocked_request, mocked_metadata):
 
         mocked_report = report
@@ -25,7 +25,8 @@ class TestSummaryReport(unittest.TestCase):
         with patch.dict(mocked_report, values=mocked_report, allData=False, clear=True):
             mocked_request().json.side_effect = [mocked_report] * 2
 
-            self.report = get_report("report_id", id_column="label1", session=mocks.FakeLogin)
+            sf = Reportforce(mocks.FakeLogin)
+            self.report = sf.get("report_id", id_column="label1")
 
     def test_summary_length(self):
         length = len(self.report)
@@ -53,19 +54,20 @@ class TestSummaryReport(unittest.TestCase):
 
 class TestEmptySummary(unittest.TestCase):
     @patch("reportforce.report.get_metadata")
-    @patch("reportforce.helpers.request_report.POST")
+    @patch.object(Reportforce.session, "post")
     def setUp(self, mocked_request, mocked_metadata):
 
         mocked_report = report
         mocked_metadata.return_value = metadata
 
         mocked_report = mocks.get_json("analytics_summary")
-        mocked_factmap = {'factMap': {'T!T': {'aggregates': {'label': 0, 'value': 0}}}}
+        mocked_factmap = {"factMap": {"T!T": {"aggregates": {"label": 0, "value": 0}}}}
 
         with patch.dict(mocked_report, mocked_factmap):
             mocked_request().json.return_value = mocked_report
 
-            self.report = get_report("report_id", id_column="label1", session=mocks.FakeLogin)
+            sf = Reportforce(mocks.FakeLogin)
+            self.report = sf.get("report_id", id_column="label1")
 
     def test_if_report_is_empty(self):
         self.assertTrue(self.report.empty)

@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from reportforce.report import get_report  # noqa: E402
+from reportforce import Reportforce  # noqa: E402
 from utils import mocks  # noqa: E402
 
 metadata = mocks.get_json("analytics_tabular_metadata")
@@ -57,7 +57,7 @@ df = pd.DataFrame(
 
 class TestTabularReport(unittest.TestCase):
     @patch("reportforce.report.get_metadata")
-    @patch("reportforce.helpers.request_report.POST")
+    @patch.object(Reportforce.session, "post")
     def setUp(self, mocked_request, mocked_metadata):
 
         mocked_report = report
@@ -66,9 +66,8 @@ class TestTabularReport(unittest.TestCase):
         with patch.dict(mocked_report, values=mocked_report, allData=False, clear=True):
             mocked_request().json.side_effect = [mocked_report] * 2
 
-            self.report = get_report(
-                "report_id", id_column="Opportunity Name", session=mocks.FakeLogin
-            )
+            sf = Reportforce(mocks.FakeLogin)
+            self.report = sf.get("report_id", id_column="Opportunity Name")
 
     def test_dataframe(self):
         test = self.report
@@ -78,7 +77,7 @@ class TestTabularReport(unittest.TestCase):
 
 class TestEmptyTabular(unittest.TestCase):
     @patch("reportforce.report.get_metadata")
-    @patch("reportforce.helpers.request_report.POST")
+    @patch.object(Reportforce.session, "post")
     def setUp(self, mocked_request, mocked_metadata):
 
         mocked_metadata.return_value = metadata
@@ -88,9 +87,8 @@ class TestEmptyTabular(unittest.TestCase):
         with patch.dict(report, values=report, factMap=mocked_factmap):
             mocked_request().json.return_value = report
 
-            self.report = get_report(
-                "report_id", id_column="Opportunity Name", session=mocks.FakeLogin
-            )
+            sf = Reportforce(mocks.FakeLogin)
+            self.report = sf.get("report_id", id_column="Opportunity Name")
 
     def test_empty_report(self):
         self.assertTrue(self.report.empty)

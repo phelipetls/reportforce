@@ -25,7 +25,7 @@ class TestTabularReport(unittest.TestCase):
         self.assertEqual(self.sf.get.__doc__, get_report.__doc__)
 
     @patch("reportforce.report.get_metadata")
-    @patch("reportforce.helpers.request_report.POST")
+    @patch.object(Reportforce.session, "post")
     def test_get_functionality(self, mocked_request, mocked_metadata):
 
         mocked_metadata.return_value = metadata

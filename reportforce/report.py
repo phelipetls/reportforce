@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 
 from .helpers import parsers
-from .helpers import request_report
 from .helpers import filtering
 from .helpers import report_generator
 
@@ -20,8 +19,8 @@ def get_report(
     end=None,
     filters=[],
     logic=None,
-    session=None,
     excel=None,
+    salesforce=None,
 ):
     """Function to get a Salesforce tabular report into a DataFrame.
 
@@ -58,19 +57,15 @@ def get_report(
         non-empty string is passed, it will be used as the filename. If True,
         the workbook will be automatically named.
 
-    session : object (optional)
-        An instance of simple_salesforce.Salesforce or reportforce.login.Login
-        to authenticate the requests.
+    salesforce : object (optional)
+        An instance of requests.Reportforce with authenticated headers.
 
     Returns
     -------
     DataFrame
         A DataFrame contaning the records from the report.
     """
-    if session is None:
-        raise SessionNotFound
-
-    metadata = copy.deepcopy(get_metadata(report_id, session))
+    metadata = copy.deepcopy(get_metadata(report_id, salesforce))
 
     if start or end:
         filtering.set_period(start, end, date_column, metadata)
@@ -80,19 +75,19 @@ def get_report(
         filtering.set_filters(filters, metadata)
 
     if excel:
-        return get_excel(report_id, excel, metadata, session)
+        return get_excel(report_id, excel, metadata, salesforce)
 
     report_format = metadata["reportMetadata"]["reportFormat"]
 
     if report_format == "TABULAR":
-        return get_tabular_reports(report_id, id_column, metadata, session)
+        return get_tabular_reports(report_id, id_column, metadata, salesforce)
     elif report_format == "SUMMARY":
-        return get_summary_reports(report_id, id_column, metadata, session)
+        return get_summary_reports(report_id, id_column, metadata, salesforce)
     elif report_format == "MATRIX":
-        return get_matrix_reports(report_id, id_column, metadata, session)
+        return get_matrix_reports(report_id, id_column, metadata, salesforce)
 
 
-def get_excel(report_id, excel, metadata, session):
+def get_excel(report_id, excel, metadata, salesforce):
     """Download report as formatted Excel spreadsheet.
 
     Parameters
@@ -104,18 +99,20 @@ def get_excel(report_id, excel, metadata, session):
         If a non-empty string, it will be used as the filename.
         If True, the workbook is automatically named.
 
-    session : object
+    salesforce : object
         An instance of simple_salesforce.Salesforce or
         reportforce.login.Login, needed for authentication.
     """
-    url = base_url.format(session.instance_url, session.version, report_id)
+    url = base_url.format(salesforce.instance_url, salesforce.version, report_id)
 
-    headers = session.headers.copy()
+    headers = salesforce.headers.copy()
 
-    spreadsheet_headers = {"Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+    spreadsheet_headers = {
+        "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    }
     headers.update(spreadsheet_headers)
 
-    with request_report.POST(url, headers=headers, json=metadata, stream=True) as r:
+    with salesforce.session.post(url, headers=headers, json=metadata, stream=True) as r:
         if isinstance(excel, str):
             filename = excel
         else:
@@ -130,7 +127,7 @@ def get_excel(report_id, excel, metadata, session):
 
 
 @report_generator.report_generator
-def get_tabular_reports(url, metadata=None, session=None):
+def get_tabular_reports(url, metadata=None, salesforce=None):
     """Request and parse a tabular report.
 
     Parameters
@@ -151,7 +148,7 @@ def get_tabular_reports(url, metadata=None, session=None):
         Report data cells parsed as a list.
         Indices to be used in the DataFrame.
     """
-    tabular = request_report.POST(url, headers=session.headers, json=metadata).json()
+    tabular = salesforce.session.post(url, json=metadata).json()
 
     tabular_cells = parsers.get_tabular_cells(tabular)
     indices = None  # no meaningful indices here
@@ -160,7 +157,7 @@ def get_tabular_reports(url, metadata=None, session=None):
 
 
 @report_generator.report_generator
-def get_matrix_reports(url, metadata, session):
+def get_matrix_reports(url, metadata, salesforce):
     """Request and parse a matrix report.
 
     Parameters
@@ -171,7 +168,7 @@ def get_matrix_reports(url, metadata, session):
     metadata : dict
         Used for filtering.
 
-    session : object
+    salesforce : object
         Used for authentication.
 
     Returns
@@ -181,7 +178,7 @@ def get_matrix_reports(url, metadata, session):
         Report data cells parsed as a list.
         Indices to be used in the DataFrame.
     """
-    matrix = request_report.POST(url, headers=session.headers, json=metadata).json()
+    matrix = salesforce.session.post(url, json=metadata).json()
 
     if len(matrix["factMap"]) == 1:
         return matrix, [], None
@@ -199,7 +196,7 @@ def get_matrix_reports(url, metadata, session):
 
 
 @report_generator.report_generator
-def get_summary_reports(url, metadata, session):
+def get_summary_reports(url, metadata, salesforce):
     """Request and parse a summary report.
 
     Parameters
@@ -210,7 +207,7 @@ def get_summary_reports(url, metadata, session):
     metadata : dict
         Used for filtering.
 
-    session : object
+    salesforce : object
         Used for authentication.
 
     Returns
@@ -220,7 +217,7 @@ def get_summary_reports(url, metadata, session):
         Report fact map parsed as a list.
         Indices to be used in the DataFrame.
     """
-    summary = request_report.POST(url, headers=session.headers, json=metadata).json()
+    summary = salesforce.session.post(url, json=metadata).json()
 
     if len(summary["factMap"]) == 1:
         return summary, [], None
@@ -232,7 +229,7 @@ def get_summary_reports(url, metadata, session):
 
 
 @functools.lru_cache(maxsize=8)
-def get_metadata(report_id, session=None):
+def get_metadata(report_id, salesforce=None):
     """Request report metadata.
 
     Parameters
@@ -241,22 +238,14 @@ def get_metadata(report_id, session=None):
         A report unique identifier.
 
     session : object (optional)
-        An instance of simple_salesforce.Salesforce or reportforce.login.Login,
-        used for authentication.
+        ** TODO : fix documentation. **
 
     Returns
     -------
     dict
         The JSON response body as a dictionary.
     """
-    if session is None:
-        raise SessionNotFound
-
     url = (
-        base_url.format(session.instance_url, session.version, report_id) + "/describe"
+        base_url.format(salesforce.instance_url, salesforce.version, report_id) + "/describe"
     )
-    return request_report.GET(url, headers=session.headers).json()
-
-
-class SessionNotFound(Exception):
-    pass
+    return salesforce.session.get(url).json()
