@@ -14,8 +14,8 @@ class Reportforce:
     def __init__(self, auth):
         self.version = auth.version
         self.instance_url = auth.instance_url
-        self.headers = auth.headers
 
+        self.session.headers.update(auth.headers)
 
     @property
     def get(self):
