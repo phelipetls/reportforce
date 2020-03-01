@@ -105,7 +105,7 @@ def get_excel(report_id, excel, metadata, salesforce):
     """
     url = base_url.format(salesforce.instance_url, salesforce.version, report_id)
 
-    headers = salesforce.headers.copy()
+    headers = salesforce.session.headers.copy()
 
     spreadsheet_headers = {
         "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
