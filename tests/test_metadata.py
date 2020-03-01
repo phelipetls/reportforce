@@ -21,9 +21,16 @@ class TestGetMetadata(unittest.TestCase):
     @patch.object(Reportforce.session, "get")
     def test_request_call_to_get_metadata(self, mock_request):
         sf = Reportforce(mocks.FakeLogin)
-        get_metadata("ID", session=sf)
-        mock_request.assert_called_with(self.url, headers=self.headers)
+        get_metadata("ID", salesforce=sf)
 
+        self.assertIn("Authorization", sf.session.headers)
+        mock_request.assert_called_with(self.url)
+
+def test_request_call_to_get_metadata(self, mock_request):
+    sf = Reportforce(mocks.FakeLogin)
+    get_metadata("ID", salesforce=sf)
+
+    assert sf.session.headers["Authorization"] == "Bearer sessionId"
 
 if __name__ == "__main__":
     unittest.main()

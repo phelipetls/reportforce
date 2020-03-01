@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-import reportforce  # noqa: E402
+from reportforce import Reportforce  # noqa: E402
 from utils import mocks  # noqa: E402
 
 metadata = mocks.get_json("analytics_matrix_metadata")
@@ -18,7 +18,7 @@ class TestMatrixReport(unittest.TestCase):
     maxDiff = None
 
     @patch("reportforce.report.get_metadata")
-    @patch("reportforce.report.request_report.POST")
+    @patch.object(Reportforce.session, "post")
     def test_dataframe(self, mocked_report, mocked_metadata):
 
         mocked_metadata.return_value = metadata
@@ -66,25 +66,29 @@ class TestMatrixReport(unittest.TestCase):
             index=indices,
             columns=columns,
         )
-        df = reportforce.report.get_report("ReportID", session=mocks.FakeLogin)
+
+        sf = Reportforce(mocks.FakeLogin)
+        df = sf.get("ReportID")
+
         pd.testing.assert_frame_equal(expected_df, df, check_dtype=False)
 
     @patch("reportforce.report.get_metadata")
-    @patch("reportforce.report.request_report.POST")
-    def TestEmptyMatrix(self, mocked_request, mocked_metadata):
+    @patch.object(Reportforce.session, "post")
+    def test_empty_matrix(self, mocked_request, mocked_metadata):
 
-        mocked_metadata.return_value = metadata
-        mocked_report = report
+            mocked_metadata.return_value = metadata
+            mocked_report = report
 
-        mocked_factmap = {
-            "T!T": {"aggregates": {"label": "label", "value": "value"}, "rows": []}
-        }
+            mocked_factmap = {
+                "T!T": {"aggregates": {"label": "label", "value": "value"}, "rows": []}
+            }
 
-        with patch.dict(mocked_report, mocked_report, factMap=mocked_factmap):
-            mocked_request().json.return_value = mocked_report
+            with patch.dict(mocked_report, mocked_report, factMap=mocked_factmap):
+                mocked_request().json.return_value = mocked_report
 
-            df = reportforce.report.get_report("ReportID", session=mocks.FakeLogin)
-            self.assertTrue(df.empty)
+                sf = Reportforce(mocks.FakeLogin)
+                df = sf.get("ReportID")
+                self.assertTrue(df.empty)
 
 
 if __name__ == "__main__":
