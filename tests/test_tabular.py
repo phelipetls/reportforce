@@ -7,11 +7,11 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from reportforce import Reportforce  # noqa: E402
 from utils import mocks  # noqa: E402
+from reportforce import Reportforce  # noqa: E402
 
-metadata = mocks.get_json("analytics_tabular_metadata")
-report = mocks.get_json("analytics_tabular")
+mock_metadata = mocks.get_json("analytics_tabular_metadata")
+mock_report = mocks.get_json("analytics_tabular")
 
 df = pd.DataFrame(
     [
@@ -58,13 +58,12 @@ df = pd.DataFrame(
 class TestTabularReport(unittest.TestCase):
     @patch("reportforce.report.get_metadata")
     @patch.object(Reportforce.session, "post")
-    def setUp(self, mocked_request, mocked_metadata):
+    def setUp(self, post, get_metadata):
 
-        mocked_report = report
-        mocked_metadata.return_value = metadata
+        get_metadata.return_value = mock_metadata
 
-        with patch.dict(mocked_report, values=mocked_report, allData=False, clear=True):
-            mocked_request().json.side_effect = [mocked_report] * 2
+        with patch.dict(mock_report, values=mock_report, allData=False, clear=True):
+            post().json.side_effect = [mock_report] * 2
 
             sf = Reportforce(mocks.FakeLogin)
             self.report = sf.get("report_id", id_column="Opportunity Name")
@@ -78,14 +77,14 @@ class TestTabularReport(unittest.TestCase):
 class TestEmptyTabular(unittest.TestCase):
     @patch("reportforce.report.get_metadata")
     @patch.object(Reportforce.session, "post")
-    def setUp(self, mocked_request, mocked_metadata):
+    def setUp(self, post, get_metadata):
 
-        mocked_metadata.return_value = metadata
+        get_metadata.return_value = mock_metadata
 
-        mocked_factmap = {"T!T": {"aggregates": {"label": 0, "value": 0}, "rows": []}}
+        mock_factmap = {"T!T": {"aggregates": {"label": 0, "value": 0}, "rows": []}}
 
-        with patch.dict(report, values=report, factMap=mocked_factmap):
-            mocked_request().json.return_value = report
+        with patch.dict(mock_report, values=mock_report, factMap=mock_factmap):
+            post().json.return_value = mock_report
 
             sf = Reportforce(mocks.FakeLogin)
             self.report = sf.get("report_id", id_column="Opportunity Name")

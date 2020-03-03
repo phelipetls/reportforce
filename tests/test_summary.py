@@ -7,23 +7,22 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from reportforce import Reportforce  # noqa: E402
 from utils import mocks  # noqa: E402
+from reportforce import Reportforce  # noqa: E402
 
-metadata = mocks.get_json("analytics_summary_metadata")
-report = mocks.get_json("analytics_summary")
+mock_metadata = mocks.get_json("analytics_summary_metadata")
+mock_report = mocks.get_json("analytics_summary")
 
 
 class TestSummaryReport(unittest.TestCase):
     @patch("reportforce.report.get_metadata")
     @patch.object(Reportforce.session, "post")
-    def setUp(self, mocked_request, mocked_metadata):
+    def setUp(self, post, get_metadata):
 
-        mocked_report = report
-        mocked_metadata.return_value = metadata
+        get_metadata.return_value = mock_metadata
 
-        with patch.dict(mocked_report, values=mocked_report, allData=False, clear=True):
-            mocked_request().json.side_effect = [mocked_report] * 2
+        with patch.dict(mock_report, values=mock_report, allData=False, clear=True):
+            post().json.side_effect = [mock_report] * 2
 
             sf = Reportforce(mocks.FakeLogin)
             self.report = sf.get("report_id", id_column="label1")
@@ -55,16 +54,15 @@ class TestSummaryReport(unittest.TestCase):
 class TestEmptySummary(unittest.TestCase):
     @patch("reportforce.report.get_metadata")
     @patch.object(Reportforce.session, "post")
-    def setUp(self, mocked_request, mocked_metadata):
+    def setUp(self, post, get_metadata):
 
-        mocked_report = report
-        mocked_metadata.return_value = metadata
+        get_metadata.return_value = mock_metadata
 
-        mocked_report = mocks.get_json("analytics_summary")
-        mocked_factmap = {"factMap": {"T!T": {"aggregates": {"label": 0, "value": 0}}}}
+        mock_report = mocks.get_json("analytics_summary")
+        mock_factmap = {"factMap": {"T!T": {"aggregates": {"label": 0, "value": 0}}}}
 
-        with patch.dict(mocked_report, mocked_factmap):
-            mocked_request().json.return_value = mocked_report
+        with patch.dict(mock_report, mock_factmap):
+            post().json.return_value = mock_report
 
             sf = Reportforce(mocks.FakeLogin)
             self.report = sf.get("report_id", id_column="label1")

@@ -1,5 +1,5 @@
 test:
-	cd tests && python3 -m unittest -v -f
+	python3 -m unittest discover -vfs tests
 
 publish:
 	python3 setup.py sdist bdist_wheel

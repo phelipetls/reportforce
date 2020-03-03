@@ -268,6 +268,7 @@ def get_metadata(report_id, salesforce=None):
         The JSON response body as a dictionary.
     """
     url = (
-        base_url.format(salesforce.instance_url, salesforce.version, report_id) + "/describe"
+        base_url.format(salesforce.instance_url, salesforce.version, report_id)
+        + "/describe"
     )
     return salesforce.session.get(url).json()

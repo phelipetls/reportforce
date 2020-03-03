@@ -39,21 +39,21 @@ def get_login(login_type):
 
 class TestSoapLogin(unittest.TestCase):
     @patch("requests.post")
-    def test_successful_login(self, mockpost):
-        mockpost.return_value = Mock(status_code=200, text=get_login("successful.xml"))
+    def test_successful_login(self, post):
+        post.return_value = Mock(status_code=200, text=get_login("successful.xml"))
 
         test = soap_login("fake@username.com", "pass", "XXX")
         expected = ("sessionId", "dummy.salesforce.com")
 
         self.assertEqual(test, expected)
 
-        mockpost.assert_called_with(
+        post.assert_called_with(
             expected_url, headers=expected_headers, data=expected_body
         )
 
     @patch("requests.post")
-    def test_failed_login(self, mockpost):
-        mockpost.return_value = Mock(status_code=500, text=get_login("failed.xml"))
+    def test_failed_login(self, post):
+        post.return_value = Mock(status_code=500, text=get_login("failed.xml"))
 
         with self.assertRaises(AuthenticationError):
             soap_login("fake@username.com", "pass", "XXX")
