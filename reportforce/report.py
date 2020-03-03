@@ -1,14 +1,36 @@
 import re
 import copy
+import requests
 import functools
 import numpy as np
 import pandas as pd
 
+from .helpers import errors
 from .helpers import parsers
 from .helpers import filtering
 from .helpers import report_generator
 
 base_url = "https://{}/services/data/v{}/analytics/reports/{}"
+
+
+class Reportforce:
+    """Class to easily interact with Salesforce Analytics API."""
+
+    session = requests.Session()
+    session.hooks["response"].append(errors.handle_error)
+
+    def __init__(self, auth):
+        self.version = auth.version
+        self.instance_url = auth.instance_url
+
+        self.session.headers.update(auth.headers)
+
+    @property
+    def get(self):
+        """Method that wraps get_report functionality."""
+        return functools.update_wrapper(
+            functools.partial(get_report, salesforce=self), get_report
+        )
 
 
 def get_report(
