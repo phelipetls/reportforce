@@ -32,8 +32,11 @@ class Reportforce:
             functools.partial(get_report, salesforce=self), get_report
         )
 
-    def get_total(self):
-        pass
+    def get_total(self, report_id):
+        url = base_url.format(self.instance_url, self.version, report_id)
+
+        response = self.session.get(url, params={"includeDetails": "false"}).json()
+        return response["factMap"]["T!T"]["aggregates"][0]["value"]
 
 
 def get_report(

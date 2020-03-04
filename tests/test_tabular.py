@@ -51,7 +51,7 @@ df = pd.DataFrame(
         "Created Date",
         "Opportunity Owner",
         "Owner Role",
-    ]
+    ],
 )
 
 
@@ -91,6 +91,22 @@ class TestEmptyTabular(unittest.TestCase):
 
     def test_empty_report(self):
         self.assertTrue(self.report.empty)
+
+
+class TestGettingTotal(unittest.TestCase):
+    @patch("reportforce.report.get_metadata")
+    @patch.object(Reportforce.session, "get")
+    def test_get_total(self, get, get_metadata):
+
+        get_metadata.return_value = mock_metadata
+        get().json.return_value = mock_report
+
+        rf = Reportforce(mocks.FakeLogin)
+
+        test = rf.get_total("report_id")
+        expected = 16000.01
+
+        self.assertEqual(test, expected)
 
 
 if __name__ == "__main__":
