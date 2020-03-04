@@ -43,6 +43,7 @@ def get_report(
     logic=None,
     excel=None,
     salesforce=None,
+    **kwargs
 ):
     """Function to get a Salesforce tabular report into a DataFrame.
 
@@ -102,19 +103,19 @@ def get_report(
         filtering.set_filters(filters, metadata)
 
     if excel:
-        return get_excel(report_id, excel, metadata, salesforce)
+        return get_excel(report_id, excel, metadata, salesforce, **kwargs)
 
     report_format = metadata["reportMetadata"]["reportFormat"]
 
     if report_format == "TABULAR":
-        return get_tabular_reports(report_id, id_column, metadata, salesforce)
+        return get_tabular_reports(report_id, id_column, metadata, salesforce, **kwargs)
     elif report_format == "SUMMARY":
-        return get_summary_reports(report_id, id_column, metadata, salesforce)
+        return get_summary_reports(report_id, id_column, metadata, salesforce, **kwargs)
     elif report_format == "MATRIX":
-        return get_matrix_reports(report_id, id_column, metadata, salesforce)
+        return get_matrix_reports(report_id, id_column, metadata, salesforce, **kwargs)
 
 
-def get_excel(report_id, excel, metadata, salesforce):
+def get_excel(report_id, excel, metadata, salesforce, **kwargs):
     """Download report as formatted Excel spreadsheet.
 
     Parameters
@@ -138,7 +139,7 @@ def get_excel(report_id, excel, metadata, salesforce):
         {"Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
     )
 
-    with salesforce.session.post(url, headers=headers, json=metadata, stream=True) as r:
+    with salesforce.session.post(url, headers=headers, json=metadata, stream=True, **kwargs) as r:
         if isinstance(excel, str):
             filename = excel
         else:
@@ -153,7 +154,7 @@ def get_excel(report_id, excel, metadata, salesforce):
 
 
 @report_generator.report_generator
-def get_tabular_reports(url, metadata=None, salesforce=None):
+def get_tabular_reports(url, metadata=None, salesforce=None, **kwargs):
     """Request and parse a tabular report.
 
     Parameters
@@ -174,7 +175,7 @@ def get_tabular_reports(url, metadata=None, salesforce=None):
         Report data cells parsed as a list.
         Indices to be used in the DataFrame.
     """
-    tabular = salesforce.session.post(url, json=metadata).json()
+    tabular = salesforce.session.post(url, json=metadata, **kwargs).json()
 
     tabular_cells = parsers.get_tabular_cells(tabular)
     indices = None  # no meaningful indices here
@@ -183,7 +184,7 @@ def get_tabular_reports(url, metadata=None, salesforce=None):
 
 
 @report_generator.report_generator
-def get_matrix_reports(url, metadata, salesforce):
+def get_matrix_reports(url, metadata, salesforce, **kwargs):
     """Request and parse a matrix report.
 
     Parameters
@@ -204,7 +205,7 @@ def get_matrix_reports(url, metadata, salesforce):
         Report data cells parsed as a list.
         Indices to be used in the DataFrame.
     """
-    matrix = salesforce.session.post(url, json=metadata).json()
+    matrix = salesforce.session.post(url, json=metadata, **kwargs).json()
 
     if len(matrix["factMap"]) == 1:
         return matrix, [], None
@@ -222,7 +223,7 @@ def get_matrix_reports(url, metadata, salesforce):
 
 
 @report_generator.report_generator
-def get_summary_reports(url, metadata, salesforce):
+def get_summary_reports(url, metadata, salesforce, **kwargs):
     """Request and parse a summary report.
 
     Parameters
@@ -243,7 +244,7 @@ def get_summary_reports(url, metadata, salesforce):
         Report fact map parsed as a list.
         Indices to be used in the DataFrame.
     """
-    summary = salesforce.session.post(url, json=metadata).json()
+    summary = salesforce.session.post(url, json=metadata, **kwargs).json()
 
     if len(summary["factMap"]) == 1:
         return summary, [], None

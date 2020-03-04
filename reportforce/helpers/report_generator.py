@@ -14,11 +14,11 @@ def report_generator(get_report):
     Once all data has been collected, it concatenates all of them.
     """
 
-    def generator(report_id, id_column, metadata, session):
+    def generator(report_id, id_column, metadata, session, **kwargs):
         """Request reports until allData is true by filtering them iteratively."""
         url = base_url.format(session.instance_url, session.version, report_id)
 
-        report, report_cells, indices = get_report(url, metadata, session)
+        report, report_cells, indices = get_report(url, metadata, session, **kwargs)
 
         columns = helpers.parsers.get_columns(report)
 
@@ -33,7 +33,7 @@ def report_generator(get_report):
 
             while not report["allData"]:
                 # getting what is needed to build the dataframe
-                report, report_cells, indices = get_report(url, metadata, session)
+                report, report_cells, indices = get_report(url, metadata, session, **kwargs)
 
                 df = pd.DataFrame(report_cells, index=indices, columns=columns)
 

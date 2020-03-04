@@ -29,7 +29,11 @@ class TestTabularReport(unittest.TestCase):
         post().json.return_value = mock_report
 
         test = self.sf.get("000O1a0940aXYhz")
+
         self.assertIsInstance(test, pd.DataFrame)
+
+        url = "https://dummy.salesforce.com/services/data/v47.0/analytics/reports/000O1a0940aXYhz"
+        post.assert_called_with(url, json=mock_metadata, params={"includeDetails": "true"})
 
     def test_get_docstring(self):
         self.assertEqual(self.sf.get.__doc__, report.get_report.__doc__)
