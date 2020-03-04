@@ -75,7 +75,7 @@ class TestMatrixReport(unittest.TestCase):
         rf = Reportforce(mocks.FakeLogin)
         df = rf.get("ReportID")
 
-        pd.testing.assert_frame_equal(expected_df, df, check_dtype=False)
+        pd.testing.assert_frame_equal(expected_df, df)
 
     @patch("reportforce.report.get_metadata")
     @patch.object(Reportforce.session, "post")

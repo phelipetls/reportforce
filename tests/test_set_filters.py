@@ -12,22 +12,13 @@ class TestFiltersSetters(unittest.TestCase):
 
     maxdiff = None
 
-    filters = [("Opportunity Name", "!=", "VALUE")]
-    period = ("01-01-2020", "2020-01-31")
-    logic = "1 AND 2"
-
     @classmethod
     def setUpClass(cls):
         cls.metadata = mocks.get_json("analytics_tabular_metadata")
 
-        filtering.set_filters(cls.filters, cls.metadata)
-
-        start, end = cls.period
-        date_column = "Fiscal Period"
-        filtering.set_period(start, end, date_column, cls.metadata)
-
-        filtering.set_logic(cls.logic, cls.metadata)
-
+        filtering.set_filters([("Opportunity Name", "!=", "VALUE")], cls.metadata)
+        filtering.set_period("01-01-2020", "2020-01-31", "Fiscal Period", cls.metadata)
+        filtering.set_logic("1 AND 2", cls.metadata)
         filtering.increment_logical_filter(cls.metadata)
 
     def test_logic(self):
