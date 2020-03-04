@@ -86,6 +86,11 @@ def get_report(
     -------
     DataFrame
         A DataFrame contaning the records from the report.
+
+    Raises
+    ------
+    ReportError
+        If there is an error-like JSON string in the reponse body.
     """
     metadata = copy.deepcopy(get_metadata(report_id, salesforce))
 
@@ -129,10 +134,9 @@ def get_excel(report_id, excel, metadata, salesforce):
 
     headers = salesforce.session.headers.copy()
 
-    spreadsheet_headers = {
-        "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    }
-    headers.update(spreadsheet_headers)
+    headers.update(
+        {"Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+    )
 
     with salesforce.session.post(url, headers=headers, json=metadata, stream=True) as r:
         if isinstance(excel, str):
@@ -269,6 +273,6 @@ def get_metadata(report_id, salesforce=None):
     """
     url = (
         base_url.format(salesforce.instance_url, salesforce.version, report_id)
-        + "/describe"
+        + "/describe"  # noqa: W503
     )
     return salesforce.session.get(url).json()

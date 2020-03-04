@@ -40,6 +40,11 @@ def soap_login(username, password, security_token, domain="login", version="47.0
     -------
     tuple
         A tuple containing the session id and instance url.
+
+    Raises
+    ------
+    AuthenticationError
+        If anything goes wrong while authenticating.
     """
     soap_url = "https://{}.salesforce.com/services/Soap/u/{}".format(domain, version)
     soap_headers = {

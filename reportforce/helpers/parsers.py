@@ -127,12 +127,13 @@ def get_groupings_labels(report, key):
 
 
 def get_columns_labels(report):
-    """Get a dict that maps a column label (which is shown
-    in the browser) to its API name (which is only internal).
+    """Get a dict that maps a column label (what you see in the browser)
+    to its API name (used internally only).
 
     The API name is the one that should be used in the request body.
 
-    This is useful to get the corresping label of a given column API name.
+    This is useful to get the corresping label of a given column API
+    name.
     """
     if report["reportMetadata"]["reportFormat"] == "MATRIX":
         columns_info = report["reportExtendedMetadata"]["groupingColumnInfo"]
@@ -142,8 +143,8 @@ def get_columns_labels(report):
 
 
 def get_columns(report):
-    """Get a report columns labels in an format appropriate to be passed to the
-    columns argument when creating a DataFrame.
+    """Get all report columns labels in a format appropriate to be
+    passed to the columns argument when creating a DataFrame.
     """
     if report["reportMetadata"]["reportFormat"] == "MATRIX":
         # get columns groups tuples

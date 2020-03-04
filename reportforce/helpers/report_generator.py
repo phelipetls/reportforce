@@ -8,8 +8,8 @@ base_url = "https://{}/services/data/v{}/analytics/reports/{}"
 
 def report_generator(get_report):
     """Decorator function to generate reports until the allData element of the
-    response body is 'true', while filtering out already seen values of
-    a specified identifier column, given by the id_column parameter.
+    response body is 'true', while filtering out already seen values of a
+    specified identifier column, given by the id_column parameter.
 
     Once all data has been collected, it concatenates all of them.
     """
