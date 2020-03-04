@@ -25,6 +25,10 @@ def get_value(cell, dtype):
     return cell["label"]
 
 
+def get_report_total(report):
+    return report["factMap"]["T!T"]["aggregates"][0]["value"]
+
+
 def get_tabular_cells(report):
     """Parse tabular report fact map"""
     rows = report["factMap"]["T!T"]["rows"]

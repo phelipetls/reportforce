@@ -106,8 +106,8 @@ class Reportforce:
     def get_total(self, report_id):
         url = base_url.format(self.instance_url, self.version, report_id)
 
-        response = self.session.get(url, params={"includeDetails": "false"}).json()
-        return response["factMap"]["T!T"]["aggregates"][0]["value"]
+        report = self.session.get(url, params={"includeDetails": "false"}).json()
+        return parsers.get_report_total(report)
 
 
 def get_excel(report_id, excel, metadata, salesforce, **kwargs):
