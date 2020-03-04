@@ -73,7 +73,7 @@ class TestMatrixReport(unittest.TestCase):
         post().json.return_value = mock_report
 
         rf = Reportforce(mocks.FakeLogin)
-        df = rf.get("ReportID")
+        df = rf.get_report("ReportID")
 
         pd.testing.assert_frame_equal(expected_df, df)
 
@@ -91,7 +91,7 @@ class TestMatrixReport(unittest.TestCase):
             post().json.return_value = mock_report
 
             rf = Reportforce(mocks.FakeLogin)
-            df = rf.get("ReportID")
+            df = rf.get_report("ReportID")
 
         self.assertTrue(df.empty)
 

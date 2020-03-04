@@ -38,7 +38,7 @@ class TestExcelWithoutFilename(unittest.TestCase):
         """When no filename is given, the one in the headers is used."""
 
         with patch("reportforce.report.open", mock_open, create=True):
-            self.rf.get("report_id", excel=True)
+            self.rf.get_report("report_id", excel=True)
 
         mock_open.assert_called_with("spreadsheet.xlsx", "wb")
 
@@ -46,7 +46,7 @@ class TestExcelWithoutFilename(unittest.TestCase):
         """When a filename is given, it is used."""
 
         with patch("reportforce.report.open", mock_open, create=True):
-            self.rf.get("report_id", excel="filename.xlsx")
+            self.rf.get_report("report_id", excel="filename.xlsx")
 
         mock_open.assert_called_with("filename.xlsx", "wb")
 

@@ -65,8 +65,8 @@ class TestTabularReport(unittest.TestCase):
         with patch.dict(mock_report, values=mock_report, allData=False, clear=True):
             post().json.side_effect = [mock_report] * 2
 
-            sf = Reportforce(mocks.FakeLogin)
-            self.report = sf.get("report_id", id_column="Opportunity Name")
+            rf = Reportforce(mocks.FakeLogin)
+            self.report = rf.get_report("report_id", id_column="Opportunity Name")
 
     def test_dataframe(self):
         test = self.report
@@ -86,8 +86,8 @@ class TestEmptyTabular(unittest.TestCase):
         with patch.dict(mock_report, values=mock_report, factMap=mock_factmap):
             post().json.return_value = mock_report
 
-            sf = Reportforce(mocks.FakeLogin)
-            self.report = sf.get("report_id", id_column="Opportunity Name")
+            rf = Reportforce(mocks.FakeLogin)
+            self.report = rf.get_report("report_id", id_column="Opportunity Name")
 
     def test_empty_report(self):
         self.assertTrue(self.report.empty)

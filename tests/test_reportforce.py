@@ -18,7 +18,7 @@ class TestTabularReport(unittest.TestCase):
     maxDiff = None
 
     def setUp(self):
-        self.sf = Reportforce(mocks.FakeLogin)
+        self.rf = Reportforce(mocks.FakeLogin)
 
     @patch("reportforce.report.get_metadata")
     @patch.object(Reportforce.session, "post")
@@ -28,7 +28,7 @@ class TestTabularReport(unittest.TestCase):
         get_metadata.return_value = mock_metadata
         post().json.return_value = mock_report
 
-        test = self.sf.get("000O1a0940aXYhz")
+        test = self.rf.get_report("000O1a0940aXYhz")
 
         self.assertIsInstance(test, pd.DataFrame)
 
@@ -36,7 +36,7 @@ class TestTabularReport(unittest.TestCase):
         post.assert_called_with(url, json=mock_metadata, params={"includeDetails": "true"})
 
     def test_get_docstring(self):
-        self.assertEqual(self.sf.get.__doc__, report.get_report.__doc__)
+        self.assertEqual(self.rf.get_report.__doc__, report.get_report.__doc__)
 
 
 if __name__ == "__main__":

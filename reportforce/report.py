@@ -26,11 +26,14 @@ class Reportforce:
         self.session.headers.update(auth.headers)
 
     @property
-    def get(self):
+    def get_report(self):
         """Method that wraps get_report functionality."""
         return functools.update_wrapper(
             functools.partial(get_report, salesforce=self), get_report
         )
+
+    def get_total(self):
+        pass
 
 
 def get_report(

@@ -25,7 +25,7 @@ class TestSummaryReport(unittest.TestCase):
             post().json.side_effect = [mock_report] * 2
 
             sf = Reportforce(mocks.FakeLogin)
-            self.report = sf.get("report_id", id_column="label1")
+            self.report = sf.get_report("report_id", id_column="label1")
 
     def test_summary_length(self):
         length = len(self.report)
@@ -64,8 +64,8 @@ class TestEmptySummary(unittest.TestCase):
         with patch.dict(mock_report, mock_factmap):
             post().json.return_value = mock_report
 
-            sf = Reportforce(mocks.FakeLogin)
-            self.report = sf.get("report_id", id_column="label1")
+            rf = Reportforce(mocks.FakeLogin)
+            self.report = rf.get_report("report_id", id_column="label1")
 
     def test_if_report_is_empty(self):
         self.assertTrue(self.report.empty)
