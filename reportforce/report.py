@@ -14,7 +14,7 @@ base_url = "https://{}/services/data/v{}/analytics/reports/{}"
 
 
 class Reportforce:
-    """Class to easily interact with Salesforce Analytics API."""
+    """Class to interact with Salesforce Analytics API."""
 
     session = requests.Session()
     session.hooks["response"].append(errors.handle_error)
@@ -25,100 +25,89 @@ class Reportforce:
 
         self.session.headers.update(auth.headers)
 
-    @property
-    def get_report(self):
-        """Method that wraps get_report functionality."""
-        return functools.update_wrapper(
-            functools.partial(get_report, salesforce=self), get_report
-        )
+    def get_report(
+        self,
+        report_id,
+        id_column=None,
+        date_column=None,
+        start=None,
+        end=None,
+        filters=[],
+        logic=None,
+        excel=None,
+        **kwargs
+    ):
+        """Function to get a Salesforce tabular report into a DataFrame.
+
+        Parameters
+        ----------
+        report_id : str
+            A report unique identifier.
+
+        id_column : str (optional)
+            Column name which has unique values for each row. This is needed as
+            a workaround to the Analytics API's 2000 row limitation.
+
+        date_column : str (optional)
+            Date column name.
+
+        start : str (optional)
+            Initial date string, passed into dateutil.parser.parse. Must start with
+            the day.
+
+        end : str (optional)
+            End date string, passed into dateutil.parser.parse. Must start with
+            the day.
+
+        filters : list (optional)
+            List of tuples, each of which represents a filter:
+            [("column", ">=", "value")].
+
+        logic : str (optional)
+            Logical filter. This is commonly needed if the report already has a
+            report filter, but it can also be useful in case you add more filters.
+
+        excel : bool, str (optional)
+            Whether or not you want to save the report in a Excel file. If a
+            non-empty string is passed, it will be used as the filename. If True,
+            the workbook will be automatically named.
+
+        Returns
+        -------
+        DataFrame
+            A DataFrame contaning the records from the report.
+
+        Raises
+        ------
+        ReportError
+            If there is an error-like JSON string in the reponse body.
+        """
+        metadata = copy.deepcopy(get_metadata(report_id, self))
+
+        if start or end:
+            filtering.set_period(start, end, date_column, metadata)
+        if logic:
+            filtering.set_logic(logic, metadata)
+        if filters:
+            filtering.set_filters(filters, metadata)
+
+        if excel:
+            return get_excel(report_id, excel, metadata, self, **kwargs)
+
+        report_format = metadata["reportMetadata"]["reportFormat"]
+
+        if report_format == "TABULAR":
+            return get_tabular_reports(report_id, id_column, metadata, self, **kwargs)
+        elif report_format == "SUMMARY":
+            return get_summary_reports(report_id, id_column, metadata, self, **kwargs)
+        elif report_format == "MATRIX":
+            return get_matrix_reports(report_id, id_column, metadata, self, **kwargs)
 
     def get_total(self, report_id):
         url = base_url.format(self.instance_url, self.version, report_id)
 
         response = self.session.get(url, params={"includeDetails": "false"}).json()
         return response["factMap"]["T!T"]["aggregates"][0]["value"]
-
-
-def get_report(
-    report_id,
-    id_column=None,
-    date_column=None,
-    start=None,
-    end=None,
-    filters=[],
-    logic=None,
-    excel=None,
-    salesforce=None,
-    **kwargs
-):
-    """Function to get a Salesforce tabular report into a DataFrame.
-
-    Parameters
-    ----------
-    report_id : str
-        A report unique identifier.
-
-    id_column : str (optional)
-        Column name which has unique values for each row. This is needed as
-        a workaround to the Analytics API's 2000 row limitation.
-
-    date_column : str (optional)
-        Date column name.
-
-    start : str (optional)
-        Initial date string, passed into dateutil.parser.parse. Must start with
-        the day.
-
-    end : str (optional)
-        End date string, passed into dateutil.parser.parse. Must start with
-        the day.
-
-    filters : list (optional)
-        List of tuples, each of which represents a filter:
-        [("column", ">=", "value")].
-
-    logic : str (optional)
-        Logical filter. This is commonly needed if the report already has a
-        report filter, but it can also be useful in case you add more filters.
-
-    excel : bool, str (optional)
-        Whether or not you want to save the report in a Excel file. If a
-        non-empty string is passed, it will be used as the filename. If True,
-        the workbook will be automatically named.
-
-    salesforce : object (optional)
-        An instance of requests.Reportforce with authenticated headers.
-
-    Returns
-    -------
-    DataFrame
-        A DataFrame contaning the records from the report.
-
-    Raises
-    ------
-    ReportError
-        If there is an error-like JSON string in the reponse body.
-    """
-    metadata = copy.deepcopy(get_metadata(report_id, salesforce))
-
-    if start or end:
-        filtering.set_period(start, end, date_column, metadata)
-    if logic:
-        filtering.set_logic(logic, metadata)
-    if filters:
-        filtering.set_filters(filters, metadata)
-
-    if excel:
-        return get_excel(report_id, excel, metadata, salesforce, **kwargs)
-
-    report_format = metadata["reportMetadata"]["reportFormat"]
-
-    if report_format == "TABULAR":
-        return get_tabular_reports(report_id, id_column, metadata, salesforce, **kwargs)
-    elif report_format == "SUMMARY":
-        return get_summary_reports(report_id, id_column, metadata, salesforce, **kwargs)
-    elif report_format == "MATRIX":
-        return get_matrix_reports(report_id, id_column, metadata, salesforce, **kwargs)
 
 
 def get_excel(report_id, excel, metadata, salesforce, **kwargs):
