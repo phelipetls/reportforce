@@ -10,7 +10,7 @@ docs:
 	cd docs && make html
 
 coverage:
-	pytest --cov=reportforce
+	pytest -s tests --cov=reportforce
 
 lint:
 	flake8 reportforce
