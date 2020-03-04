@@ -45,7 +45,7 @@ def report_generator(get_report):
 
     @functools.wraps(get_report)
     def concat(*args, **kwargs):
-        df = pd.concat(generator(*args, **kwargs))
+        df = pd.concat(generator(*args, params={"includeDetails": "true"}, **kwargs))
 
         if not isinstance(df.index, pd.MultiIndex):
             df = df.reset_index(drop=True)
