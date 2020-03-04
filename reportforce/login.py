@@ -4,7 +4,7 @@ import requests
 from .helpers.xml import read_failed_response, read_successful_response
 
 
-class Login(object):
+class Salesforce(object):
     """A Salesforce session instance."""
 
     def __init__(self, username, password, security_token, version="47.0", **kwargs):
@@ -63,9 +63,11 @@ def soap_login(username, password, security_token, domain="login", version="47.0
         token=security_token if security_token else getpass.getpass("Security Token: "),
     )
     response = requests.post(soap_url, headers=soap_headers, data=soap_body)
+
     if response.status_code != 200:
         msg = read_failed_response(response.text)
         raise AuthenticationError(msg)
+
     return read_successful_response(response.text)
 
 
