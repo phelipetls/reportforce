@@ -3,7 +3,7 @@ from pathlib import Path
 
 
 class FakeLogin:
-    """Fake Salesforce session object"""
+    """Mock object for authentication."""
 
     version = "47.0"
     session_id = "sessionId"

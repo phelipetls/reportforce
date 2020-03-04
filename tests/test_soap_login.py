@@ -37,7 +37,7 @@ def get_login(login_type):
         return xml_file.read()
 
 
-class TestSoapLogin(unittest.TestCase):
+class TestSoapLoginSuccess(unittest.TestCase):
     @patch("requests.post")
     def test_successful_login(self, post):
         post.return_value = Mock(status_code=200, text=get_login("successful.xml"))
@@ -51,12 +51,25 @@ class TestSoapLogin(unittest.TestCase):
             expected_url, headers=expected_headers, data=expected_body
         )
 
-    @patch("requests.post")
-    def test_failed_login(self, post):
-        post.return_value = Mock(status_code=500, text=get_login("failed.xml"))
 
-        with self.assertRaises(AuthenticationError):
+config = {"post.return_value": Mock(status_code=500, text=get_login("failed.xml"))}
+mock_post = patch("reportforce.login.requests", **config)
+
+
+class TestSoapLoginFailure(unittest.TestCase):
+    maxDiff = None
+
+    def test_failed_login(self):
+        with mock_post, self.assertRaises(AuthenticationError):
             soap_login("fake@username.com", "pass", "XXX")
+
+    def test_failed_login_error_str_repr(self):
+        expected = "INVALID_LOGIN: Invalid username, password, security token; or user locked out."
+        with mock_post:
+            try:
+                soap_login("fake@username.com", "pass", "XXX")
+            except AuthenticationError as error:
+                self.assertEqual(str(error), expected)
 
 
 if __name__ == "__main__":

@@ -6,14 +6,17 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from reportforce.login import Login  # noqa: E402
+from reportforce.login import Salesforce  # noqa: E402
 
 
-class TestLogin(unittest.TestCase):
+class TestSalesforce(unittest.TestCase):
+    """Test Salesforce class main properties."""
+
     @patch("reportforce.login.soap_login")
     def test_salesforce_class(self, mock_soap_login):
+
         mock_soap_login.return_value = ("sessionId", "dummy.salesforce.com")
-        sf = Login("foo@bar.com", "pass", "XXX")
+        sf = Salesforce("foo@bar.com", "pass", "XXX")
 
         self.assertEqual(sf.version, "47.0")
         self.assertEqual(sf.session_id, "sessionId")
