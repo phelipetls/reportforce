@@ -38,9 +38,8 @@ def report_generator(get_report):
                 df = pd.DataFrame(report_cells, index=indices, columns=columns)
 
                 # filtering out already seen values
-                if id_column:
-                    already_seen += ",".join(df[id_column].values)
-                    helpers.filtering.update_filter(-1, "value", already_seen, metadata)
+                already_seen += ",".join(df[id_column].values)
+                helpers.filtering.update_filter(-1, "value", already_seen, metadata)
 
                 yield df
 
