@@ -1,8 +1,11 @@
+import json
+
+
 def handle_error(r, **kwargs):
     try:
         error = r.json()[0]
         raise ReportError(error["errorCode"], error["message"])
-    except KeyError:
+    except (KeyError, json.JSONDecodeError):
         pass
 
 
@@ -12,4 +15,4 @@ class ReportError(Exception):
         self.msg = msg
 
     def __str__(self):
-        return "\n\nCode: {}. Message: {}".format(self.code, self.msg)
+        return "\nCode: {}. Message: {}".format(self.code, self.msg)
