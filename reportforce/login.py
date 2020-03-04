@@ -3,11 +3,13 @@ import requests
 
 from .helpers.xml import read_failed_response, read_successful_response
 
+DEFAULT_VERSION="47.0"
+
 
 class Salesforce(object):
     """A Salesforce session instance."""
 
-    def __init__(self, username, password, security_token, version="47.0", **kwargs):
+    def __init__(self, username, password, security_token, version=DEFAULT_VERSION, **kwargs):
         self.version = version
         self.session_id, self.instance_url = soap_login(
             username, password, security_token, version=version, **kwargs
