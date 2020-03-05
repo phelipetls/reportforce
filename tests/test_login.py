@@ -13,9 +13,9 @@ class TestSalesforce(unittest.TestCase):
     """Test Salesforce class main properties."""
 
     @patch("reportforce.login.soap_login")
-    def test_salesforce_class(self, mock_soap_login):
+    def test_salesforce_class(self, soap_login):
 
-        mock_soap_login.return_value = ("sessionId", "dummy.salesforce.com")
+        soap_login.return_value = ("sessionId", "dummy.salesforce.com")
         sf = Salesforce("foo@bar.com", "pass", "XXX")
 
         self.assertEqual(sf.version, "47.0")

@@ -33,24 +33,24 @@ class MockBytesResponse:
 
 class TestErrorHandling(unittest.TestCase):
     def test_handle_error_json(self):
-        """Test if error is raised when error-like JSON is passed."""
+        """Test if ReportError is raised when error-like JSON is passed."""
         with self.assertRaises(ReportError):
             handle_error(MockErrorResponse())
 
     def test_error_string_repr(self):
-        """Test error string representation."""
+        """Check error string representation."""
         try:
             handle_error(MockErrorResponse())
         except ReportError as error:
             self.assertEqual(str(error), "\nCode: errorCode. Message: message")
 
-    def test_expections_binary(self):
-        """Test if an error is raised when invalid JSON string is passed."""
+    def test_expections_binary_string(self):
+        """Test binary string being passed to simplejson parser."""
         handle_error(MockBytesResponse())
 
     @patch("requests.models.complexjson", ujson)
     def test_expections_binary_ujson(self):
-        """Test if no error is raised if ujson is used."""
+        """Test binary string being passed to ujson parser."""
         handle_error(MockBytesResponse())
 
 

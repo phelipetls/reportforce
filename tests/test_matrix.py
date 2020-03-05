@@ -62,38 +62,43 @@ expected_df = pd.DataFrame(
 )
 
 
+metadata_config = {"return_value": mock_metadata}
+soap_login_config = {"return_value": ("sessionId", "dummy.salesforce.com")}
+
+
 class TestMatrixReport(unittest.TestCase):
     maxDiff = None
 
-    @patch("reportforce.report.get_metadata")
-    @patch.object(Reportforce.session, "post")
-    def test_dataframe(self, post, get_metadata):
+    def setUp(self):
+        soap_login = patch("reportforce.login.soap_login", **soap_login_config)
+        get_metadata = patch("reportforce.report.get_metadata", **metadata_config)
 
-        get_metadata.return_value = mock_metadata
+        soap_login.start()
+        get_metadata.start()
+
+        self.rf = Reportforce("foo@bar.com", "1234", "XXX")
+
+    @patch.object(Reportforce.session, "post")
+    def test_dataframe(self, post):
         post().json.return_value = mock_report
 
-        rf = Reportforce(mocks.FakeLogin)
-        df = rf.get_report("ReportID")
-
+        df = self.rf.get_report("ReportID")
         pd.testing.assert_frame_equal(expected_df, df)
 
-    @patch("reportforce.report.get_metadata")
     @patch.object(Reportforce.session, "post")
-    def test_empty_matrix(self, post, get_metadata):
-
-        get_metadata.return_value = mock_metadata
-
+    def test_empty_matrix(self, post):
         mock_factmap = {
             "T!T": {"aggregates": {"label": "label", "value": "value"}, "rows": []}
         }
 
         with patch.dict(mock_report, mock_report, factMap=mock_factmap):
             post().json.return_value = mock_report
+            df = self.rf.get_report("ReportID")
 
-            rf = Reportforce(mocks.FakeLogin)
-            df = rf.get_report("ReportID")
+            self.assertTrue(df.empty)
 
-        self.assertTrue(df.empty)
+    def tearDown(self):
+        patch.stopall()
 
 
 if __name__ == "__main__":

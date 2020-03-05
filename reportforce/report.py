@@ -5,6 +5,8 @@ import functools
 import numpy as np
 import pandas as pd
 
+from .login import Salesforce
+
 from .helpers import errors
 from .helpers import parsers
 from .helpers import filters
@@ -13,17 +15,16 @@ from .helpers import generators
 URL = "https://{}/services/data/v{}/analytics/reports/{}"
 
 
-class Reportforce:
+class Reportforce(Salesforce):
     """Class to interact with Salesforce Analytics API."""
 
     session = requests.Session()
     session.hooks["response"].append(errors.handle_error)
 
-    def __init__(self, auth):
-        self.version = auth.version
-        self.instance_url = auth.instance_url
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-        self.session.headers.update(auth.headers)
+        self.session.headers.update(self.headers)
 
     def get_report(
         self,
@@ -134,7 +135,9 @@ def get_excel(report_id, excel, metadata, salesforce, **kwargs):
         {"Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
     )
 
-    with salesforce.session.post(url, headers=headers, json=metadata, stream=True, **kwargs) as r:
+    with salesforce.session.post(
+        url, headers=headers, json=metadata, stream=True, **kwargs
+    ) as r:
         if isinstance(excel, str):
             filename = excel
         else:

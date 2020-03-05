@@ -26,13 +26,18 @@ post_config = {"return_value.__enter__.return_value": MockResponse}
 
 class TestExcelWithoutFilename(unittest.TestCase):
     def setUp(self):
-        self.get_metadata = patch("reportforce.report.get_metadata", **metadata_config)
-        self.get_metadata.start()
+        auth = ("sessionId", "dummy.salesforce.com")
+        soap_login = patch("reportforce.login.soap_login", return_value=auth)
 
-        self.post = patch.object(Reportforce.session, "post", **post_config)
-        self.post.start()
+        get_metadata = patch("reportforce.report.get_metadata", **metadata_config)
 
-        self.rf = Reportforce(mocks.FakeLogin)
+        post = patch.object(Reportforce.session, "post", **post_config)
+
+        soap_login.start()
+        get_metadata.start()
+        post.start()
+
+        self.rf = Reportforce("foo@bar.com", "1234", "XXX")
 
     def test_get_excel_without_filename(self):
         """When no filename is given, the one in the headers is used."""
@@ -51,8 +56,7 @@ class TestExcelWithoutFilename(unittest.TestCase):
         mock_open.assert_called_with("filename.xlsx", "wb")
 
     def tearDown(self):
-        self.get_metadata.stop()
-        self.post.stop()
+        patch.stopall()
 
 
 if __name__ == "__main__":

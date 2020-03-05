@@ -1,14 +1,8 @@
 import json
+import unittest
+
 from pathlib import Path
-
-
-class FakeLogin:
-    """Mock object for authentication."""
-
-    version = "47.0"
-    session_id = "sessionId"
-    instance_url = "dummy.salesforce.com"
-    headers = {"Authorization": "Bearer sessionId"}
+from unittest.mock import patch
 
 
 def get_json(json_file):

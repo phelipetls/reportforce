@@ -10,9 +10,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from utils import mocks  # noqa: E402
 from reportforce import Reportforce  # noqa: E402
 
-mock_metadata = mocks.get_json("analytics_tabular_metadata")
-mock_report = mocks.get_json("analytics_tabular")
-
 df = pd.DataFrame(
     [
         [
@@ -54,59 +51,71 @@ df = pd.DataFrame(
     ],
 )
 
+mock_metadata = mocks.get_json("analytics_tabular_metadata")
+mock_report = mocks.get_json("analytics_tabular")
+
+metadata_config = {"return_value": mock_metadata}
+soap_login_config = {"return_value": ("sessionId", "dummy.salesforce.com")}
+
 
 class TestTabularReport(unittest.TestCase):
-    @patch("reportforce.report.get_metadata")
+    def setUp(self):
+        soap_login = patch("reportforce.login.soap_login", **soap_login_config)
+        get_metadata = patch("reportforce.report.get_metadata", **metadata_config)
+
+        soap_login.start()
+        get_metadata.start()
+
+        self.rf = Reportforce("foo@bar.com", "1234", "XXX")
+
     @patch.object(Reportforce.session, "post")
-    def setUp(self, post, get_metadata):
-
-        get_metadata.return_value = mock_metadata
-
+    def test_dataframe(self, post):
         with patch.dict(mock_report, values=mock_report, allData=False, clear=True):
             post().json.side_effect = [mock_report] * 2
 
-            rf = Reportforce(mocks.FakeLogin)
-            self.report = rf.get_report("report_id", id_column="Opportunity Name")
+            df = self.rf.get_report("report_id", id_column="Opportunity Name")
 
-    def test_dataframe(self):
-        test = self.report
-        expected = df
-        pd.testing.assert_frame_equal(test, expected)
+        expected_df = df
+        pd.testing.assert_frame_equal(df, expected_df)
 
-
-class TestEmptyTabular(unittest.TestCase):
-    @patch("reportforce.report.get_metadata")
     @patch.object(Reportforce.session, "post")
-    def setUp(self, post, get_metadata):
-
-        get_metadata.return_value = mock_metadata
-
+    def test_empty_report(self, post):
         mock_factmap = {"T!T": {"aggregates": {"label": 0, "value": 0}, "rows": []}}
 
         with patch.dict(mock_report, values=mock_report, factMap=mock_factmap):
             post().json.return_value = mock_report
 
-            rf = Reportforce(mocks.FakeLogin)
-            self.report = rf.get_report("report_id", id_column="Opportunity Name")
+            df = self.rf.get_report("report_id")
 
-    def test_empty_report(self):
-        self.assertTrue(self.report.empty)
+        self.assertTrue(df.empty)
 
-
-class TestGettingTotal(unittest.TestCase):
-    @patch("reportforce.report.get_metadata")
     @patch.object(Reportforce.session, "get")
-    def test_get_total(self, get, get_metadata):
-
-        get_metadata.return_value = mock_metadata
+    def test_get_total(self, get):
         get().json.return_value = mock_report
 
-        rf = Reportforce(mocks.FakeLogin)
-
-        test = rf.get_total("report_id")
+        test = self.rf.get_total("report_id")
         expected = 16000.01
 
         self.assertEqual(test, expected)
+
+    def tearDown(self):
+        patch.stopall()
+
+
+# class TestGettingTotal(unittest.TestCase):
+#     @patch("reportforce.report.get_metadata")
+#     @patch.object(Reportforce.session, "get")
+#     def test_get_total(self, get, get_metadata):
+
+#         get_metadata.return_value = mock_metadata
+#         get().json.return_value = mock_report
+
+#         rf = Reportforce("foo@bar.com", "1234", "XXX")
+
+#         test = rf.get_total("report_id")
+#         expected = 16000.01
+
+#         self.assertEqual(test, expected)
 
 
 if __name__ == "__main__":

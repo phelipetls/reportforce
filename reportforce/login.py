@@ -3,21 +3,21 @@ import requests
 
 from .helpers.xml import read_failed_response, read_successful_response
 
-DEFAULT_VERSION="47.0"
+DEFAULT_VERSION = "47.0"
 
 
-class Salesforce(object):
+class Salesforce:
     """A Salesforce session instance."""
 
-    def __init__(self, username, password, security_token, version=DEFAULT_VERSION, **kwargs):
+    def __init__(self, username, password, security_token, version=DEFAULT_VERSION):
         self.version = version
         self.session_id, self.instance_url = soap_login(
-            username, password, security_token, version=version, **kwargs
+            username, password, security_token, version
         )
         self.headers = {"Authorization": "Bearer " + self.session_id}
 
 
-def soap_login(username, password, security_token, domain="login", version="47.0"):
+def soap_login(username, password, security_token, version="47.0", domain="login"):
     """Helper function to login into Salesforce via SOAP API.
 
     Parameters
@@ -69,6 +69,7 @@ def soap_login(username, password, security_token, domain="login", version="47.0
         password=password if password else getpass.getpass(),
         token=security_token if security_token else getpass.getpass("Security Token: "),
     )
+
     response = requests.post(soap_url, headers=soap_headers, data=soap_body)
 
     if response.status_code != 200:

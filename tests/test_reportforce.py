@@ -13,7 +13,9 @@ from reportforce import report, Reportforce  # noqa: E402
 mock_metadata = mocks.get_json("analytics_tabular_metadata")
 mock_report = mocks.get_json("analytics_tabular")
 
-URL = "https://dummy.salesforce.com/services/data/v47.0/analytics/reports/000O1a0940aXYhz"
+URL = (
+    "https://dummy.salesforce.com/services/data/v47.0/analytics/reports/000O1a0940aXYhz"
+)
 
 
 @patch("reportforce.report.get_metadata")
@@ -21,8 +23,11 @@ URL = "https://dummy.salesforce.com/services/data/v47.0/analytics/reports/000O1a
 class TestTabularReport(unittest.TestCase):
     maxDiff = None
 
-    def setUp(self):
-        self.rf = Reportforce(mocks.FakeLogin)
+    @patch("reportforce.login.soap_login")
+    def setUp(self, soap_login):
+        soap_login.return_value = ("sessionId", "dummy.salesforce.com")
+
+        self.rf = Reportforce("foo@bar.com", "1234", "XXX")
 
     def test_get_report_call_with_params(self, post, get_metadata):
         """Assure that includeDetails is passed into post request."""
@@ -62,6 +67,6 @@ class TestTabularReport(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(failfast=True)
 
 # vi: nowrap
