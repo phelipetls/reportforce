@@ -5,7 +5,7 @@ import unittest
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from utils import mocks  # noqa: E402
-from reportforce.helpers import filtering  # noqa: E402
+from reportforce.helpers import filters  # noqa: E402
 
 
 class TestFiltersSetters(unittest.TestCase):
@@ -16,10 +16,10 @@ class TestFiltersSetters(unittest.TestCase):
     def setUpClass(cls):
         cls.metadata = mocks.get_json("analytics_tabular_metadata")
 
-        filtering.set_filters([("Opportunity Name", "!=", "VALUE")], cls.metadata)
-        filtering.set_period("01-01-2020", "2020-01-31", "Fiscal Period", cls.metadata)
-        filtering.set_logic("1 AND 2", cls.metadata)
-        filtering.increment_logical_filter(cls.metadata)
+        filters.set_filters([("Opportunity Name", "!=", "VALUE")], cls.metadata)
+        filters.set_period("01-01-2020", "2020-01-31", "Fiscal Period", cls.metadata)
+        filters.set_logic("1 AND 2", cls.metadata)
+        filters.increment_logical_filter(cls.metadata)
 
     def test_logic(self):
         test = self.metadata["reportMetadata"]["reportBooleanFilter"]

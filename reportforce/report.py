@@ -7,8 +7,8 @@ import pandas as pd
 
 from .helpers import errors
 from .helpers import parsers
-from .helpers import filtering
-from .helpers import report_generator
+from .helpers import filters
+from .helpers import generators
 
 URL = "https://{}/services/data/v{}/analytics/reports/{}"
 
@@ -85,11 +85,11 @@ class Reportforce:
         metadata = copy.deepcopy(get_metadata(report_id, self))
 
         if start or end:
-            filtering.set_period(start, end, date_column, metadata)
+            filters.set_period(start, end, date_column, metadata)
         if logic:
-            filtering.set_logic(logic, metadata)
+            filters.set_logic(logic, metadata)
         if filters:
-            filtering.set_filters(filters, metadata)
+            filters.set_filters(filters, metadata)
 
         if excel:
             return get_excel(report_id, excel, metadata, self, **kwargs)
@@ -148,7 +148,7 @@ def get_excel(report_id, excel, metadata, salesforce, **kwargs):
                     excel_file.write(chunk)
 
 
-@report_generator.report_generator
+@generators.report_generator
 def get_tabular_reports(url, metadata=None, salesforce=None, **kwargs):
     """Request and parse a tabular report.
 
@@ -178,7 +178,7 @@ def get_tabular_reports(url, metadata=None, salesforce=None, **kwargs):
     return tabular, tabular_cells, indices
 
 
-@report_generator.report_generator
+@generators.report_generator
 def get_matrix_reports(url, metadata, salesforce, **kwargs):
     """Request and parse a matrix report.
 
@@ -217,7 +217,7 @@ def get_matrix_reports(url, metadata, salesforce, **kwargs):
     return matrix, matrix_cells, indices
 
 
-@report_generator.report_generator
+@generators.report_generator
 def get_summary_reports(url, metadata, salesforce, **kwargs):
     """Request and parse a summary report.
 

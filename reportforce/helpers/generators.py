@@ -1,7 +1,7 @@
 import functools
 import pandas as pd
 
-from .. import helpers
+from ..helpers import filters, parsers
 
 URL = "https://{}/services/data/v{}/analytics/reports/{}"
 
@@ -20,26 +20,28 @@ def report_generator(get_report):
 
         report, report_cells, indices = get_report(url, metadata, session, **kwargs)
 
-        columns = helpers.parsers.get_columns(report)
+        columns = parsers.get_columns(report)
 
         df = pd.DataFrame(report_cells, index=indices, columns=columns)
         yield df
 
         if id_column:
             already_seen = ",".join(df[id_column].values)
-            helpers.filtering.set_filters([(id_column, "!=", already_seen)], metadata)
+            filters.set_filters([(id_column, "!=", already_seen)], metadata)
 
-            helpers.filtering.increment_logical_filter(metadata)
+            filters.increment_logical_filter(metadata)
 
             while not report["allData"]:
                 # getting what is needed to build the dataframe
-                report, report_cells, indices = get_report(url, metadata, session, **kwargs)
+                report, report_cells, indices = get_report(
+                    url, metadata, session, **kwargs
+                )
 
                 df = pd.DataFrame(report_cells, index=indices, columns=columns)
 
                 # filtering out already seen values
                 already_seen += ",".join(df[id_column].values)
-                helpers.filtering.update_filter(-1, "value", already_seen, metadata)
+                filters.update_filter(-1, "value", already_seen, metadata)
 
                 yield df
 
