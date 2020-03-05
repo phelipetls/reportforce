@@ -6,8 +6,8 @@ from unittest.mock import Mock, patch, mock_open
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from reportforce.report import Reportforce  # noqa: E402
 from utils import mocks  # noqa: E402
+from reportforce import Reportforce  # noqa: E402
 
 mock_open = mock_open()
 mock_metadata = mocks.get_json("analytics_tabular_metadata")
@@ -20,21 +20,15 @@ class MockResponse:
         return b"1,2,3\na,b,c"
 
 
-metadata_config = {"return_value": mock_metadata}
 post_config = {"return_value.__enter__.return_value": MockResponse}
 
 
 class TestExcelWithoutFilename(unittest.TestCase):
     def setUp(self):
-        auth = ("sessionId", "dummy.salesforce.com")
-        soap_login = patch("reportforce.login.soap_login", return_value=auth)
-
-        get_metadata = patch("reportforce.report.get_metadata", **metadata_config)
+        mocks.mock_login().start()
+        mocks.mock_get_metadata("analytics_tabular_metadata").start()
 
         post = patch.object(Reportforce.session, "post", **post_config)
-
-        soap_login.start()
-        get_metadata.start()
         post.start()
 
         self.rf = Reportforce("foo@bar.com", "1234", "XXX")

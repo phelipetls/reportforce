@@ -10,23 +10,13 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from utils import mocks  # noqa: E402
 from reportforce import Reportforce  # noqa: E402
 
-mock_metadata = mocks.get_json("analytics_summary_metadata")
 mock_report = mocks.get_json("analytics_summary")
-
-metadata_config = {"return_value": mock_metadata}
-soap_login_config = {"return_value": ("sessionId", "dummy.salesforce.com")}
-
 
 class TestSummaryReport(unittest.TestCase):
     @patch.object(Reportforce.session, "post")
     def setUp(self, post):
-        soap_login = patch("reportforce.login.soap_login", **soap_login_config)
-        get_metadata = patch("reportforce.report.get_metadata", **metadata_config)
-
-        soap_login.start()
-        get_metadata.start()
-
-        self.rf = Reportforce("foo@bar.com", "1234", "XXX")
+        mocks.mock_get_metadata("analytics_summary_metadata").start()
+        mocks.mock_login().start()
 
         with patch.dict(mock_report, values=mock_report, allData=False, clear=True):
             post().json.side_effect = [mock_report] * 2

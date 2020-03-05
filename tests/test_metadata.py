@@ -11,13 +11,10 @@ from reportforce import report, Reportforce  # noqa: E402
 
 URL = "https://dummy.salesforce.com/services/data/v47.0/analytics/reports/report_id/describe"
 
-soap_login_config = {"return_value": ("sessionId", "dummy.salesforce.com")}
-
 
 class TestGetMetadata(unittest.TestCase):
     def setUp(self):
-        soap_login = patch("reportforce.login.soap_login", **soap_login_config)
-        soap_login.start()
+        mocks.mock_login().start()
 
     @patch.object(Reportforce.session, "get")
     def test_request_call_to_get_metadata(self, get):

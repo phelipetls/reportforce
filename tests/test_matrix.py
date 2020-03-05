@@ -62,19 +62,12 @@ expected_df = pd.DataFrame(
 )
 
 
-metadata_config = {"return_value": mock_metadata}
-soap_login_config = {"return_value": ("sessionId", "dummy.salesforce.com")}
-
-
 class TestMatrixReport(unittest.TestCase):
     maxDiff = None
 
     def setUp(self):
-        soap_login = patch("reportforce.login.soap_login", **soap_login_config)
-        get_metadata = patch("reportforce.report.get_metadata", **metadata_config)
-
-        soap_login.start()
-        get_metadata.start()
+        mocks.mock_get_metadata("analytics_matrix_metadata").start()
+        mocks.mock_login().start()
 
         self.rf = Reportforce("foo@bar.com", "1234", "XXX")
 

@@ -51,20 +51,13 @@ df = pd.DataFrame(
     ],
 )
 
-mock_metadata = mocks.get_json("analytics_tabular_metadata")
 mock_report = mocks.get_json("analytics_tabular")
-
-metadata_config = {"return_value": mock_metadata}
-soap_login_config = {"return_value": ("sessionId", "dummy.salesforce.com")}
 
 
 class TestTabularReport(unittest.TestCase):
     def setUp(self):
-        soap_login = patch("reportforce.login.soap_login", **soap_login_config)
-        get_metadata = patch("reportforce.report.get_metadata", **metadata_config)
-
-        soap_login.start()
-        get_metadata.start()
+        mocks.mock_get_metadata("analytics_tabular_metadata").start()
+        mocks.mock_login().start()
 
         self.rf = Reportforce("foo@bar.com", "1234", "XXX")
 
