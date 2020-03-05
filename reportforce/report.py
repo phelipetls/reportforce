@@ -10,7 +10,7 @@ from .helpers import parsers
 from .helpers import filtering
 from .helpers import report_generator
 
-base_url = "https://{}/services/data/v{}/analytics/reports/{}"
+URL = "https://{}/services/data/v{}/analytics/reports/{}"
 
 
 class Reportforce:
@@ -104,7 +104,7 @@ class Reportforce:
             return get_matrix_reports(report_id, id_column, metadata, self, **kwargs)
 
     def get_total(self, report_id):
-        url = base_url.format(self.instance_url, self.version, report_id)
+        url = URL.format(self.instance_url, self.version, report_id)
 
         report = self.session.get(url, params={"includeDetails": "false"}).json()
         return parsers.get_report_total(report)
@@ -126,7 +126,7 @@ def get_excel(report_id, excel, metadata, salesforce, **kwargs):
         An instance of simple_salesforce.Salesforce or
         reportforce.login.Login, needed for authentication.
     """
-    url = base_url.format(salesforce.instance_url, salesforce.version, report_id)
+    url = URL.format(salesforce.instance_url, salesforce.version, report_id)
 
     headers = salesforce.session.headers.copy()
 
@@ -268,7 +268,7 @@ def get_metadata(report_id, salesforce=None):
         The JSON response body as a dictionary.
     """
     url = (
-        base_url.format(salesforce.instance_url, salesforce.version, report_id)
+        URL.format(salesforce.instance_url, salesforce.version, report_id)
         + "/describe"  # noqa: W503
     )
     return salesforce.session.get(url).json()

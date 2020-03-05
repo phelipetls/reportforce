@@ -3,7 +3,7 @@ import pandas as pd
 
 from .. import helpers
 
-base_url = "https://{}/services/data/v{}/analytics/reports/{}"
+URL = "https://{}/services/data/v{}/analytics/reports/{}"
 
 
 def report_generator(get_report):
@@ -16,7 +16,7 @@ def report_generator(get_report):
 
     def generator(report_id, id_column, metadata, session, **kwargs):
         """Request reports until allData is true by filtering them iteratively."""
-        url = base_url.format(session.instance_url, session.version, report_id)
+        url = URL.format(session.instance_url, session.version, report_id)
 
         report, report_cells, indices = get_report(url, metadata, session, **kwargs)
 
