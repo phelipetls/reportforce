@@ -1,4 +1,5 @@
 import copy
+import urllib
 import requests
 import functools
 
@@ -13,7 +14,7 @@ from .report import (
     get_matrix_reports,
 )
 
-URL = "https://{}/services/data/v{}/analytics/reports/{}"
+URL = "https://{}/services/data/v{}/analytics/reports/"
 
 
 class Reportforce(Salesforce):
@@ -24,6 +25,8 @@ class Reportforce(Salesforce):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.url = URL.format(self.instance_url, self.version)
 
         self.session.headers.update(self.headers)
 
@@ -107,7 +110,7 @@ class Reportforce(Salesforce):
 
     def get_total(self, report_id):
         """Get a report grand total."""
-        url = URL.format(self.instance_url, self.version, report_id)
+        url = urllib.parse.urljoin(self.url, report_id)
 
         report = self.session.get(url, params={"includeDetails": "false"}).json()
         return parsers.get_report_total(report)
@@ -115,8 +118,5 @@ class Reportforce(Salesforce):
     @functools.lru_cache(maxsize=8)
     def get_metadata(self, report_id):
         """Get a report metadata, used to manipulate reports."""
-        url = (
-            URL.format(self.instance_url, self.version, report_id)
-            + "/describe"  # noqa: W503
-        )
+        url = urllib.parse.urljoin(self.url, report_id + "/describe")
         return self.session.get(url).json()
