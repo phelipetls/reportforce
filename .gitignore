@@ -36,11 +36,9 @@ _codebraid
 .\#*
 
 # unittests
+htmlcov/
 .coverage
 .coverage.*
-
-# docs
-docs/source/auto_examples/
 
 # flake
 .flake8
