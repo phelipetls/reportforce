@@ -9,11 +9,27 @@ DEFAULT_VERSION = "47.0"
 class Salesforce:
     """A Salesforce session instance."""
 
-    def __init__(self, username, password, security_token, version=DEFAULT_VERSION):
+    def __init__(
+        self,
+        username=None,
+        password=None,
+        security_token=None,
+        version=DEFAULT_VERSION,
+        session_id=None,
+        instance_url=None,
+    ):
+        if instance_url and session_id:
+            self.session_id = session_id
+            self.instance_url = instance_url
+
+        elif all((username, password, security_token)):
+            self.session_id, self.instance_url = soap_login(
+                username, password, security_token, version
+            )
+        else:
+            raise AuthenticationError
+
         self.version = version
-        self.session_id, self.instance_url = soap_login(
-            username, password, security_token, version
-        )
         self.headers = {"Authorization": "Bearer " + self.session_id}
 
 
@@ -80,7 +96,7 @@ def soap_login(username, password, security_token, version="47.0", domain="login
 
 
 class AuthenticationError(Exception):
-    def __init__(self, msg):
+    def __init__(self, msg=""):
         self.msg = msg
 
     def __str__(self):
