@@ -106,6 +106,7 @@ class Reportforce(Salesforce):
             return get_matrix_reports(report_id, id_column, metadata, self, **kwargs)
 
     def get_total(self, report_id):
+        """Get a report grand total."""
         url = URL.format(self.instance_url, self.version, report_id)
 
         report = self.session.get(url, params={"includeDetails": "false"}).json()
@@ -113,7 +114,7 @@ class Reportforce(Salesforce):
 
     @functools.lru_cache(maxsize=8)
     def get_metadata(self, report_id):
-        """Request report metadata, in JSON format."""
+        """Get a report metadata, used to manipulate reports."""
         url = (
             URL.format(self.instance_url, self.version, report_id)
             + "/describe"  # noqa: W503

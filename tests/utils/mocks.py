@@ -12,7 +12,7 @@ def get_json(json_file):
 
 def mock_get_metadata(metadata):
     metadata_config = {"return_value": get_json(metadata)}
-    return patch("reportforce.reportforce.Reportforce.get_metadata", **metadata_config)
+    return patch("reportforce.api.Reportforce.get_metadata", **metadata_config)
 
 def mock_login():
     soap_login_config = {"return_value": ("sessionId", "dummy.salesforce.com")}
