@@ -17,6 +17,7 @@ class Salesforce:
         version=DEFAULT_VERSION,
         session_id=None,
         instance_url=None,
+        latest_version=False
     ):
         if instance_url and session_id:
             self.session_id = session_id
@@ -29,8 +30,13 @@ class Salesforce:
         else:
             raise AuthenticationError
 
-        self.version = version
+        self.version = self.get_latest_version() if latest_version else version
         self.headers = {"Authorization": "Bearer " + self.session_id}
+
+    def get_latest_version(self):
+        url = "https://{}/services/data/".format(self.instance_url)
+        version = requests.get(url).json()[-1]["version"]
+        return version
 
 
 def soap_login(username, password, security_token, version="47.0", domain="login"):
