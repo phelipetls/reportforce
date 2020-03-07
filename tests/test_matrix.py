@@ -9,6 +9,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from utils import mocks  # noqa: E402
 from reportforce import Reportforce  # noqa: E402
+from reportforce.helpers.parsers import get_columns_labels
 
 mock_metadata = mocks.get_json("analytics_matrix_metadata")
 mock_report = mocks.get_json("analytics_matrix")
@@ -89,6 +90,18 @@ class TestMatrixReport(unittest.TestCase):
             df = self.rf.get_report("ReportID")
 
             self.assertTrue(df.empty)
+
+    def test_get_columns_labels_of_a_matrix(self):
+        """Test get columns labels of a matrix."""
+
+        test = get_columns_labels(mock_report)
+        expected = {
+            "Delivery Day": "Delivery Day",
+            "Product": "Product",
+            "Supervisor": "Supervisor",
+            "Worker": "Worker",
+        }
+        self.assertDictEqual(test, expected)
 
     def tearDown(self):
         patch.stopall()

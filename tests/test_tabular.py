@@ -15,7 +15,7 @@ df = pd.DataFrame(
         [
             "Acme - 200 Widgets",
             16000.01,
-            "Word of mouth",
+            16000.01,
             "Need estimate",
             60,
             "Q3-2015",
@@ -27,7 +27,7 @@ df = pd.DataFrame(
         [
             "Acme - 200 Widgets",
             16000.01,
-            "Word of mouth",
+            16000.01,
             "Need estimate",
             60,
             "Q3-2015",

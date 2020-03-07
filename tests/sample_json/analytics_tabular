@@ -30,8 +30,8 @@
                             }
                         },
                         {
-                            "label": "Word of mouth",
-                            "value": "Word of mouth"
+                            "label": "$16,000.01",
+                            "value": 16000.01
                         },
                         {
                             "label": "Need estimate",
@@ -175,7 +175,7 @@
                 "label": "Amount"
             },
             "LEAD_SOURCE": {
-                "dataType": "picklist",
+                "dataType": "currency",
                 "label": "Lead Source"
             },
             "NEXT_STEP": {
