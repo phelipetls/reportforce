@@ -1,7 +1,6 @@
 import os
 import sys
 import json
-import ujson
 import unittest
 import requests
 
@@ -47,12 +46,6 @@ class TestErrorHandling(unittest.TestCase):
     def test_expections_binary_string(self):
         """Test binary string being passed to simplejson parser."""
         handle_error(MockBytesResponse())
-
-    @patch("requests.models.complexjson", ujson)
-    def test_expections_binary_ujson(self):
-        """Test binary string being passed to ujson parser."""
-        handle_error(MockBytesResponse())
-
 
 if __name__ == "__main__":
     unittest.main(failfast=True)
