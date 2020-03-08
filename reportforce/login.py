@@ -7,8 +7,32 @@ DEFAULT_VERSION = "47.0"
 
 
 class Salesforce:
-    """A Salesforce session instance."""
+    """A Salesforce session instance.
 
+    Attributes
+    ----------
+    session_id : str
+        Session ID passed to the request headers for authentication.
+
+    instance_url : str
+        The user's Salesforce instance/server.
+
+    version : str, default '47.0'
+        The SOAP API and Analytics API version to be used.
+
+    headers : dict
+        Headers used for authentication.
+
+    Methods
+    -------
+    _get_latest_version : str
+        Method used to get the latest Analytics API version.
+
+    Raises
+    ------
+    AuthenticationError
+        If anything goes wrong while authenticating.
+    """
     def __init__(
         self,
         username=None,

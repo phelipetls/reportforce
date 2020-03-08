@@ -40,6 +40,7 @@ def get_tabular_cells(report):
         for cell, dtype in zip(row["dataCells"], dtypes):
             L.append(get_value(cell, dtype))
         cells.append(L)
+
     return cells
 
 
@@ -64,6 +65,7 @@ def get_matrix_cells(matrix):
         aggregates = factmap[group]["aggregates"]
         for agg, dtype in zip(aggregates, dtypes):
             cells.append(get_value(agg, dtype))
+
     return cells
 
 
@@ -103,7 +105,6 @@ def get_summary_indices(summary, cells_by_group):
     )
 
     names = get_groupings_labels(summary, "groupingsDown")
-
     return pd.MultiIndex.from_tuples(repeated_groups, names=names)
 
 
@@ -118,6 +119,7 @@ def get_columns_dtypes(report):
 
     info = report["reportExtendedMetadata"]["detailColumnInfo"]
     columns = report["reportMetadata"]["detailColumns"]
+
     return [info[col]["dataType"] for col in columns]
 
 
@@ -125,19 +127,19 @@ def get_groupings_labels(report, key):
     """Get groupings labels"""
     groupings_metadata = report["reportExtendedMetadata"]["groupingColumnInfo"]
     groups_names = [group["name"] for group in report["reportMetadata"][key]]
-
     groups_labels = [groupings_metadata[name]["label"] for name in groups_names]
     return groups_labels
 
 
 def get_columns_labels(report):
-    """Get a dict that maps a column label (what you see in the browser)
-    to its API name (used internally only).
+    """Get a dict that maps a column label (what you see in
+    the browser) to its API name (used internally only).
 
-    The API name is the one that should be used in the request body.
+    The API name is the one that should be used in the
+    request body.
 
-    This is useful to get the corresping label of a given column API
-    name.
+    This is useful to get the corresping label of a given
+    column API name.
     """
     if report["reportMetadata"]["reportFormat"] == "MATRIX":
         columns_info = report["reportExtendedMetadata"]["groupingColumnInfo"]
@@ -147,9 +149,7 @@ def get_columns_labels(report):
 
 
 def get_columns(report):
-    """Get all report columns labels in a format appropriate to be
-    passed to the columns argument when creating a DataFrame.
-    """
+    """Get report columns to pass to DataFrame constructor."""
     if report["reportMetadata"]["reportFormat"] == "MATRIX":
         # get columns groups tuples
         groupings_across = report["groupingsAcross"]["groupings"]
@@ -174,29 +174,78 @@ def get_columns(report):
 
 
 def get_groups(groups):
-    """Iterate through a GroupingsDown or GroupingsAcross, which stores a list
-    of groupings that may contain other groupings etc.
+    """Iterate through a list of groupings to
+    get the cartesian product of their values.
 
-    It tries to return a list of tuples which results from the product of the
-    values inside that group.
+    For example, imagine this list of groupings:
+
+    g = [
+        {
+            "groupings": [
+                {
+                    "groupings": [
+                        {
+                            "groupings": [
+                                {
+                                    "groupings": [],
+                                    "label": "grouping4_1"
+                                }
+                                ],
+                            "label": "grouping3_1",
+                        },
+                        {
+                            "groupings": [
+                                {
+                                    "groupings": [],
+                                    "label": "grouping4_1"
+                                }
+                                ],
+                            "label": "grouping3_2",
+                        },
+                    ],
+                    "label": "grouping2",
+                }
+            ],
+            "label": "grouping1",
+        }
+    ]
+
+    Our job is to extract the label of each group and put them
+    in a list per level of nesting.
+
+    Examples
+    --------
+    >>> get_groups(g)
+    [('grouping1', 'grouping2', 'grouping3_1', 'grouping4_1'),
+     ('grouping1', 'grouping2', 'grouping3_1', 'grouping4_1'),
+     ('grouping1', 'grouping2', 'grouping3_2', 'grouping4_1'),
+     ('grouping1', 'grouping2', 'grouping3_2', 'grouping4_1')]
     """
     indices = []
     for group in groups:
-        groups_values = get_groups_values([group], [])
-        indices.extend(itertools.product(*groups_values))
+        groups_labels = get_groups_labels([group], [])
+        indices.extend(itertools.product(*groups_labels))
     return indices
 
 
-def get_groups_values(groups, L=[]):
-    """
-    Auxiliary function to recursively iterate through a grouping, which is a
-    list of dictionary, extract theirs labels and append them into a list.
+def get_groups_labels(groups, L=[]):
+    """Recursively extract the labels for each group, for
+    every level of nesting, until there are no more nested
+    groups.
 
-    The function stops when there are no more groupings inside the first group.
+    Examples
+    --------
+    >>> get_groups_labels(g)
+    [['grouping1'], ['grouping2'], ['grouping3_1', 'grouping3_2'], ['grouping4_1', 'grouping4_1']]
     """
-    L.append([group["label"] for group in groups])
+    labels = []
+    groupings = []
+
     for group in groups:
-        if group["groupings"]:
-            return get_groups_values(group["groupings"], L)
-        else:
-            return L
+        labels.append(group["label"])
+        groupings.extend(group["groupings"])
+    else:
+        L.append(labels)
+        if groupings:
+            get_groups_labels(groupings, L)
+    return L

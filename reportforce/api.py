@@ -18,7 +18,27 @@ URL = "https://{}/services/data/v{}/analytics/reports/"
 
 
 class Reportforce(Salesforce):
-    """Class to interact with Salesforce Analytics API."""
+    """Class to interact with the Salesforce Analytics API.
+
+    Attributes
+    ----------
+    url : str
+        Salesforce instance/server URL.
+
+    session : requests.Session
+        Session used for making http requests.
+
+    Methods
+    -------
+    get_report : pandas.DataFrame
+        Get a report as a DataFrame.
+
+    get_total : int, float
+        Get the grand total of a report.
+
+    get_metadata : dict
+        Get a report metadata.
+    """
 
     session = requests.Session()
     session.hooks["response"].append(errors.handle_error)

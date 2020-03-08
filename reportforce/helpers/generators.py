@@ -7,11 +7,16 @@ URL = "https://{}/services/data/v{}/analytics/reports/{}"
 
 
 def report_generator(get_report):
-    """Decorator function to generate reports until the allData element of the
-    response body is 'true', while filtering out already seen values of a
-    specified identifier column, given by the id_column parameter.
+    """Decorator function to yield reports (as a DataFrame)
+    until the allData item of the response body is 'true',
+    which eventually will be because we filter out already
+    seen values of a specified row-identifier column.
 
-    Once all data has been collected, it concatenates all of them.
+    It then concatenates and returns all generated
+    DataFrame.
+
+    If an id_column is not provided or if the report is less
+    than 2000 rows, then there is nothing that could be done.
     """
 
     def generator(report_id, id_column, metadata, session, **kwargs):

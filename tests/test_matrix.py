@@ -74,6 +74,8 @@ class TestMatrixReport(unittest.TestCase):
 
     @patch.object(Reportforce.session, "post")
     def test_dataframe(self, post):
+        """Test if it returns the expected DataFrame."""
+
         post().json.return_value = mock_report
 
         df = self.rf.get_report("ReportID")
@@ -81,6 +83,8 @@ class TestMatrixReport(unittest.TestCase):
 
     @patch.object(Reportforce.session, "post")
     def test_empty_matrix(self, post):
+        """Test if returns an empty DataFrame when the matrix is empty."""
+
         mock_factmap = {
             "T!T": {"aggregates": {"label": "label", "value": "value"}, "rows": []}
         }

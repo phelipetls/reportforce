@@ -18,8 +18,9 @@ def get_excel(report_id, excel, metadata, salesforce, **kwargs):
         A report unique identifier.
 
     excel : bool or str
-        If a non-empty string, it will be used as the filename.
-        If True, the workbook is automatically named.
+        If a non-empty string, it will be used as the
+        filename. If True, the workbook is automatically
+        named.
 
     salesforce : object
         An instance of simple_salesforce.Salesforce or
@@ -67,8 +68,8 @@ def get_tabular_reports(url, metadata=None, salesforce=None, **kwargs):
     Returns
     -------
     tuple
-        JSON response body parsed as a dict.
-        Report data cells parsed as a list.
+        JSON response body parsed as a dict,
+        Report data cells parsed as a list,
         Indices to be used in the DataFrame.
     """
     tabular = salesforce.session.post(url, json=metadata, **kwargs).json()
@@ -97,8 +98,8 @@ def get_matrix_reports(url, metadata, salesforce, **kwargs):
     Returns
     -------
     tuple
-        JSON response body parsed as a dict.
-        Report data cells parsed as a list.
+        JSON response body parsed as a dict,
+        Report data cells parsed as a list,
         Indices to be used in the DataFrame.
     """
     matrix = salesforce.session.post(url, json=metadata, **kwargs).json()
