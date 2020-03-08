@@ -1,0 +1,21 @@
+site_name: Reportforce
+nav:
+    - Home: 'index.md'
+    - 'User Guide':
+        - 'Installation': 'user-guide/installation.md'
+        - 'Authentication': 'user-guide/authentication.md'
+        - 'Usage': 'user-guide/usage.md'
+repo_name: 'phelipetls/reportforce'
+repo_url: 'https://github.com/phelipetls/reportforce'
+markdown_extensions:
+    - toc:
+        permalink: true
+    - codehilite:
+        guess_lang: false
+    - admonition
+theme:
+    name: material
+    palette:
+        primary: 'indigo'
+        accent: 'indigo'
+        language: 'en'
