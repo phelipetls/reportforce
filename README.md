@@ -5,7 +5,7 @@ it gets so tedious to do so manually in the browser or something?
 
 Well, me too. To turn this process less painful, I created this package. By
 using it, you will hopefully be able to download most Salesforce reports as a
-*DataFrame* or an Excel *spreadsheet*.
+**DataFrame** or an Excel **spreadsheet**.
 
 Check out our documentation at [readthedocs](http://reportforce.rtfd.io/).
 
@@ -27,4 +27,3 @@ something could be improved, open a pull request.
 ## Support
 
 You can help me by starring this repository. :)
-

@@ -1,0 +1,18 @@
+language: python
+python:
+  - "3.6"
+  - "3.7"
+  - "3.8"
+# command to install dependencies
+install:
+  - pip3 install coverage codecov
+  - pip3 install -r requirements.txt
+# command to run tests
+script:
+  - coverage run --source reportforce -m unittest discover -s tests
+after_success:
+  - codecov
+branches:
+  only:
+  - master
+

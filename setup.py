@@ -1,8 +1,8 @@
 import setuptools
 import distutils
 
-long_description = """
-"""
+with open("README.md", "r") as readme:
+    long_description = readme.read()
 
 setuptools.setup(
     name="reportforce",
@@ -20,8 +20,5 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.6",
-    project_urls={
-        "Documentation": "",
-    },
+    python_requires=">=3.6"
 )
