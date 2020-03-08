@@ -229,9 +229,8 @@ def get_groups(groups):
 
 
 def get_groups_labels(groups, L=[]):
-    """Recursively extract the labels for each group, for
-    every level of nesting, until there are no more nested
-    groups.
+    """Recursively extract the labels for each
+    group, for every level of nesting.
 
     Examples
     --------
