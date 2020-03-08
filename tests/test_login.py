@@ -36,16 +36,11 @@ class TestSalesforce(unittest.TestCase):
         self.assertEqual(sf.instance_url, "dummy.salesforce.com")
         self.assertEqual(sf.headers, {"Authorization": "Bearer sessionId"})
 
-
     def test_salesforce_authentication_error(self):
         """Test if raises Authentication Error when no valid arguments are passed."""
         with self.assertRaises(AuthenticationError):
             Salesforce()
-
-        with self.assertRaises(AuthenticationError):
             Salesforce(session_id="session_id", password="pass")
-
-        with self.assertRaises(AuthenticationError):
             Salesforce(username="username", password="pass")
 
     def test_get_latest_version(self):
@@ -56,6 +51,7 @@ class TestSalesforce(unittest.TestCase):
             rf = Reportforce(
                 session_id="session_id", instance_url="instance", latest_version=True
             )
+
             test = rf.version
             expected = "48.0"
 

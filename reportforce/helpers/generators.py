@@ -19,11 +19,11 @@ def report_generator(get_report):
     than 2000 rows, then there is nothing that could be done.
     """
 
-    def generator(report_id, id_column, metadata, session, **kwargs):
+    def generator(report_id, id_column, metadata, salesforce, **kwargs):
         """Request reports until allData is true by filtering them iteratively."""
-        url = URL.format(session.instance_url, session.version, report_id)
+        url = salesforce.url + report_id
 
-        report, report_cells, indices = get_report(url, metadata, session, **kwargs)
+        report, report_cells, indices = get_report(url, metadata, salesforce, **kwargs)
 
         columns = parsers.get_columns(report)
 
@@ -39,16 +39,15 @@ def report_generator(get_report):
             while not report["allData"]:
                 # getting what is needed to build the dataframe
                 report, report_cells, indices = get_report(
-                    url, metadata, session, **kwargs
+                    url, metadata, salesforce, **kwargs
                 )
 
                 df = pd.DataFrame(report_cells, index=indices, columns=columns)
+                yield df
 
-                # filtering out already seen values
+                # filtering out already seen values for the next report
                 already_seen += ",".join(df[id_column].values)
                 filters.update_filter(-1, "value", already_seen, metadata)
-
-                yield df
 
     @functools.wraps(get_report)
     def concat(*args, **kwargs):

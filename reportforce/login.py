@@ -54,10 +54,10 @@ class Salesforce:
         else:
             raise AuthenticationError
 
-        self.version = self.get_latest_version() if latest_version else version
+        self.version = self._get_latest_version() if latest_version else version
         self.headers = {"Authorization": "Bearer " + self.session_id}
 
-    def get_latest_version(self):
+    def _get_latest_version(self):
         url = "https://{}/services/data/".format(self.instance_url)
         version = requests.get(url).json()[-1]["version"]
         return version

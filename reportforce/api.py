@@ -121,12 +121,14 @@ class Reportforce(Salesforce):
 
         report_format = metadata["reportMetadata"]["reportFormat"]
 
+        args = (report_id, id_column, metadata, self)
+
         if report_format == "TABULAR":
-            return get_tabular_reports(report_id, id_column, metadata, self, **kwargs)
+            return get_tabular_reports(*args, **kwargs)
         elif report_format == "SUMMARY":
-            return get_summary_reports(report_id, id_column, metadata, self, **kwargs)
+            return get_summary_reports(*args, **kwargs)
         elif report_format == "MATRIX":
-            return get_matrix_reports(report_id, id_column, metadata, self, **kwargs)
+            return get_matrix_reports(*args, **kwargs)
 
     def get_total(self, report_id):
         """Get a report grand total."""
