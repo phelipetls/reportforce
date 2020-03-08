@@ -51,7 +51,7 @@ df = pd.DataFrame(
     ],
 )
 
-mock_report = mocks.get_json("analytics_tabular")
+report = mocks.get_json("analytics_tabular")
 
 
 class TestTabularReport(unittest.TestCase):
@@ -63,20 +63,21 @@ class TestTabularReport(unittest.TestCase):
 
     @patch.object(Reportforce.session, "post")
     def test_dataframe(self, post):
-        with patch.dict(mock_report, values=mock_report, allData=False, clear=True):
-            post().json.side_effect = [mock_report] * 2
+        """Test if the generated DataFrame is what we expected, including dtypes."""
+        post().json.side_effect = mocks.generate_reports(report)
 
-            df = self.rf.get_report("report_id", id_column="Opportunity Name")
+        df = self.rf.get_report("report_id", id_column="Opportunity Name")
 
         expected_df = df
         pd.testing.assert_frame_equal(df, expected_df)
 
     @patch.object(Reportforce.session, "post")
     def test_empty_report(self, post):
+        """Test if an empty DataFrame is returned in case of an empty report."""
         mock_factmap = {"T!T": {"aggregates": {"label": 0, "value": 0}, "rows": []}}
 
-        with patch.dict(mock_report, values=mock_report, factMap=mock_factmap):
-            post().json.return_value = mock_report
+        with patch.dict(report, values=report, factMap=mock_factmap):
+            post().json.return_value = report
 
             df = self.rf.get_report("report_id")
 
@@ -84,7 +85,8 @@ class TestTabularReport(unittest.TestCase):
 
     @patch.object(Reportforce.session, "get")
     def test_get_total(self, get):
-        get().json.return_value = mock_report
+        """Test getting the grand total of a report."""
+        get().json.return_value = report
 
         test = self.rf.get_total("report_id")
         expected = 16000.01
@@ -93,22 +95,6 @@ class TestTabularReport(unittest.TestCase):
 
     def tearDown(self):
         patch.stopall()
-
-
-# class TestGettingTotal(unittest.TestCase):
-#     @patch("reportforce.report.get_metadata")
-#     @patch.object(Reportforce.session, "get")
-#     def test_get_total(self, get, get_metadata):
-
-#         get_metadata.return_value = mock_metadata
-#         get().json.return_value = mock_report
-
-#         rf = Reportforce("foo@bar.com", "1234", "XXX")
-
-#         test = rf.get_total("report_id")
-#         expected = 16000.01
-
-#         self.assertEqual(test, expected)
 
 
 if __name__ == "__main__":

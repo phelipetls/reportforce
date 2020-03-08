@@ -10,8 +10,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from utils import mocks  # noqa: E402
 from reportforce import Reportforce  # noqa: E402
 
-mock_report = mocks.get_json("analytics_summary")
-
+report = mocks.get_json("analytics_summary")
 
 class TestSummaryReport(unittest.TestCase):
     @patch.object(Reportforce.session, "post")
@@ -19,11 +18,10 @@ class TestSummaryReport(unittest.TestCase):
         mocks.mock_get_metadata("analytics_summary_metadata").start()
         mocks.mock_login().start()
 
-        with patch.dict(mock_report, values=mock_report, allData=False, clear=True):
-            post().json.side_effect = [mock_report] * 2
+        post().json.side_effect = mocks.generate_reports(report)
 
-            rf = Reportforce("foo@bar.com", "1234", "XXX")
-            self.report = rf.get_report("report_id", id_column="label1")
+        rf = Reportforce("foo@bar.com", "1234", "XXX")
+        self.report = rf.get_report("report_id", id_column="label1")
 
     def test_summary_length(self):
         length = len(self.report)
@@ -53,8 +51,8 @@ class TestSummaryReport(unittest.TestCase):
 
         mock_factmap = {"factMap": {"T!T": {"aggregates": {"label": 0, "value": 0}}}}
 
-        with patch.dict(mock_report, mock_factmap):
-            post().json.return_value = mock_report
+        with patch.dict(report, mock_factmap):
+            post().json.return_value = report
 
             rf = Reportforce("foo@bar.com", "1234", "XXX")
             self.report = rf.get_report("report_id", id_column="label1")

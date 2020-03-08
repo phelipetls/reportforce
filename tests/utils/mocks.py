@@ -18,3 +18,16 @@ def mock_get_metadata(metadata):
 def mock_login():
     soap_login_config = {"return_value": ("sessionId", "dummy.salesforce.com")}
     return patch("reportforce.login.soap_login", **soap_login_config)
+
+
+def generate_reports(second):
+    """Pick a report, make its allData attribute false, so
+    as to simulate an incomplete Salesforce report to force
+    keeping getting reports.
+
+    Then the second report will have allData attribute set
+    to true, and the iteration will stop.
+    """
+    first = second.copy()
+    first["allData"] = False
+    return [first, second]
