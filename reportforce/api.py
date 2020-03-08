@@ -107,7 +107,7 @@ class Reportforce(Salesforce):
         ReportError
             If there is an error-like JSON string in the reponse body.
         """
-        metadata = copy.deepcopy(self.get_metadata(report_id), memo={})
+        metadata = copy.deepcopy(self.get_metadata(report_id))
 
         if start or end:
             filters.set_period(start, end, date_column, metadata)
