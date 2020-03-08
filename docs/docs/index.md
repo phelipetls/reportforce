@@ -1,5 +1,10 @@
 # A Salesforce Analytics API client in Python
 
+[![Documentation Status](https://readthedocs.org/projects/reportforce/badge/?version=latest)](https://reportforce.readthedocs.io/en/latest/?badge=latest)
+[![PyPI Version](https://img.shields.io/pypi/v/reportforce.svg)](https://pypi.org/project/reportforce/)
+[![Travis Build Status](https://travis-ci.org/phelipetls/reportforce.svg?branch=master)](https://travis-ci.org/phelipetls/reportforce)
+[![Code Coverage](https://codecov.io/gh/phelipetls/reportforce/branch/master/graph/badge.svg)](https://codecov.io/gh/phelipetls/reportforce)
+
 Ever needed to daily download a Salesforce report and curse your life because
 it gets so tedious to do so manually in the browser?
 
