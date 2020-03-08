@@ -3,24 +3,25 @@ import sys
 import json
 import unittest
 import requests
-
-from unittest.mock import patch, Mock
+import simplejson
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
+from unittest.mock import Mock
 from reportforce.helpers.errors import ReportError, handle_error  # noqa: E402
 
 ok_json = {"json.return_value": [{"this json": "is ok"}]}
 binary = {"json.return_value": "\x005"}
 
 
-class MockErrorResponse:
+class MockErrorResponse(requests.Response):
     """Mock error response body."""
 
     text = '[{"errorCode": "errorCode", "message": "message"}]'
 
-    def json(self):
-        return json.loads(self.text)
+
+class MockInvalidJSON(requests.Response):
+    text = "\x005"
 
 
 class MockBytesResponse:
@@ -43,9 +44,14 @@ class TestErrorHandling(unittest.TestCase):
         except ReportError as error:
             self.assertEqual(str(error), "\nCode: errorCode. Message: message")
 
-    def test_expections_binary_string(self):
-        """Test binary string being passed to simplejson parser."""
+    def test_json_decode_error(self):
+        """Test binary string being passed to json parser."""
         handle_error(MockBytesResponse())
+
+    def test_simplejson_json_decode_error(self):
+        """Test binary string being passed to simplejson parser."""
+        handle_error(MockInvalidJSON())
+
 
 if __name__ == "__main__":
     unittest.main(failfast=True)
