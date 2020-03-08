@@ -42,3 +42,6 @@ htmlcov/
 
 # flake
 .flake8
+
+# mkdocs
+site/
