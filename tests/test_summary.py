@@ -12,6 +12,7 @@ from reportforce import Reportforce  # noqa: E402
 
 mock_report = mocks.get_json("analytics_summary")
 
+
 class TestSummaryReport(unittest.TestCase):
     @patch.object(Reportforce.session, "post")
     def setUp(self, post):

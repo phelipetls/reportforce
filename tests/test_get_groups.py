@@ -4,7 +4,7 @@ import unittest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from reportforce.helpers.parsers import get_groups_labels, get_groups
+from reportforce.helpers.parsers import get_groups_labels  # noqa: E402
 
 g = [
     {

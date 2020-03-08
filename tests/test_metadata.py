@@ -7,7 +7,7 @@ from unittest.mock import patch
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from utils import mocks  # noqa: E402
-from reportforce import report, Reportforce  # noqa: E402
+from reportforce import Reportforce  # noqa: E402
 
 URL = "https://dummy.salesforce.com/services/data/v47.0/analytics/reports/report_id/describe"
 

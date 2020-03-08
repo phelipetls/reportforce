@@ -8,9 +8,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from utils import mocks  # noqa: E402
 from reportforce import Reportforce  # noqa: E402
-from reportforce.helpers import sf_filters  # noqa: E402
 
 mock_report = mocks.get_json("analytics_tabular")
+
 
 class TestFiltersSetters(unittest.TestCase):
 

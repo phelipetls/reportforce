@@ -1,6 +1,3 @@
-import json
-
-
 def handle_error(r, **kwargs):
     try:
         error = r.json()[0]

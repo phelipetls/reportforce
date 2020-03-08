@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from utils import mocks  # noqa: E402
 from reportforce import Reportforce  # noqa: E402
-from reportforce.helpers.parsers import get_columns_labels
+from reportforce.helpers.parsers import get_columns_labels  # noqa: E402
 
 mock_metadata = mocks.get_json("analytics_matrix_metadata")
 mock_report = mocks.get_json("analytics_matrix")

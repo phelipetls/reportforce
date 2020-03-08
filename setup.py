@@ -1,5 +1,4 @@
 import setuptools
-import distutils
 
 with open("README.md", "r") as readme:
     long_description = readme.read()

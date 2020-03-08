@@ -3,11 +3,9 @@ import sys
 import json
 import unittest
 import requests
-import simplejson
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from unittest.mock import Mock
 from reportforce.helpers.errors import ReportError, handle_error  # noqa: E402
 
 ok_json = {"json.return_value": [{"this json": "is ok"}]}
