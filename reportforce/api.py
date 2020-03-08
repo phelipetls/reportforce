@@ -7,6 +7,9 @@ from .login import Salesforce
 
 from .helpers import errors
 from .helpers import parsers
+
+from .helpers.sf_filters import set_filters, set_period, set_logic
+
 from .report import (
     get_excel,
     get_tabular_reports,
@@ -107,21 +110,21 @@ class Reportforce(Salesforce):
         ReportError
             If there is an error-like JSON string in the reponse body.
         """
-        metadata = copy.deepcopy(self.get_metadata(report_id))
+        self.metadata = copy.deepcopy(self.get_metadata(report_id))
 
         if start or end:
-            filters.set_period(start, end, date_column, metadata)
+            set_period(start, end, date_column, self.metadata)
         if logic:
-            filters.set_logic(logic, metadata)
+            set_logic(logic, self.metadata)
         if filters:
-            filters.set_filters(filters, metadata)
+            set_filters(filters, self.metadata)
 
         if excel:
-            return get_excel(report_id, excel, metadata, self, **kwargs)
+            return get_excel(report_id, excel, self.metadata, self, **kwargs)
 
-        report_format = metadata["reportMetadata"]["reportFormat"]
+        report_format = self.metadata["reportMetadata"]["reportFormat"]
 
-        args = (report_id, id_column, metadata, self)
+        args = (report_id, id_column, self.metadata, self)
 
         if report_format == "TABULAR":
             return get_tabular_reports(*args, **kwargs)

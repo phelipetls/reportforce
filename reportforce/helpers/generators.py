@@ -1,7 +1,8 @@
 import functools
 import pandas as pd
 
-from ..helpers import filters, parsers
+from ..helpers import parsers
+from ..helpers.sf_filters import update_filter, set_filters, increment_logical_filter
 
 URL = "https://{}/services/data/v{}/analytics/reports/{}"
 
@@ -32,9 +33,9 @@ def report_generator(get_report):
 
         if id_column:
             already_seen = ",".join(df[id_column].values)
-            filters.set_filters([(id_column, "!=", already_seen)], metadata)
+            set_filters([(id_column, "!=", already_seen)], metadata)
 
-            filters.increment_logical_filter(metadata)
+            increment_logical_filter(metadata)
 
             while not report["allData"]:
                 # getting what is needed to build the dataframe
@@ -47,12 +48,13 @@ def report_generator(get_report):
 
                 # filtering out already seen values for the next report
                 already_seen += ",".join(df[id_column].values)
-                filters.update_filter(-1, "value", already_seen, metadata)
+                update_filter(-1, "value", already_seen, metadata)
 
     @functools.wraps(get_report)
     def concat(*args, **kwargs):
         details = {"includeDetails": "true"}
-        merge_params = kwargs.setdefault("params", {}).update(details)
+        # merge params
+        kwargs.setdefault("params", {}).update(details)
 
         df = pd.concat(generator(*args, **kwargs))
 
