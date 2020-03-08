@@ -1,7 +1,9 @@
+docs_dir: 'docs'
+site_dir: 'site'
 site_name: Reportforce
 nav:
     - Home: 'index.md'
-    - 'User Guide':
+    - User Guide:
         - 'Installation': 'user-guide/installation.md'
         - 'Authentication': 'user-guide/authentication.md'
         - 'Usage': 'user-guide/usage.md'
