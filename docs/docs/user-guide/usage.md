@@ -47,7 +47,7 @@ If you want to filter the report by a report column, you may do it by passing a
 list of tuples to the filters parameter:
 
 ```python
-report.get_report("00O1a000001YtFG", filters=[("COLUMN_NAME", ">=", "VALUE")])
+rf.get_report("00O1a000001YtFG", filters=[("COLUMN_NAME", ">=", "VALUE")])
 ```
 
 You can use the typical logical operators as in Python, e.g.
@@ -58,7 +58,7 @@ You can use the typical logical operators as in Python, e.g.
 When filtering, you may find it useful to add a logic to your filters:
 
 ```python
-report.get_report(
+rf.get_report(
     "00O1a000001YtFG", filters=[("Coder", "==", "Gilfoyle")], logic="1 AND 2"
 )
 ```
@@ -69,7 +69,7 @@ You can download the entire report (the 2000 row limit does not apply here) as
 an Excel spreadsheet:
 
 ```python
-report.get_report("00O1a000001YtFG", excel=True)
+rf.get_report("00O1a000001YtFG", excel=True)
 ```
 
 The spreadsheet will then be saved to your current working directory with an
@@ -77,7 +77,7 @@ appropriate name. But you may also pass a string to name the spreadsheet at your
 will.
 
 ```python
-report.get_report("00O1a000001YtFG", excel="spreadsheet.xlsx")
+rf.get_report("00O1a000001YtFG", excel="spreadsheet.xlsx")
 ```
 
 !!! note
