@@ -1,4 +1,4 @@
-# A Salesforce Analytics API client in Python
+# A Salesforce Analytics API client for Python
 
 [![Documentation Status](https://readthedocs.org/projects/reportforce/badge/?version=latest)](https://reportforce.readthedocs.io/en/latest/?badge=latest)
 [![PyPI Version](https://img.shields.io/pypi/v/reportforce.svg)](https://pypi.org/project/reportforce/)

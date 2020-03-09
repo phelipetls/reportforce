@@ -1,6 +1,6 @@
 docs_dir: 'docs'
 site_dir: 'site'
-site_name: Reportforce
+site_name: 'Reportforce: A Salesforce Analytics API client for Python'
 nav:
     - Home: 'index.md'
     - User Guide:

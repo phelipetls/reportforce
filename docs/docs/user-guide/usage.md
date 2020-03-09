@@ -81,11 +81,8 @@ report.get_report("00O1a000001YtFG", excel="spreadsheet.xlsx")
 ```
 
 !!! note
-    This is, naturally, faster than the work around the 2000 row limit, with
-    the downside of the ouput being an Excel file.
-
-    But it still struggles if the report is huge. It may hang for a while until
-    it starts to be saved chunk by chunk.
+    This still struggles if the report is huge. It's common to hang for a while
+    until it starts to be saved chunk by chunk.
 
 ## Speeding up
 
