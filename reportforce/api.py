@@ -130,7 +130,7 @@ class Reportforce(Salesforce):
             return get_tabular_reports(*args, **kwargs)
         elif report_format == "SUMMARY":
             return get_summary_reports(*args, **kwargs)
-        elif report_format == "MATRIX":
+        else:
             return get_matrix_reports(*args, **kwargs)
 
     def get_total(self, report_id):
