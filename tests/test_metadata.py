@@ -19,7 +19,7 @@ class TestGetMetadata(unittest.TestCase):
     @patch.object(Reportforce.session, "get")
     def test_request_call_to_get_metadata(self, get):
         rf = Reportforce("foo@bar.com", "1234", "XXX")
-        rf.get_report("report_id")
+        rf.get_metadata("report_id")
 
         get.assert_called_with(URL)
 
