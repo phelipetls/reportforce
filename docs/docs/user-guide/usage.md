@@ -8,8 +8,7 @@ This is the simplest way to get a report:
 rf.get_report("00O1a000001YtFG")
 ```
 
-No filters applied and, if this report has more than 2000 rows, 2000 rows is
-all you'll get.
+In this way, no **filters** are applied and you will get 2000 rows at max.
 
 ## Getting more than 2000 rows
 
@@ -58,9 +57,7 @@ You can use the typical logical operators as in Python, e.g.
 When filtering, you may find it useful to add a logic to your filters:
 
 ```python
-rf.get_report(
-    "00O1a000001YtFG", filters=[("Coder", "==", "Gilfoyle")], logic="1 AND 2"
-)
+rf.get_report("00O1a000001YtFG", filters=[("Coder", "==", "Gilfoyle")], logic="1 AND 2")
 ```
 
 ## Downloading report as Excel spreadsheet

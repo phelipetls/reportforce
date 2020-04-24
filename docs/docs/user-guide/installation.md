@@ -2,7 +2,7 @@
 
 To install the package, simply run
 
-```
+```sh
 $ pip3 install --upgrade reportforce
 ```
 
