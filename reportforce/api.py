@@ -123,7 +123,6 @@ class Reportforce(Salesforce):
             return get_excel(report_id, excel, self.metadata, self, **kwargs)
 
         report_format = self.metadata["reportMetadata"]["reportFormat"]
-
         args = (report_id, id_column, self.metadata, self)
 
         if report_format == "TABULAR":

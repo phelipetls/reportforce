@@ -27,9 +27,6 @@ var/
 .installed.cfg
 *.egg
 
-# codebraid
-_codebraid
-
 # temp files
 *~
 \#*
