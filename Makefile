@@ -6,6 +6,10 @@ TEST_DIR = tests
 test:
 	python3 -m unittest discover -vfs $(TEST_DIR)
 
+clean:
+	rm -rf build dist .egg $(PACKAGE).egg-info
+	coverage erase
+
 publish:
 	python3 setup.py sdist bdist_wheel
 	twine upload --skip-existing dist/*
