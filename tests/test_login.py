@@ -3,7 +3,7 @@ import unittest
 from utils import mocks
 from unittest.mock import patch
 from reportforce import Reportforce
-from reportforce.login import Salesforce, AuthenticationError
+from reportforce.login import Salesforce
 
 
 class TestSalesforce(unittest.TestCase):
