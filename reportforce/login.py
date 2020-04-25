@@ -1,6 +1,7 @@
-import getpass
 import requests
 
+from html import escape
+from getpass import getpass
 from .helpers.xml import read_failed_response, read_successful_response
 
 DEFAULT_VERSION = "47.0"
@@ -94,6 +95,11 @@ def soap_login(username, password, security_token, version="47.0", domain="login
     AuthenticationError
         If anything goes wrong while authenticating.
     """
+
+    username = escape(username)
+    password = escape(password or getpass())
+    security_token = escape(security_token or getpass())
+
     soap_url = "https://{}.salesforce.com/services/Soap/u/{}".format(domain, version)
     soap_headers = {
         "Content-Type": "text/xml; charset=UTF-8",
@@ -111,9 +117,7 @@ def soap_login(username, password, security_token, version="47.0", domain="login
             </n1:login>
         </env:Body>
     </env:Envelope>""".format(
-        username=username,
-        password=password if password else getpass.getpass(),
-        token=security_token if security_token else getpass.getpass("Security Token: "),
+        username=username, password=password, token=security_token
     )
 
     response = requests.post(soap_url, headers=soap_headers, data=soap_body)

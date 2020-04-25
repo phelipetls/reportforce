@@ -57,6 +57,20 @@ class TestSoapLoginSuccess(unittest.TestCase):
         )
 
 
+@patch("requests.post", return_value=Mock(status_code=200, text=succesful_xml_response))
+class TestEscapeXmlCharacters(unittest.TestCase):
+
+    maxDiff = None
+
+    def test_escaped_xml(self, post):
+        soap_login("<>&", "<>&", "<>&")
+
+        escaped_body = body_template.format(
+            "&lt;&gt;&amp;", "&lt;&gt;&amp;", "&lt;&gt;&amp;"
+        )
+
+        post.assert_called_with(
+            expected_url, headers=expected_headers, data=escaped_body
         )
 
 
