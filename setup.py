@@ -8,7 +8,7 @@ setuptools.setup(
     version="0.0.4",
     author="Phelipe Teles",
     author_email="phelipe_teles@hotmail.com",
-    description="",
+    description="A Salesforce Analytics API client for Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/phelipetls/reportforce",
@@ -20,4 +20,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.6",
+    project_urls={
+        "Documentation": "https://reportforce.readthedocs.io/",
+    },
 )
