@@ -75,10 +75,9 @@ class TestEscapeXmlCharacters(unittest.TestCase):
 class TestGetCredentialsWithGetPass(unittest.TestCase):
     """Test getting user credentials via getpass."""
 
-    @patch(
-        "reportforce.login.getpass", side_effect=["fake@username.com", "pass", "XXX"]
-    )
-    def test_get_credentials_with_get_pass(self, _, post):
+    @patch("reportforce.login.input", return_value="fake@username.com")
+    @patch("reportforce.login.getpass", side_effect=["pass", "XXX"])
+    def test_get_credentials_with_get_pass(self, _, __, post):
         soap_login()
 
         expected_body = body_template.format("fake@username.com", "pass", "XXX")

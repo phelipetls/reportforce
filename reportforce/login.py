@@ -99,9 +99,9 @@ def soap_login(
         If anything goes wrong while authenticating.
     """
 
-    username = escape(username or getpass())
-    password = escape(password or getpass())
-    security_token = escape(security_token or getpass())
+    username = escape(username or input("Username: "))
+    password = escape(password or getpass("Password: "))
+    security_token = escape(security_token or getpass("Security token: "))
 
     soap_url = "https://{}.salesforce.com/services/Soap/u/{}".format(domain, version)
 
