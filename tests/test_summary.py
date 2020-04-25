@@ -1,18 +1,16 @@
-import os
-import sys
 import unittest
 import itertools
 
+from utils import mocks
 from unittest.mock import patch
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-from utils import mocks  # noqa: E402
-from reportforce import Reportforce  # noqa: E402
+from reportforce import Reportforce
 
 report = mocks.get_json("analytics_summary")
 
+
 class TestSummaryReport(unittest.TestCase):
+    """Test summary report parser."""
+
     @patch.object(Reportforce.session, "post")
     def setUp(self, post):
         mocks.mock_get_metadata("analytics_summary_metadata").start()

@@ -17,15 +17,15 @@ expected_headers = {
     "SoapAction": "login",
 }
 
-expected_body = """<?xml version="1.0" encoding="utf-8" ?>
+body_template = """<?xml version="1.0" encoding="utf-8" ?>
     <env:Envelope
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <env:Body>
             <n1:login xmlns:n1="urn:partner.soap.sforce.com">
-                <n1:username>fake@username.com</n1:username>
-                <n1:password>passXXX</n1:password>
+                <n1:username>{}</n1:username>
+                <n1:password>{}{}</n1:password>
             </n1:login>
         </env:Body>
     </env:Envelope>"""
@@ -37,18 +37,26 @@ def get_login(login_type):
         return xml_file.read()
 
 
-class TestSoapLoginSuccess(unittest.TestCase):
-    @patch("requests.post")
-    def test_successful_login(self, post):
-        post.return_value = Mock(status_code=200, text=get_login("successful.xml"))
+succesful_xml_response = get_login("successful.xml")
 
+
+@patch("requests.post", return_value=Mock(status_code=200, text=succesful_xml_response))
+class TestSoapLoginSuccess(unittest.TestCase):
+    """Test a successful login attempt via SOAP API."""
+
+    def test_successful_login(self, post):
         test = soap_login("fake@username.com", "pass", "XXX")
         expected = ("sessionId", "dummy.salesforce.com")
 
         self.assertEqual(test, expected)
 
         post.assert_called_with(
-            expected_url, headers=expected_headers, data=expected_body
+            expected_url,
+            headers=expected_headers,
+            data=body_template.format("fake@username.com", "pass", "XXX")
+        )
+
+
         )
 
 

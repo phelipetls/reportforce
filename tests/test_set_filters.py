@@ -1,13 +1,8 @@
-import os
-import sys
 import unittest
 
+from utils import mocks
 from unittest.mock import patch
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-from utils import mocks  # noqa: E402
-from reportforce import Reportforce  # noqa: E402
+from reportforce import Reportforce
 
 mock_report = mocks.get_json("analytics_tabular")
 
@@ -37,11 +32,13 @@ class TestFiltersSetters(unittest.TestCase):
         )
 
     def test_logic(self):
+        """Test if filter logic was incremented."""
         test = self.rf.metadata["reportMetadata"]["reportBooleanFilter"]
         expected = "1 AND 2 AND 3"
         self.assertEqual(test, expected)
 
     def test_date_filter(self):
+        """Test if dates were changed."""
         test = self.rf.metadata["reportMetadata"]["standardDateFilter"]
         expected = {
             "column": "FISCAL_QUARTER",
@@ -52,6 +49,7 @@ class TestFiltersSetters(unittest.TestCase):
         self.assertDictEqual(test, expected)
 
     def test_report_filters(self):
+        """Test if filters were changed."""
         test = self.rf.metadata["reportMetadata"]["reportFilters"]
         expected = [
             {

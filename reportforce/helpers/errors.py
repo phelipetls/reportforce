@@ -1,6 +1,6 @@
-def handle_error(r, **kwargs):
+def handle_error(response, **kwargs):
     try:
-        error = r.json()[0]
+        error = response.json()[0]
         raise ReportError(error["errorCode"], error["message"])
     except (KeyError, ValueError):
         pass

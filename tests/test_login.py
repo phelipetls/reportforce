@@ -1,24 +1,19 @@
-import os
-import sys
 import unittest
 
+from utils import mocks
 from unittest.mock import patch
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-from reportforce import Reportforce  # noqa: E402
-from reportforce.login import Salesforce, AuthenticationError  # noqa: E402
-from utils import mocks  # noqa: E402
+from reportforce import Reportforce
+from reportforce.login import Salesforce, AuthenticationError
 
 
 class TestSalesforce(unittest.TestCase):
     """Test Salesforce class main properties."""
 
     @patch("reportforce.login.soap_login")
-    def test_salesforce_soap_login(self, soap_login):
+    def test_soap_login(self, soap_login):
         """Test authentication via user-password-token method."""
-
         soap_login.return_value = ("sessionId", "dummy.salesforce.com")
+
         sf = Salesforce("foo@bar.com", "pass", "XXX")
 
         self.assertEqual(sf.version, "47.0")
@@ -26,22 +21,33 @@ class TestSalesforce(unittest.TestCase):
         self.assertEqual(sf.instance_url, "dummy.salesforce.com")
         self.assertEqual(sf.headers, {"Authorization": "Bearer sessionId"})
 
-    def test_salesforce_use_session_id(self):
+    def test_use_session_id(self):
         """Test authentication when user provides session ID and instance directly."""
-        session_id, instance_url = ("sessionId", "dummy.salesforce.com")
+        session_id, instance_url = ("userSessionId", "dummy.salesforce.com")
+
         sf = Salesforce(session_id=session_id, instance_url=instance_url)
 
         self.assertEqual(sf.version, "47.0")
-        self.assertEqual(sf.session_id, "sessionId")
+        self.assertEqual(sf.session_id, "userSessionId")
         self.assertEqual(sf.instance_url, "dummy.salesforce.com")
-        self.assertEqual(sf.headers, {"Authorization": "Bearer sessionId"})
+        self.assertEqual(sf.headers, {"Authorization": "Bearer userSessionId"})
 
-    def test_salesforce_authentication_error(self):
-        """Test if raises Authentication Error when no valid arguments are passed."""
+    def test_authentication_error(self):
+        """AuthenticationError should be raised when no arguments are provided"""
         with self.assertRaises(AuthenticationError):
             Salesforce()
-            Salesforce(session_id="session_id", password="pass")
+
+    def test_authentication_error_no_instance_url(self):
+        """For authentication with session id, instance URL is required."""
+        with self.assertRaises(AuthenticationError):
+            Salesforce(session_id="session_id")
+
+    def test_authentication_error_incomplete_credentials(self):
+        """For authentication, username, password and security token are required."""
+        with self.assertRaises(AuthenticationError):
             Salesforce(username="username", password="pass")
+            Salesforce(password="pass", security_token="token")
+            Salesforce(username="username", security_token="token")
 
     def test_get_latest_version(self):
         """Test getting latest version of Salesforce."""
