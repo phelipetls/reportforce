@@ -2,6 +2,7 @@ import requests
 
 from html import escape
 from getpass import getpass
+
 from .helpers.xml import read_failed_response, read_successful_response
 
 DEFAULT_VERSION = "47.0"
@@ -34,6 +35,7 @@ class Salesforce:
     AuthenticationError
         If anything goes wrong while authenticating.
     """
+
     def __init__(
         self,
         username=None,
@@ -43,7 +45,7 @@ class Salesforce:
         domain=None,
         session_id=None,
         instance_url=None,
-        latest_version=False
+        latest_version=False,
     ):
         if instance_url and session_id:
             self.session_id = session_id
@@ -63,8 +65,10 @@ class Salesforce:
         return version
 
 
-def soap_login(username, password, security_token, version="47.0", domain="login"):
-    """Helper function to login into Salesforce via SOAP API.
+def soap_login(
+    username=None, password=None, security_token=None, version="47.0", domain="login"
+):
+    """Login into Salesforce via SOAP API.
 
     Parameters
     ----------
@@ -100,10 +104,12 @@ def soap_login(username, password, security_token, version="47.0", domain="login
     security_token = escape(security_token or getpass())
 
     soap_url = "https://{}.salesforce.com/services/Soap/u/{}".format(domain, version)
+
     soap_headers = {
         "Content-Type": "text/xml; charset=UTF-8",
         "SoapAction": "login",
     }
+
     soap_body = """<?xml version="1.0" encoding="utf-8" ?>
     <env:Envelope
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"

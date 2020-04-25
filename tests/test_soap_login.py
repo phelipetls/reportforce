@@ -53,15 +53,12 @@ class TestSoapLoginSuccess(unittest.TestCase):
         post.assert_called_with(
             expected_url,
             headers=expected_headers,
-            data=body_template.format("fake@username.com", "pass", "XXX")
+            data=body_template.format("fake@username.com", "pass", "XXX"),
         )
 
 
 @patch("requests.post", return_value=Mock(status_code=200, text=succesful_xml_response))
 class TestEscapeXmlCharacters(unittest.TestCase):
-
-    maxDiff = None
-
     def test_escaped_xml(self, post):
         soap_login("<>&", "<>&", "<>&")
 
@@ -96,14 +93,18 @@ mock_post = patch("reportforce.login.requests", **config)
 
 
 class TestSoapLoginFailure(unittest.TestCase):
-    maxDiff = None
+    """Test a failed login attempt via SOAP API."""
 
     def test_failed_login(self):
         with mock_post, self.assertRaises(AuthenticationError):
             soap_login("fake@username.com", "pass", "XXX")
 
     def test_failed_login_error_str_repr(self):
-        expected = "INVALID_LOGIN: Invalid username, password, security token; or user locked out."
+        expected = (
+            "INVALID_LOGIN: Invalid username, password, "
+            "security token; or user locked out."
+        )
+
         with mock_post:
             try:
                 soap_login("fake@username.com", "pass", "XXX")
