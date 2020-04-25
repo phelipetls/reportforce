@@ -5,7 +5,7 @@ with open("README.md", "r") as readme:
 
 setuptools.setup(
     name="reportforce",
-    version="0.0.4",
+    version="0.0.5",
     author="Phelipe Teles",
     author_email="phelipe_teles@hotmail.com",
     description="A Salesforce Analytics API client for Python",
