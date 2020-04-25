@@ -74,6 +74,23 @@ class TestEscapeXmlCharacters(unittest.TestCase):
         )
 
 
+@patch("requests.post", return_value=Mock(status_code=200, text=succesful_xml_response))
+class TestGetCredentialsWithGetPass(unittest.TestCase):
+    """Test getting user credentials via getpass."""
+
+    @patch(
+        "reportforce.login.getpass", side_effect=["fake@username.com", "pass", "XXX"]
+    )
+    def test_get_credentials_with_get_pass(self, _, post):
+        soap_login()
+
+        expected_body = body_template.format("fake@username.com", "pass", "XXX")
+
+        post.assert_called_with(
+            expected_url, headers=expected_headers, data=expected_body
+        )
+
+
 config = {"post.return_value": Mock(status_code=500, text=get_login("failed.xml"))}
 mock_post = patch("reportforce.login.requests", **config)
 

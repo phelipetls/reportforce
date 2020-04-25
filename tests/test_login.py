@@ -32,23 +32,6 @@ class TestSalesforce(unittest.TestCase):
         self.assertEqual(sf.instance_url, "dummy.salesforce.com")
         self.assertEqual(sf.headers, {"Authorization": "Bearer userSessionId"})
 
-    def test_authentication_error(self):
-        """AuthenticationError should be raised when no arguments are provided"""
-        with self.assertRaises(AuthenticationError):
-            Salesforce()
-
-    def test_authentication_error_no_instance_url(self):
-        """For authentication with session id, instance URL is required."""
-        with self.assertRaises(AuthenticationError):
-            Salesforce(session_id="session_id")
-
-    def test_authentication_error_incomplete_credentials(self):
-        """For authentication, username, password and security token are required."""
-        with self.assertRaises(AuthenticationError):
-            Salesforce(username="username", password="pass")
-            Salesforce(password="pass", security_token="token")
-            Salesforce(username="username", security_token="token")
-
     def test_get_latest_version(self):
         """Test getting latest version of Salesforce."""
         get_config = {"get.return_value.json.return_value": mocks.get_json("versions")}

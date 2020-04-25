@@ -49,12 +49,10 @@ class Salesforce:
             self.session_id = session_id
             self.instance_url = instance_url
 
-        elif all((username, password, security_token)):
+        else:
             self.session_id, self.instance_url = soap_login(
                 username, password, security_token, version, domain
             )
-        else:
-            raise AuthenticationError
 
         self.version = self._get_latest_version() if latest_version else version
         self.headers = {"Authorization": "Bearer " + self.session_id}
@@ -97,7 +95,7 @@ def soap_login(username, password, security_token, version="47.0", domain="login
         If anything goes wrong while authenticating.
     """
 
-    username = escape(username)
+    username = escape(username or getpass())
     password = escape(password or getpass())
     security_token = escape(security_token or getpass())
 
