@@ -40,6 +40,7 @@ class Salesforce:
         password=None,
         security_token=None,
         version=DEFAULT_VERSION,
+        domain=None,
         session_id=None,
         instance_url=None,
         latest_version=False
@@ -50,7 +51,7 @@ class Salesforce:
 
         elif all((username, password, security_token)):
             self.session_id, self.instance_url = soap_login(
-                username, password, security_token, version
+                username, password, security_token, version, domain
             )
         else:
             raise AuthenticationError
