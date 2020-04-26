@@ -6,7 +6,7 @@
 				<metadataServerUrl>metadataServerUrl</metadataServerUrl>
 				<passwordExpired>passwordExpired</passwordExpired>
 				<sandbox>sandbox</sandbox>
-				<serverUrl>https://dummy.salesforce.com/services/Soap/u/00.0/000000000000000</serverUrl>
+				<serverUrl>https://www.salesforce.com/services/Soap/u/00.0/000000000000000</serverUrl>
 				<sessionId>sessionId</sessionId>
 				<userId>userId</userId>
 				<userInfo>

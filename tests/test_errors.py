@@ -1,62 +1,48 @@
 import json
-import unittest
+import pytest
 import requests
 
 from reportforce.helpers.errors import ReportError, handle_error
 
 
-class ErrorResponse(requests.Response):
-    """Simulate a response with a error response as its body."""
-
+class ResponseWithApiError(requests.Response):
     text = '[{"errorCode": "errorCode", "message": "message"}]'
 
 
-class TestSalesforceErrorJson(unittest.TestCase):
-    """Test if ReportError is raised when error-like JSON is passed."""
+def test_report_error():
+    """Handle_error hook should raise ReportError only for error-like JSON."""
 
-    def test_handle_error_json(self):
-        with self.assertRaises(ReportError):
-            handle_error(ErrorResponse())
-
-    def test_error_string_repr(self):
-        """Check error string representation."""
-        try:
-            handle_error(ErrorResponse())
-        except ReportError as error:
-            self.assertEqual(str(error), "\nCode: errorCode. Message: message")
+    with pytest.raises(ReportError):
+        handle_error(ResponseWithApiError())
 
 
-class BytesResponse:
-    """Simulate a response with a body with byte-content."""
+def test_report_error_string_representation():
+    """Test ReportError string representation."""
+
+    with pytest.raises(ReportError) as report_error:
+        handle_error(ResponseWithApiError())
+
+    assert str(report_error.value) == "\nCode: errorCode. Message: message"
+
+
+class ResponseWithBinaryContent:
     text = "\x005"
 
     def json(self):
         return json.loads(self.text)
 
 
-class TestErrorBytesString(unittest.TestCase):
-    """Test binary string being passed to json parser."""
+def test_report_error_should_not_raise_with_binary_content():
+    """Shouldn't raise for responses with binary content."""
 
-    def test_json_decode_error(self):
-        response = BytesResponse()
-
-        handle_error(response)
+    handle_error(ResponseWithBinaryContent())
 
 
-class InvalidJsonResponse(requests.Response):
+class ResponseWithInvalidJSON(requests.Response):
     text = "{invalid: json"
 
 
-class TestErrorInvalidJsonString(unittest.TestCase):
-    """Test binary string being passed to simplejson parser."""
+def test_report_error_should_not_raise_with_invalid_json():
+    """Shouldn't raise for responses with invalid JSONs."""
 
-    def test_simplejson_json_decode_error(self):
-        response = InvalidJsonResponse()
-
-        handle_error(response)
-
-
-if __name__ == "__main__":
-    unittest.main(failfast=True)
-
-# vi: nowrap
+    handle_error(ResponseWithInvalidJSON())

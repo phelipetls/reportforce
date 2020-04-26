@@ -1,23 +1,52 @@
-import os
-import sys
-import unittest
+import pytest
 
-from pathlib import Path
-from unittest.mock import Mock, patch
+from fixtures_utils import read_data
+from reportforce.login import soap_login, AuthenticationError
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+SUCCESS = read_data("login_successful.xml")
+FAILURE = read_data("login_failed.xml")
 
-from reportforce.login import soap_login, AuthenticationError  # noqa: E402
+USERNAME = "fake@username.com"
+PASSWORD = "pass"
+TOKEN = "token"
 
 
-expected_url = "https://login.salesforce.com/services/Soap/u/47.0"
+class MockXmlResponse:
+    def __init__(self, data, code, *args, **kwargs):
+        self.text = data
+        self.status_code = code
 
-expected_headers = {
+
+@pytest.fixture
+def mock_success_login(mocker):
+    """
+    Do not make a POST request, return a XML response as if the login had
+    succeded.
+    """
+    xml_response = MockXmlResponse(data=SUCCESS, code=200)
+
+    return mocker.patch("requests.post", return_value=xml_response)
+
+
+def test_xml_response_parser(mock_success_login):
+    """
+    Test if function correctly get session id and instance URL from the XML
+    response body.
+    """
+    test = soap_login(USERNAME, PASSWORD, TOKEN)
+    expected = ("sessionId", "www.salesforce.com")
+
+    assert test == expected
+
+
+EXPECTED_URL = "https://login.salesforce.com/services/Soap/u/47.0"
+
+EXPECTED_HEADERS = {
     "Content-Type": "text/xml; charset=UTF-8",
     "SoapAction": "login",
 }
 
-body_template = """<?xml version="1.0" encoding="utf-8" ?>
+BODY_TEMPLATE = """<?xml version="1.0" encoding="utf-8" ?>
     <env:Envelope
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
@@ -31,87 +60,62 @@ body_template = """<?xml version="1.0" encoding="utf-8" ?>
     </env:Envelope>"""
 
 
-def get_login(login_type):
-    xml_path = Path(__file__).resolve().parent / "sample_xml" / login_type
-    with open(xml_path, "r") as xml_file:
-        return xml_file.read()
+def test_post_request_call(mock_success_login):
+    """Test if POST request is called with expected parameters."""
+    soap_login(USERNAME, PASSWORD, TOKEN)
+
+    mock_success_login.assert_called_with(
+        EXPECTED_URL,
+        headers=EXPECTED_HEADERS,
+        data=BODY_TEMPLATE.format(USERNAME, PASSWORD, TOKEN),
+    )
 
 
-succesful_xml_response = get_login("successful.xml")
+def test_escape_xml_body(mock_success_login):
+    """
+    Test if POST request is called with expected parameters, when there are
+    special XML characters in the credentials.
+    """
+    soap_login("<>&", "<>&", "<>&")
+
+    mock_success_login.assert_called_with(
+        EXPECTED_URL,
+        headers=EXPECTED_HEADERS,
+        data=BODY_TEMPLATE.format("&lt;&gt;&amp;", "&lt;&gt;&amp;", "&lt;&gt;&amp;"),
+    )
 
 
-@patch("requests.post", return_value=Mock(status_code=200, text=succesful_xml_response))
-class TestSoapLoginSuccess(unittest.TestCase):
-    """Test a successful login attempt via SOAP API."""
+def test_authentication_with_getpass(mock_success_login, mocker):
+    mocker.patch("reportforce.login.input", return_value=USERNAME)
+    mocker.patch("reportforce.login.getpass", side_effect=[PASSWORD, "token<>&"])
 
-    def test_successful_login(self, post):
-        test = soap_login("fake@username.com", "pass", "XXX")
-        expected = ("sessionId", "dummy.salesforce.com")
+    soap_login()
 
-        self.assertEqual(test, expected)
-
-        post.assert_called_with(
-            expected_url,
-            headers=expected_headers,
-            data=body_template.format("fake@username.com", "pass", "XXX"),
-        )
+    mock_success_login.assert_called_with(
+        EXPECTED_URL,
+        headers=EXPECTED_HEADERS,
+        data=BODY_TEMPLATE.format(USERNAME, PASSWORD, "token&lt;&gt;&amp;"),
+    )
 
 
-@patch("requests.post", return_value=Mock(status_code=200, text=succesful_xml_response))
-class TestEscapeXmlCharacters(unittest.TestCase):
-    def test_escaped_xml(self, post):
-        soap_login("<>&", "<>&", "<>&")
+@pytest.fixture
+def mock_failed_login(mocker):
+    """
+    Do not make a POST request, return a XML response as if the login had
+    failed.
+    """
+    xml_response = MockXmlResponse(data=FAILURE, code=500)
 
-        escaped_body = body_template.format(
-            "&lt;&gt;&amp;", "&lt;&gt;&amp;", "&lt;&gt;&amp;"
-        )
-
-        post.assert_called_with(
-            expected_url, headers=expected_headers, data=escaped_body
-        )
+    return mocker.patch("requests.post", return_value=xml_response)
 
 
-@patch("requests.post", return_value=Mock(status_code=200, text=succesful_xml_response))
-class TestGetCredentialsWithGetPass(unittest.TestCase):
-    """Test getting user credentials via getpass."""
+def test_failed_login(mock_failed_login):
+    with pytest.raises(AuthenticationError) as err:
+        soap_login(USERNAME, PASSWORD, TOKEN)
 
-    @patch("reportforce.login.input", return_value="fake@username.com")
-    @patch("reportforce.login.getpass", side_effect=["pass", "XXX"])
-    def test_get_credentials_with_get_pass(self, _, __, post):
-        soap_login()
+    expected = (
+        "INVALID_LOGIN: Invalid username, password, "
+        "security token; or user locked out."
+    )
 
-        expected_body = body_template.format("fake@username.com", "pass", "XXX")
-
-        post.assert_called_with(
-            expected_url, headers=expected_headers, data=expected_body
-        )
-
-
-config = {"post.return_value": Mock(status_code=500, text=get_login("failed.xml"))}
-mock_post = patch("reportforce.login.requests", **config)
-
-
-class TestSoapLoginFailure(unittest.TestCase):
-    """Test a failed login attempt via SOAP API."""
-
-    def test_failed_login(self):
-        with mock_post, self.assertRaises(AuthenticationError):
-            soap_login("fake@username.com", "pass", "XXX")
-
-    def test_failed_login_error_str_repr(self):
-        expected = (
-            "INVALID_LOGIN: Invalid username, password, "
-            "security token; or user locked out."
-        )
-
-        with mock_post:
-            try:
-                soap_login("fake@username.com", "pass", "XXX")
-            except AuthenticationError as error:
-                self.assertEqual(str(error), expected)
-
-
-if __name__ == "__main__":
-    unittest.main()
-
-# vi: nowrap
+    assert str(err.value) == expected

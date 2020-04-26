@@ -4,7 +4,7 @@ PACKAGE = reportforce
 TEST_DIR = tests
 
 test:
-	python3 -m unittest discover -vfs $(TEST_DIR)
+	pytest
 
 clean:
 	rm -rf build dist .egg $(PACKAGE).egg-info
@@ -23,11 +23,10 @@ publish-test:
 lint:
 	flake8 $(PACKAGE)
 
-COVERAGE = coverage run --source $(PACKAGE)/ -m unittest discover -s $(TEST_DIR)
+COVERAGE = pytest --cov=reportforce tests
 
 cov:
 	$(COVERAGE)
-	coverage report
 	coverage erase
 
 htmlcov:
