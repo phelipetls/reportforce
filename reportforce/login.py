@@ -42,7 +42,7 @@ class Salesforce:
         password=None,
         security_token=None,
         version=DEFAULT_VERSION,
-        domain=None,
+        domain="login",
         session_id=None,
         instance_url=None,
         latest_version=False,
