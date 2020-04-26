@@ -57,7 +57,7 @@ class Salesforce:
             )
 
         self.version = self._get_latest_version() if latest_version else version
-        self.headers = {"Authorization": "Bearer " + self.session_id}
+        self.headers = {"Authorization": "Bearer {}".format(self.session_id)}
 
     def _get_latest_version(self):
         url = "https://{}/services/data/".format(self.instance_url)

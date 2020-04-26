@@ -36,16 +36,16 @@ def get_excel(report_id, excel, metadata, salesforce, **kwargs):
 
     with salesforce.session.post(
         url, headers=headers, json=metadata, stream=True, **kwargs
-    ) as r:
+    ) as response:
         if isinstance(excel, str):
             filename = excel
-        else:
-            string = r.headers["Content-Disposition"]
+        elif excel:
+            string = response.headers["Content-Disposition"]
             pattern = 'filename="(.*)"'
             filename = re.search(pattern, string).group(1)
 
         with open(filename, "wb") as excel_file:
-            for chunk in r.iter_content(chunk_size=512 * 1024):
+            for chunk in response.iter_content(chunk_size=512 * 1024):
                 if chunk:
                     excel_file.write(chunk)
 

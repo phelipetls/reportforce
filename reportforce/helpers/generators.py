@@ -48,7 +48,9 @@ def report_generator(get_report):
 
                 # filtering out already seen values for the next report
                 already_seen += ",".join(df[id_column].values)
-                update_filter(-1, "value", already_seen, metadata)
+                update_filter(
+                    index=-1, key="value", value=already_seen, metadata=metadata
+                )
 
     @functools.wraps(get_report)
     def concat(*args, **kwargs):
