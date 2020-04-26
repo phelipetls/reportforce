@@ -65,7 +65,7 @@ class Reportforce(Salesforce):
         excel=None,
         **kwargs
     ):
-        """Function to get a Salesforce tabular report into a DataFrame.
+        """Function to get a Salesforce report into a DataFrame.
 
         Parameters
         ----------
@@ -123,6 +123,7 @@ class Reportforce(Salesforce):
             return get_excel(report_id, excel, self.metadata, self, **kwargs)
 
         report_format = self.metadata["reportMetadata"]["reportFormat"]
+
         args = (report_id, id_column, self.metadata, self)
 
         if report_format == "TABULAR":
@@ -135,12 +136,13 @@ class Reportforce(Salesforce):
     def get_total(self, report_id):
         """Get a report grand total."""
         url = urllib.parse.urljoin(self.url, report_id)
-
         report = self.session.get(url, params={"includeDetails": "false"}).json()
+
         return parsers.get_report_total(report)
 
     @functools.lru_cache(maxsize=8)
     def get_metadata(self, report_id):
         """Get a report metadata, used to manipulate reports."""
         url = urllib.parse.urljoin(self.url, report_id + "/describe")
+
         return self.session.get(url).json()

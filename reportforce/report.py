@@ -25,6 +25,7 @@ def get_excel(report_id, excel, metadata, salesforce, **kwargs):
         An instance of simple_salesforce.Salesforce or
         reportforce.login.Login, needed for authentication.
     """
+
     url = URL.format(salesforce.instance_url, salesforce.version, report_id)
 
     headers = salesforce.session.headers.copy()

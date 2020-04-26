@@ -7,6 +7,8 @@ def handle_error(response, **kwargs):
 
 
 class ReportError(Exception):
+    """Class to represent any Analytics API error."""
+
     def __init__(self, code, msg):
         self.code = code
         self.msg = msg
