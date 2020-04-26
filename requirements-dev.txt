@@ -1,5 +1,10 @@
 requests
 pandas
 pytest
-pytest-cov
 pytest-mock
+pytest-cov
+coverage
+twine
+wheel
+pip
+--editable .
