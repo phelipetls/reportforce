@@ -52,9 +52,7 @@ def report_generator(get_report):
 
     @functools.wraps(get_report)
     def concat(*args, **kwargs):
-        details = {"includeDetails": "true"}
-        # merge params
-        kwargs.setdefault("params", {}).update(details)
+        kwargs.setdefault("params", {"includeDetails": "true"})
 
         df = pd.concat(generator(*args, **kwargs))
 
