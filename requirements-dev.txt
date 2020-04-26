@@ -7,4 +7,5 @@ coverage
 twine
 wheel
 pip
+codecov
 --editable .
