@@ -37,7 +37,7 @@ By default, this will use the standard date filter column that is in the
 report. You may change it with the `date_column` argument.
 
 ```python
-rf.get_report("00O1a000001YtFG", start="01/12/2020"", date_column="ANOTHER_COLUMN")
+rf.get_report("00O1a000001YtFG", start="01/12/2020", date_column="Last Modification Date")
 ```
 
 ## Filtering a column
@@ -46,7 +46,7 @@ If you want to filter the report by a report column, you may do it by passing a
 list of tuples to the filters parameter:
 
 ```python
-rf.get_report("00O1a000001YtFG", filters=[("COLUMN_NAME", ">=", "VALUE")])
+rf.get_report("00O1a000001YtFG", filters=[("Sales Revenue", ">=", 3000)])
 ```
 
 You can use the typical logical operators as in Python, e.g.
@@ -57,7 +57,17 @@ You can use the typical logical operators as in Python, e.g.
 When filtering, you may find it useful to add a logic to your filters:
 
 ```python
-rf.get_report("00O1a000001YtFG", filters=[("Coder", "==", "Gilfoyle")], logic="1 AND 2")
+rf.get_report("00O1a000001YtFG", filters=[("Account", "==", "Mary")], logic="1 AND 2")
+```
+
+## Customizing request calls
+
+Every keyword arguments is passed to the POST request call (done by the `requests` library).
+
+You can take advantage of that to customize the URL query, for example:
+
+```python
+rf.get_report("00O1a000001YtFG", params={"includeDetails": "false"})
 ```
 
 ## Downloading report as Excel spreadsheet
@@ -70,8 +80,9 @@ rf.get_report("00O1a000001YtFG", excel=True)
 ```
 
 The spreadsheet will then be saved to your current working directory with an
-appropriate name. But you may also pass a string to name the spreadsheet at your
-will.
+appropriate name.
+
+But you may also pass a string to give the file the name you want.
 
 ```python
 rf.get_report("00O1a000001YtFG", excel="spreadsheet.xlsx")
@@ -79,7 +90,7 @@ rf.get_report("00O1a000001YtFG", excel="spreadsheet.xlsx")
 
 !!! note
     This still struggles if the report is huge. It's common to hang for a while
-    until it starts to be saved chunk by chunk.
+    until it starts to be saved by chunks.
 
 ## Speeding up
 
