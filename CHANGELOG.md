@@ -1,3 +1,7 @@
+# 0.0.6
+
+- Fix bug of domain defaulting to `None` in Salesforce object.
+
 # 0.0.5
 
 - Add helpful prompt to get user credentials via standarad input (input and
@@ -12,4 +16,4 @@
 
 # 0.0.3
 
-- Fix bug of reportforce.helpers not being a package (withou a __init__.py file).
+- Fix bug of reportforce.helpers not being a package (withou a `__init__.py` file).
