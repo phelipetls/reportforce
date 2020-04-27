@@ -6,33 +6,31 @@ TEST_DIR = tests
 test:
 	pytest
 
+CLEAR_PACKAGING = rm -rf build dist $(PACKAGE).egg-info
+
 clean:
-	rm -rf build dist .egg $(PACKAGE).egg-info
-	coverage erase
+	$(CLEAR_PACKAGING)
+	$(CLEAR_COVERAGE)
 
 publish:
 	python3 setup.py sdist bdist_wheel
 	twine upload --skip-existing dist/*
-	rm -rf build dist .egg $(PACKAGE).egg-info
-
-publish-test:
-	python3 setup.py sdist bdist_wheel
-	python3 -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*
-	rm -rf build dist .egg $(PACKAGE).egg-info
+	$(CLEAR_PACKAGING)
 
 lint:
 	flake8 $(PACKAGE)
 
 COVERAGE = pytest --cov=reportforce tests
+CLEAR_COVERAGE = coverage erase
 
 cov:
 	$(COVERAGE)
-	coverage erase
+	$(CLEAR_COVERAGE)
 
 htmlcov:
 	$(COVERAGE)
 	coverage html
-	coverage erase
+	$(CLEAR_COVERAGE)
 	firefox htmlcov/index.html
 
 fix:
