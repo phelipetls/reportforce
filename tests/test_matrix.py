@@ -38,17 +38,3 @@ def test_empty_matrix(setup, monkeypatch):
     matrix_df = rf.get_report("ID")
 
     assert matrix_df.empty
-
-
-def test_get_columns_labels():
-    """Test reportforce.helpers.parsers.get_columns_labels function."""
-    columns_labels = get_columns_labels(MATRIX_REPORT)
-
-    expected_columns_labels = {
-        "Delivery Day": "Delivery Day",
-        "Product": "Product",
-        "Supervisor": "Supervisor",
-        "Worker": "Worker",
-    }
-
-    assert columns_labels == expected_columns_labels

@@ -133,18 +133,12 @@ def get_groupings_labels(report, key):
 
 def get_columns_labels(report):
     """Get a dict that maps a column label (what you see in
-    the browser) to its API name (used internally only).
+    the browser) to its API name (used internally).
 
     The API name is the one that should be used in the
     request body.
-
-    This is useful to get the corresping label of a given
-    column API name.
     """
-    if report["reportMetadata"]["reportFormat"] == "MATRIX":
-        columns_info = report["reportExtendedMetadata"]["groupingColumnInfo"]
-    else:
-        columns_info = report["reportExtendedMetadata"]["detailColumnInfo"]
+    columns_info = report["reportExtendedMetadata"]["detailColumnInfo"]
     return {info["label"]: column for column, info in columns_info.items()}
 
 
