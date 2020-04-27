@@ -8,7 +8,7 @@ from .login import Salesforce
 from .helpers import errors
 from .helpers import parsers
 
-from .helpers.sf_filters import set_filters, set_period, set_logic
+from .helpers.report_filters import set_filters, set_period, set_logic
 
 from .report import (
     get_excel,

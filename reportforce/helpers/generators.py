@@ -2,7 +2,7 @@ import functools
 import pandas as pd
 
 from ..helpers import parsers
-from ..helpers.sf_filters import update_filter, set_filters, increment_logical_filter
+from ..helpers.report_filters import update_filter, set_filters, increment_logical_filter
 
 URL = "https://{}/services/data/v{}/analytics/reports/{}"
 
