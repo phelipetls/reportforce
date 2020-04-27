@@ -26,6 +26,7 @@ def get_value(cell, dtype):
 
 
 def get_report_total(report):
+    """Get a report grand total."""
     return report["factMap"]["T!T"]["aggregates"][0]["value"]
 
 
@@ -45,7 +46,7 @@ def get_tabular_cells(report):
 
 
 def get_matrix_cells(matrix):
-    """Parse matrix report fact map"""
+    """Parse matrix report fact map."""
     factmap = matrix["factMap"]
 
     n_rows = len(matrix["reportMetadata"]["groupingsDown"])
@@ -70,10 +71,10 @@ def get_matrix_cells(matrix):
 
 
 def get_summary_cells(summary):
-    """Parse summary report fact map"""
+    """Parse summary report fact map."""
     factmap = summary["factMap"]
     cells = []
-    cells_by_group = []
+    group_frequency = []
 
     # pattern to filter out sub/grandtotals
     n_groups = len(summary["reportMetadata"]["groupingsDown"])
@@ -90,15 +91,15 @@ def get_summary_cells(summary):
             cells.append(
                 [get_value(cell, dtype) for cell, dtype in zip(data_cells, dtypes)]
             )
-        cells_by_group.append(len(rows))
+        group_frequency.append(len(rows))
 
-    return cells, cells_by_group
+    return cells, group_frequency
 
 
-def get_summary_indices(summary, cells_by_group):
+def get_summary_indices(summary, group_frequency):
     """Get summary report index (groups values for each line)."""
     groups = get_groups(summary["groupingsDown"]["groupings"])
-    groups_frequency_pairs = zip(groups, cells_by_group)
+    groups_frequency_pairs = zip(groups, group_frequency)
 
     repeated_groups = itertools.chain.from_iterable(
         itertools.starmap(itertools.repeat, groups_frequency_pairs)
@@ -109,7 +110,7 @@ def get_summary_indices(summary, cells_by_group):
 
 
 def get_columns_dtypes(report):
-    """Get columns types."""
+    """Get columns data types."""
     report_format = report["reportMetadata"]["reportFormat"]
 
     if report_format == "MATRIX":
@@ -124,10 +125,12 @@ def get_columns_dtypes(report):
 
 
 def get_groupings_labels(report, key):
-    """Get groupings labels"""
-    groupings_metadata = report["reportExtendedMetadata"]["groupingColumnInfo"]
+    """Get row or column groupings labels, depending on key (groupingsDown/Across)."""
     groups_names = [group["name"] for group in report["reportMetadata"][key]]
+
+    groupings_metadata = report["reportExtendedMetadata"]["groupingColumnInfo"]
     groups_labels = [groupings_metadata[name]["label"] for name in groups_names]
+
     return groups_labels
 
 
@@ -144,12 +147,14 @@ def get_columns_labels(report):
 
 def get_columns(report):
     """Get report columns to pass to DataFrame constructor."""
+
+    # for matrices, we actually need to get the columns groups labels
     if report["reportMetadata"]["reportFormat"] == "MATRIX":
-        # get columns groups tuples
+        # get all columns groups
         groupings_across = report["groupingsAcross"]["groupings"]
         column_groups = get_groups(groupings_across)
 
-        # get aggregate columns
+        # get all used aggregates
         aggregates_info = report["reportExtendedMetadata"]["aggregateColumnInfo"]
         aggregates_labels = [
             aggregates_info[agg]["label"]
@@ -164,6 +169,7 @@ def get_columns(report):
         if multi_columns:
             groups_labels = [""] + get_groupings_labels(report, "groupingsAcross")
             return pd.MultiIndex.from_tuples(multi_columns, names=groups_labels)
+
     return get_columns_labels(report)
 
 

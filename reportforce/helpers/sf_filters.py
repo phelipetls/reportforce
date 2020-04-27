@@ -18,8 +18,8 @@ operators_dict = {
 
 def set_filters(filters, metadata):
     """Append each filter in a list of filter to report metadata."""
-    for filter_ in filters:
-        column, operator, value = filter_
+    for f in filters:
+        column, operator, value = f
         filter_dict = {
             "column": parsers.get_columns_labels(metadata)[column],
             "operator": operators_dict.get(operator),
