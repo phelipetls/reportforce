@@ -113,19 +113,25 @@ def get_summary_indices(summary, group_frequency):
     return pd.MultiIndex.from_tuples(repeated_groups, names=names)
 
 
+def map_columns_to_dtypes(metadata):
+    report_format = get_report_format(metadata)
+    is_matrix = report_format == "MATRIX"
+
+    columns = "aggregateColumnInfo" if is_matrix else "detailColumnInfo"
+
+    return {
+        info["label"]: info["dataType"]
+        for info in metadata["reportExtendedMetadata"][columns].values()
+    }
+
+
+def get_column_dtype(column_label, metadata):
+    return map_columns_to_dtypes(metadata)[column_label]
+
+
 def get_columns_dtypes(report):
-    """Get columns data types."""
-    report_format = report["reportMetadata"]["reportFormat"]
-
-    if report_format == "MATRIX":
-        info = report["reportExtendedMetadata"]["aggregateColumnInfo"]
-        aggregates = report["reportMetadata"]["aggregates"]
-        return [info[col]["dataType"] for col in aggregates]
-
-    info = report["reportExtendedMetadata"]["detailColumnInfo"]
-    columns = report["reportMetadata"]["detailColumns"]
-
-    return [info[col]["dataType"] for col in columns]
+    """Get columns data types in a list."""
+    return list(map_columns_to_dtypes(report).values())
 
 
 def get_groupings_labels(report, key):
