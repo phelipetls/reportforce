@@ -25,8 +25,6 @@ def test_summary_to_dataframe(setup, mock_generate_reports):
     rf = Reportforce("fake@username.com", "1234", "token")
     summary_df = rf.get_report("ID", id_column="label1")
 
-    summary_df.to_pickle("tests/data/summary_df.pickle")
-
     pd.testing.assert_frame_equal(expected_summary_df, summary_df)
 
 
