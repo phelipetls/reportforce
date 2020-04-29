@@ -8,6 +8,10 @@ number_types = ["double", "percent", "int"]
 date_types = ["datetime", "date", "time"]
 
 
+def get_report_format(metadata):
+    return metadata["reportMetadata"]["reportFormat"]
+
+
 def get_value(cell, dtype):
     """Get a cell value according to the column data type."""
     if dtype in number_types:
@@ -149,7 +153,7 @@ def get_columns(report):
     """Get report columns to pass to DataFrame constructor."""
 
     # for matrices, we actually need to get the columns groups labels
-    if report["reportMetadata"]["reportFormat"] == "MATRIX":
+    if get_report_format(report) == "MATRIX":
         # get all columns groups
         groupings_across = report["groupingsAcross"]["groupings"]
         column_groups = get_groups(groupings_across)
