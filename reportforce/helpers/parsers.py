@@ -4,16 +4,16 @@ import pandas as pd
 
 from distutils.version import LooseVersion
 
-numbers = ["double", "percent", "int"]
-dates = ["datetime", "date", "time"]
+number_types = ["double", "percent", "int"]
+date_types = ["datetime", "date", "time"]
 
 
 def get_value(cell, dtype):
     """Get a cell value according to the column data type."""
-    if dtype in numbers:
+    if dtype in number_types:
         return cell["value"]
 
-    elif dtype in dates:
+    elif dtype in date_types:
         return pd.Timestamp(cell["value"])
 
     elif dtype == "currency":
