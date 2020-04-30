@@ -30,16 +30,15 @@ def mock_generate_reports(mocker):
     True.
     """
 
-    def _generator(data):
+    def _mock_generate_reports(data, n=1, **kwargs):
         all_data_false = data.copy()
         all_data_false["allData"] = False
 
-        all_data_true = data
+        generator = map(MockJsonResponse, [all_data_false] * n + [data])
 
-        return map(MockJsonResponse, [all_data_false, all_data_true])
-
-    def _mock_generate_reports(data, *args, **kwargs):
-        mocker.patch.object(Reportforce.session, "post", side_effect=_generator(data))
+        mocker.patch.object(
+            Reportforce.session, "post", side_effect=generator
+        )
 
     return _mock_generate_reports
 
