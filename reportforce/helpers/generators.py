@@ -3,12 +3,10 @@ import pandas as pd
 
 from ..helpers import parsers
 from ..helpers.report_filters import (
-    update_filter_value,
-    set_filters,
+    filter_id_column,
+    update_filter_out,
     increment_logical_filter,
 )
-
-URL = "https://{}/services/data/v{}/analytics/reports/{}"
 
 
 def report_generator(get_report):
@@ -36,18 +34,18 @@ def report_generator(get_report):
         yield df
 
         if not report["allData"] and id_column:
-            already_seen = ""
+            filter_out = ""
+
+            dtype = parsers.get_column_dtype(id_column, metadata)
+            filter_id_column(dtype, id_column, metadata)
+
             increment_logical_filter(metadata)
-            set_filters([(id_column, "!=", already_seen)], metadata)
 
         while not report["allData"] and id_column:
             # filtering out already seen values for the next report
             column = df[id_column]
-            already_seen += ",".join(column.values) + ","
 
-            update_filter_value(
-                index=-1, value=already_seen.strip(","), metadata=metadata
-            )
+            filter_out = update_filter_out(filter_out, dtype, column, metadata)
 
             # getting what is needed to build the dataframe
             report, report_cells, indices = get_report(

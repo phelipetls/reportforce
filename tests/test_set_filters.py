@@ -1,4 +1,5 @@
 import pytest
+import pandas as pd
 
 from reportforce import Reportforce
 from reportforce.helpers import report_filters
@@ -89,3 +90,37 @@ def test_sort_by_error(setup):
     assert str(err.value) == (
         "Orientation should be either 'asc' or 'desc', not 'orientation'"
     )
+
+
+@pytest.fixture
+def setup2(mock_login, mock_generate_reports, mock_get_metadata):
+    mock_generate_reports(REPORT, n=2)
+    mock_get_metadata(METADATA)
+
+    rf = Reportforce("foo@bar.com", "1234", "XXX")
+    rf.get_report("ID", id_column="Created Date")
+
+    return rf
+
+
+def test_id_column_sortable(setup2):
+    sort_by = setup2.metadata["reportMetadata"]["sortBy"]
+
+    assert sort_by == {"sortColumn": "CREATED_DATE", "sortOrder": "Asc"}
+
+    filters = setup2.metadata["reportMetadata"]["reportFilters"]
+
+    assert filters == [
+        {
+            "column": "column",
+            "filterType": "filterType",
+            "isRunPageEditable": True,
+            "operator": "operator",
+            "value": "value",
+        },
+        {
+            "column": "CREATED_DATE",
+            "operator": "greaterThan",
+            "value": pd.Timestamp("2015-07-31 00:00:00"),
+        },
+    ]

@@ -1,7 +1,7 @@
 import re
 
-from . import parsers
 from dateutil import parser
+from reportforce.helpers import parsers
 
 operators_dict = {
     "==": "equals",
@@ -14,6 +14,36 @@ operators_dict = {
     "not contains": "notContain",
     "startswith": "startsWith",
 }
+
+sortable = [
+    "id",
+    "int",
+    "number",
+    "double",
+    "date",
+    "time",
+    "datetime",
+]
+
+
+def filter_id_column(dtype, id_column, metadata):
+    if dtype in sortable:
+        set_sort_by(id_column, "asc", metadata)
+        set_filters([(id_column, ">", "")], metadata)
+    else:
+        set_filters([(id_column, "!=", "")], metadata)
+
+
+def update_filter_out(filter_out, dtype, column, metadata):
+    if dtype in sortable:
+        filter_out = column.iloc[-1]
+    else:
+        filter_out += "," + ",".join(column) + ","
+        filter_out = filter_out.strip(",")
+
+    update_filter_value(filter_out, metadata)
+
+    return filter_out
 
 
 def set_filters(filters, metadata):
@@ -28,9 +58,9 @@ def set_filters(filters, metadata):
         metadata["reportMetadata"]["reportFilters"].append(filter_dict)
 
 
-def update_filter_value(index, value, metadata):
-    """Update the value of filter at index `index`."""
-    metadata["reportMetadata"]["reportFilters"][index]["value"] = value
+def update_filter_value(value, metadata):
+    """Update the value of last filter."""
+    metadata["reportMetadata"]["reportFilters"][-1]["value"] = value
 
 
 def increment_logical_filter(metadata):
