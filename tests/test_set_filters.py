@@ -8,13 +8,13 @@ METADATA = read_json("tabular_metadata.json")
 
 
 @pytest.fixture
-def setup(mock_login, mock_http_request, mock_get_metadata):
+def setup(mock_login, mock_generate_reports, mock_get_metadata):
     """Simulate getting a report with these parameters.
 
     We expected the underlying report metadata dictionary
     to change accordingly.
     """
-    mock_http_request(REPORT, "post")
+    mock_generate_reports(REPORT, n=2)
     mock_get_metadata(METADATA)
 
     rf = Reportforce("foo@bar.com", "1234", "XXX")
@@ -64,7 +64,7 @@ def test_report_filters(setup):
         {
             "column": "OPPORTUNITY_NAME",
             "operator": "notEqual",
-            "value": "Acme - 200 Widgets",
+            "value": "Acme - 200 Widgets,Acme - 200 Widgets",
         },
     ]
 

@@ -2,7 +2,11 @@ import functools
 import pandas as pd
 
 from ..helpers import parsers
-from ..helpers.report_filters import update_filter, set_filters, increment_logical_filter
+from ..helpers.report_filters import (
+    update_filter_value,
+    set_filters,
+    increment_logical_filter,
+)
 
 URL = "https://{}/services/data/v{}/analytics/reports/{}"
 
@@ -11,7 +15,7 @@ def report_generator(get_report):
     """Decorator function to yield reports (as a DataFrame)
     until the allData item of the response body is 'true',
     which eventually will be because we filter out already
-    seen values of a specified row-identifier column.
+    seen values of an specified identifier column.
 
     It then concatenates and returns all generated
     DataFrame.
@@ -31,26 +35,27 @@ def report_generator(get_report):
         df = pd.DataFrame(report_cells, index=indices, columns=columns)
         yield df
 
-        if id_column:
-            already_seen = ",".join(df[id_column].values)
+        if not report["allData"] and id_column:
+            already_seen = ""
+            increment_logical_filter(metadata)
             set_filters([(id_column, "!=", already_seen)], metadata)
 
-            increment_logical_filter(metadata)
+        while not report["allData"] and id_column:
+            # filtering out already seen values for the next report
+            column = df[id_column]
+            already_seen += ",".join(column.values) + ","
 
-            while not report["allData"]:
-                # getting what is needed to build the dataframe
-                report, report_cells, indices = get_report(
-                    url, metadata, salesforce, **kwargs
-                )
+            update_filter_value(
+                index=-1, value=already_seen.strip(","), metadata=metadata
+            )
 
-                df = pd.DataFrame(report_cells, index=indices, columns=columns)
-                yield df
+            # getting what is needed to build the dataframe
+            report, report_cells, indices = get_report(
+                url, metadata, salesforce, **kwargs
+            )
 
-                # filtering out already seen values for the next report
-                already_seen += ",".join(df[id_column].values)
-                update_filter(
-                    index=-1, key="value", value=already_seen, metadata=metadata
-                )
+            df = pd.DataFrame(report_cells, index=indices, columns=columns)
+            yield df
 
     @functools.wraps(get_report)
     def concat(*args, **kwargs):
