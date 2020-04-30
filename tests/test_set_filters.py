@@ -1,6 +1,8 @@
 import pytest
 
 from reportforce import Reportforce
+from reportforce.helpers import report_filters
+
 from fixtures_utils import read_json
 
 REPORT = read_json("tabular.json")
@@ -69,3 +71,21 @@ def test_report_filters(setup):
     ]
 
     assert filters == expected_filters
+
+
+def test_sort_by(setup):
+    report_filters.set_sort_by("Opportunity Name", "asc", METADATA)
+
+    sort_by = METADATA["reportMetadata"]["sortBy"]
+
+    assert sort_by["sortColumn"] == "OPPORTUNITY_NAME"
+    assert sort_by["sortOrder"] == "Asc"
+
+
+def test_sort_by_error(setup):
+    with pytest.raises(ValueError) as err:
+        report_filters.set_sort_by("Opportunity Name", "orientation", METADATA)
+
+    assert str(err.value) == (
+        "Orientation should be either 'asc' or 'desc', not 'orientation'"
+    )

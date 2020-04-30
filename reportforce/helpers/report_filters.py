@@ -67,3 +67,17 @@ def set_period(start, end, column, metadata):
         )
     if end:
         date_filter["endDate"] = parser.parse(end, dayfirst=True).strftime("%Y-%m-%d")
+
+
+def set_sort_by(sort_column, orientation, metadata):
+    sort_column = parsers.get_column_api_name(sort_column, metadata)
+
+    if re.match(r"^(a|de)sc$", orientation, flags=re.IGNORECASE):
+        sort_order = orientation.title()
+    else:
+        raise ValueError(
+            "Orientation should be either 'asc' or 'desc', not '{}'".format(orientation)
+        )
+
+    sort_by_dict = {"sortColumn": sort_column, "sortOrder": sort_order}
+    metadata["reportMetadata"]["sortBy"] = sort_by_dict
