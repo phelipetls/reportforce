@@ -1,4 +1,3 @@
-import pytest
 import pandas as pd
 
 from fixtures_utils import read_json
@@ -12,7 +11,7 @@ METADATA = read_json("tabular_metadata.json")
 def test_get_value():
     """Test getting values of different data types of a 'cell' in a factMap."""
 
-    currency_cell = cell={"label": "$29", "value": 29}
+    currency_cell = {"label": "$29", "value": 29}
     assert parsers.get_value(currency_cell, dtype="currency") == 29
 
     currency_cell = {"label": "$29", "value": {"amount": 29, "currency": None}}

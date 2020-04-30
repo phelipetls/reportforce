@@ -2,7 +2,6 @@ import pytest
 import pandas as pd
 
 from reportforce import Reportforce
-from reportforce.helpers.parsers import get_columns_labels
 
 from fixtures_utils import read_json
 
