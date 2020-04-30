@@ -155,6 +155,10 @@ def get_columns_labels(report):
     return {info["label"]: column for column, info in columns_info.items()}
 
 
+def get_column_api_name(column, metadata):
+    return get_columns_labels(metadata)[column]
+
+
 def get_columns(report):
     """Get report columns to pass to DataFrame constructor."""
 
