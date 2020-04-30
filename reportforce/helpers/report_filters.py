@@ -28,9 +28,9 @@ def set_filters(filters, metadata):
         metadata["reportMetadata"]["reportFilters"].append(filter_dict)
 
 
-def update_filter(index, key, value, metadata):
-    """Update an arbitrary filter key-value pair in a list of filters."""
-    metadata["reportMetadata"]["reportFilters"][index][key] = value
+def update_filter_value(index, value, metadata):
+    """Update the value of filter at index `index`."""
+    metadata["reportMetadata"]["reportFilters"][index]["value"] = value
 
 
 def increment_logical_filter(metadata):
