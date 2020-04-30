@@ -16,15 +16,14 @@ class ExcelResponse:
         pass
 
 
-def mock_post_response(*args, **kwargs):
-    return ExcelResponse()
-
-
 @pytest.fixture
 def mock_post(mock_get_metadata, monkeypatch):
     mock_get_metadata("analytics_tabular_metadata")
 
-    monkeypatch.setattr(Reportforce.session, "post", mock_post_response)
+    def _mock_post_response(*args, **kwargs):
+        return ExcelResponse()
+
+    monkeypatch.setattr(Reportforce.session, "post", _mock_post_response)
 
 
 @pytest.fixture

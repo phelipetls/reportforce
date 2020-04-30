@@ -10,10 +10,12 @@ METADATA = read_json("tabular_metadata.json")
 
 
 def test_get_value():
-    currency = parsers.get_value(cell={"label": "$29", "value": 29}, dtype="currency")
-    assert currency == 29
+    """Test getting values of different data types of a 'cell' in a factMap."""
 
-    currency_cell = {"label": "$28", "value": {"amount": 29}}
+    currency_cell = cell={"label": "$29", "value": 29}
+    assert parsers.get_value(currency_cell, dtype="currency") == 29
+
+    currency_cell = {"label": "$29", "value": {"amount": 29, "currency": None}}
     assert parsers.get_value(currency_cell, "currency") == 29
 
     date_cell = {"label": "7/31/2015", "value": "2015-07-31"}
@@ -24,6 +26,7 @@ def test_get_value():
 
 
 def test_map_columns_to_dtypes():
+    """If not a matrix, we expect the information on detailColumnInfo."""
     columns_to_dtypes = parsers.map_columns_to_dtypes(METADATA)
 
     assert columns_to_dtypes == {
@@ -41,7 +44,9 @@ def test_map_columns_to_dtypes():
 
 
 def test_map_columns_to_dtypes_matrix(monkeypatch):
+    """If it's a matrix, we expect the information on aggregateColumnInfo."""
     monkeypatch.setitem(METADATA["reportMetadata"], "reportFormat", "MATRIX")
+
     assert parsers.map_columns_to_dtypes(METADATA) == {"label": "dataType"}
 
 
