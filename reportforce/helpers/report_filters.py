@@ -15,35 +15,25 @@ operators_dict = {
     "startswith": "startsWith",
 }
 
-sortable = [
-    "id",
-    "int",
-    "number",
-    "double",
-    "date",
-    "time",
-    "datetime",
-]
 
-
-def filter_id_column(dtype, id_column, metadata):
-    if dtype in sortable:
+def filter_id_column(all_unique, id_column, metadata):
+    if all_unique:
         set_sort_by(id_column, "asc", metadata)
         set_filters([(id_column, ">", "")], metadata)
     else:
         set_filters([(id_column, "!=", "")], metadata)
 
 
-def update_filter_out(filter_out, dtype, column, metadata):
-    if dtype in sortable:
-        filter_out = column.iloc[-1]
+def update_filter_out(filter_value, all_unique, id_column, metadata):
+    if all_unique:
+        filter_value = id_column.iloc[-1]
     else:
-        filter_out += "," + ",".join(column) + ","
-        filter_out = filter_out.strip(",")
+        filter_value += "," + id_column.str.cat(sep=',', na_rep='-') + ","
+        filter_value = filter_value.strip(",")
 
-    update_filter_value(filter_out, metadata)
+    update_filter_value(filter_value, metadata)
 
-    return filter_out
+    return filter_value
 
 
 def set_filters(filters, metadata):
