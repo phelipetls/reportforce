@@ -1,7 +1,7 @@
 import requests
 
-from html import escape
 from getpass import getpass
+from xml.sax.saxutils import escape
 
 from .helpers.xml import read_failed_response, read_successful_response
 
