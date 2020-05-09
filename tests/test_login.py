@@ -28,6 +28,13 @@ def test_use_session_id(mock_login):
     assert sf.headers == {"Authorization": "Bearer userSessionId"}
 
 
+def test_change_version(mock_login):
+    """Test authentication when user provides session ID and instance URL directly."""
+    sf = Salesforce(USERNAME, PASSWORD, TOKEN, version="48.0")
+
+    assert sf.version == "48.0"
+
+
 VERSIONS = read_json("versions.json")
 
 
