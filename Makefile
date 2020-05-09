@@ -34,7 +34,7 @@ htmlcov:
 	firefox htmlcov/index.html
 
 fix:
-	nvim -q <(flake8 --exclude=venv* .)
+	nvim -q <(flake8 $(PACKAGE) tests)
 
 PROFILE_SCRIPT = profiler.py
 PROFILE_OUTPUT = profile.txt
