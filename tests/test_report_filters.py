@@ -90,3 +90,38 @@ def test_sort_by_error(setup):
     assert str(err.value) == (
         "Orientation should be either 'asc' or 'desc', not 'orientation'"
     )
+
+
+def test_tabular_by_sorting(
+    mock_login, mock_generate_reports, mock_get_metadata, monkeypatch
+):
+    mock_get_metadata(read_json("tabular_metadata.json"))
+
+    fact_map = REPORT["factMap"]["T!T"]
+    rows = fact_map["rows"] * 2000
+
+    new_rows = []
+
+    for i, row in enumerate(rows):
+        cell = row["dataCells"].copy()
+        new_value = cell[6].copy()
+        new_value["value"] = i
+        cell[6] = new_value
+        new_rows.append({"dataCells": cell})
+
+    monkeypatch.setitem(fact_map, "rows", new_rows)
+    mock_generate_reports(REPORT)
+
+    rf = Reportforce("fake@username.com", "1234", "token")
+    rf.get_report("ID", id_column="Age")
+
+    assert rf.metadata["reportMetadata"]["sortBy"] == {
+        "sortColumn": "AGE",
+        "sortOrder": "Asc",
+    }
+
+    assert rf.metadata["reportMetadata"]["reportFilters"][-1] == {
+        "column": "AGE",
+        "operator": "greaterThan",
+        "value": 1999,
+    }

@@ -1,4 +1,5 @@
 import re
+import pandas as pd
 
 from dateutil import parser
 from reportforce.helpers import parsers
@@ -16,19 +17,29 @@ operators_dict = {
 }
 
 
-def filter_id_column(all_unique, id_column, metadata):
-    if all_unique:
+def filter_by_sort(df, id_column, metadata):
+    all_unique = len(df[id_column].unique()) == 2000
+    dtype = parsers.get_column_dtype(id_column, metadata)
+
+    return all_unique and dtype in ["id", "int", "number"]
+
+
+def filter_id_column(by_sort, id_column, metadata):
+    if by_sort:
         set_sort_by(id_column, "asc", metadata)
         set_filters([(id_column, ">", "")], metadata)
     else:
         set_filters([(id_column, "!=", "")], metadata)
 
 
-def update_filter_out(filter_value, all_unique, id_column, metadata):
-    if all_unique:
+def update_id_column_filter(filter_value, by_sort, id_column, metadata):
+    if by_sort:
         filter_value = id_column.iloc[-1]
+
+        if isinstance(filter_value, pd.Timestamp):
+            filter_value = filter_value.isoformat()
     else:
-        filter_value += "," + id_column.str.cat(sep=',', na_rep='-') + ","
+        filter_value += "," + id_column.astype("str").str.cat(sep=",", na_rep="-") + ","
         filter_value = filter_value.strip(",")
 
     update_filter_value(filter_value, metadata)
