@@ -1,6 +1,7 @@
 import pytest
 
 from reportforce import Reportforce
+from fixtures_utils import read_json
 
 
 class ExcelResponse:
@@ -18,7 +19,7 @@ class ExcelResponse:
 
 @pytest.fixture
 def mock_post(mock_get_metadata, monkeypatch):
-    mock_get_metadata("analytics_tabular_metadata")
+    mock_get_metadata(read_json("tabular_metadata.json"))
 
     def _mock_post_response(*args, **kwargs):
         return ExcelResponse()

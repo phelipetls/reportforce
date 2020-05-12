@@ -35,14 +35,14 @@ def setup(mock_login, mock_generate_reports, mock_get_metadata):
 
 
 def test_logic(setup):
-    logic = setup.metadata["reportMetadata"]["reportBooleanFilter"]
+    logic = setup.metadata.boolean_filter
     expected_logic = "1 AND 2 AND 3"
 
     assert logic == expected_logic
 
 
 def test_date_filter(setup):
-    dates = setup.metadata["reportMetadata"]["standardDateFilter"]
+    dates = setup.metadata.std_date_filter
     expected_dates = {
         "column": "FISCAL_QUARTER",
         "durationValue": "CUSTOM",
@@ -54,7 +54,7 @@ def test_date_filter(setup):
 
 
 def test_report_filters(setup):
-    filters = setup.metadata["reportMetadata"]["reportFilters"]
+    filters = setup.metadata.report_filters
     expected_filters = [
         {
             "column": "column",
@@ -115,12 +115,12 @@ def test_tabular_by_sorting(
     rf = Reportforce("fake@username.com", "1234", "token")
     rf.get_report("ID", id_column="Age")
 
-    assert rf.metadata["reportMetadata"]["sortBy"] == {
+    assert rf.metadata.sort_by == {
         "sortColumn": "AGE",
         "sortOrder": "Asc",
     }
 
-    assert rf.metadata["reportMetadata"]["reportFilters"][-1] == {
+    assert rf.metadata.report_filters[-1] == {
         "column": "AGE",
         "operator": "greaterThan",
         "value": 1999,

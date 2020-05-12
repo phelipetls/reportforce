@@ -88,10 +88,10 @@ def set_logic(logic, metadata):
 
 def set_period(start, end, column, metadata):
     """Set date-related filters parameters."""
-    date_filter = metadata["reportMetadata"]["standardDateFilter"]
+    date_filter = metadata.std_date_filter
     date_filter["durationValue"] = "CUSTOM"
     if column:
-        date_filter["column"] = parsers.get_column_api_name(column, metadata)
+        date_filter["column"] = metadata.get_column_api_name(column)
     if start:
         date_filter["startDate"] = parser.parse(start, dayfirst=True).strftime(
             "%Y-%m-%d"

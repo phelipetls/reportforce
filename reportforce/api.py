@@ -7,6 +7,7 @@ from .login import Salesforce
 
 from .helpers import errors
 from .helpers import parsers
+from .helpers.metadata import Metadata
 
 from .helpers.report_filters import set_filters, set_period, set_logic
 
@@ -146,4 +147,4 @@ class Reportforce(Salesforce):
         """Get a report metadata, used to manipulate reports."""
         url = urllib.parse.urljoin(self.url, report_id + "/describe")
 
-        return self.session.get(url).json()
+        return Metadata(self.session.get(url).json())

@@ -2,6 +2,8 @@ import pytest
 import reportforce
 
 from reportforce import Reportforce
+from reportforce.helpers.metadata import Metadata
+
 from fixtures_utils import MockJsonResponse
 
 
@@ -59,7 +61,9 @@ def mock_get_metadata(monkeypatch):
 
     def _mock_get_metadata(metadata, *args, **kwargs):
         monkeypatch.setattr(
-            reportforce.Reportforce, "get_metadata", lambda *args, **kwargs: metadata,
+            reportforce.Reportforce,
+            "get_metadata",
+            lambda *args, **kwargs: Metadata(metadata),
         )
 
     return _mock_get_metadata
