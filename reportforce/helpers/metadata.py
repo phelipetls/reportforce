@@ -37,34 +37,28 @@ class Metadata(dict):
     def groupings_across(self):
         return self.report_metadata["groupingsAcross"]
 
-    def _get_infos(self):
-        if self.report_format == "MATRIX":
-            return self.extended_metadata["aggregateColumnInfo"]
-        return self.extended_metadata["detailColumnInfo"]
-
-    @property
-    def columns_info(self):
-        infos = self._get_infos()
-
-        return {
-            info["label"]: {"dtype": info["dataType"], "api_name": column}
-            for column, info in infos.items()
-        }
-
     def get_columns_labels(self):
         return list(self.columns_info.keys())
 
     def get_column_api_name(self, column):
         return self.columns_info[column]["api_name"]
 
-    def get_columns_dtypes(self):
-        return [info["dtype"] for info in self.columns_info.values()]
-
     def get_column_dtype(self, column):
         return self.columns_info[column]["dtype"]
+
+    def get_columns_dtypes(self):
+        return [info["dtype"] for info in self.columns_info.values()]
 
     def get_groupings_labels(self):
         return [
             group["label"]
             for group in self.extended_metadata["groupingColumnInfo"].values()
         ]
+
+
+def parse_orientation(orientation):
+    if re.match(r"^(a|de)sc$", orientation, flags=re.IGNORECASE):
+        return orientation.title()
+
+    msg = "Orientation should be either 'asc' or 'desc', not '{}'"
+    raise ValueError(msg.format(orientation))
