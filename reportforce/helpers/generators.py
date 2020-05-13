@@ -20,6 +20,14 @@ def report_generator(get_report):
     than 2000 rows, then there is nothing that could be done.
     """
 
+    def _addExclusionFilter(values, id_column, metadata):
+        """Add an additional filter to metadata to exclude the passed in values"""
+        if len(values):
+            quoted_values = map(lambda v: '"' + v + '"', pd.unique(values))
+            already_seen = ",".join(quoted_values)
+            set_filters([(id_column, "!=", already_seen)], metadata)
+            increment_logical_filter(metadata)
+
     def generator(report_id, id_column, metadata, salesforce, **kwargs):
         """Request reports until allData is true by filtering them iteratively."""
         url = salesforce.url + report_id
@@ -32,10 +40,7 @@ def report_generator(get_report):
         yield df
 
         if id_column:
-            already_seen = ",".join(df[id_column].values)
-            set_filters([(id_column, "!=", already_seen)], metadata)
-
-            increment_logical_filter(metadata)
+            _addExclusionFilter(df[id_column].values, id_column, metadata)
 
             while not report["allData"]:
                 # getting what is needed to build the dataframe
@@ -47,10 +52,7 @@ def report_generator(get_report):
                 yield df
 
                 # filtering out already seen values for the next report
-                already_seen += ",".join(df[id_column].values)
-                update_filter(
-                    index=-1, key="value", value=already_seen, metadata=metadata
-                )
+                _addExclusionFilter(df[id_column].values, id_column, metadata)
 
     @functools.wraps(get_report)
     def concat(*args, **kwargs):
