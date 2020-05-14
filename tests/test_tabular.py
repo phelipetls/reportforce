@@ -1,40 +1,25 @@
-import pytest
 import pandas as pd
 
-from reportforce import Reportforce
+from reportforce.helpers.tabular import Tabular
+
 from fixtures_utils import read_json
 
 TABULAR_REPORT = read_json("tabular.json")
-TABULAR_METADATA = read_json("tabular_metadata.json")
+EXPECTED_TABULAR_DF = pd.read_pickle("tests/data/tabular_df.pickle")
 
 
-@pytest.fixture
-def setup(mock_login, mock_http_request, mock_get_metadata):
-    mock_get_metadata(TABULAR_METADATA)
-    mock_http_request(TABULAR_REPORT, "post")
-
-
-expected_tabular_df = pd.read_pickle("tests/data/tabular_df.pickle")
-
-
-def test_tabular_to_dataframe(setup, mock_generate_reports):
+def test_tabular_to_dataframe():
     """Test tabular report DataFrame converter."""
-    mock_generate_reports(TABULAR_REPORT)
+    tabular_df = Tabular(TABULAR_REPORT).to_dataframe()
 
-    rf = Reportforce("fake@username.com", "1234", "token")
-    tabular_df = rf.get_report("ID", id_column="Opportunity Name")
-
-    pd.testing.assert_frame_equal(expected_tabular_df, tabular_df)
+    pd.testing.assert_frame_equal(EXPECTED_TABULAR_DF, tabular_df)
 
 
 EMPTY_FACTMAP = {"T!T": {"rows": []}}
 
 
-def test_empty_tabular(setup, monkeypatch):
+def test_empty_tabular(monkeypatch):
     """Test if DataFrame is empty when there are no rows in factMap."""
     monkeypatch.setitem(TABULAR_REPORT, "factMap", EMPTY_FACTMAP)
 
-    rf = Reportforce("fake@username.com", "1234", "token")
-    tabular_df = rf.get_report("ID", id_column="Opportunity Name")
-
-    assert tabular_df.empty
+    assert Tabular(TABULAR_REPORT).to_dataframe().empty

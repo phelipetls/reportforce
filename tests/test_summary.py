@@ -1,40 +1,24 @@
-import pytest
 import pandas as pd
 
-from reportforce import Reportforce
+from reportforce.helpers.summary import Summary
 
 from fixtures_utils import read_json
 
 SUMMARY_REPORT = read_json("summary.json")
-SUMMARY_METADATA = read_json("summary_metadata.json")
+EXPECTED_SUMMARY_DF = pd.read_pickle("tests/data/summary_df.pickle")
 
 
-@pytest.fixture
-def setup(mock_login, mock_http_request, mock_get_metadata):
-    mock_get_metadata(SUMMARY_METADATA)
-    mock_http_request(SUMMARY_REPORT, "post")
-
-
-expected_summary_df = pd.read_pickle("tests/data/summary_df.pickle")
-
-
-def test_summary_to_dataframe(setup, mock_generate_reports):
+def test_summary_to_dataframe():
     """Test summary report into DataFrame converter."""
-    mock_generate_reports(SUMMARY_REPORT)
+    summary_df = Summary(SUMMARY_REPORT).to_dataframe()
 
-    rf = Reportforce("fake@username.com", "1234", "token")
-    summary_df = rf.get_report("ID", id_column="label1")
-
-    pd.testing.assert_frame_equal(expected_summary_df, summary_df)
+    pd.testing.assert_frame_equal(EXPECTED_SUMMARY_DF, summary_df)
 
 
 EMPTY_FACTMAP = {"T!T": {"rows": []}}
 
 
-def test_empty_summary(setup, monkeypatch):
+def test_empty_summary(monkeypatch):
     monkeypatch.setitem(SUMMARY_REPORT, "factMap", EMPTY_FACTMAP)
 
-    rf = Reportforce("fake@username.com", "1234", "token")
-    summary_df = rf.get_report("ID", id_column="label1")
-
-    assert summary_df.empty
+    assert Summary(SUMMARY_REPORT).to_dataframe().empty
