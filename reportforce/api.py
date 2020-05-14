@@ -119,9 +119,8 @@ class Reportforce(Salesforce):
             self.metadata.report_filters = filters
 
         if excel:
-            return get_excel(report_id, excel, self.metadata, self, **kwargs)
-
         parser = self._get_parser()
+            return self._save_spreadsheet(excel)
 
         report = pd.concat(self.report_generator())
 
@@ -168,3 +167,29 @@ class Reportforce(Salesforce):
             report = self._get_report()
             df = report.to_dataframe()
             yield df
+
+    EXCEL_HEADERS = {
+        "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    }
+
+    def _save_spreadsheet(self, excel):
+        excel_headers = self._get_excel_headers()
+
+        with self.session.post(
+            self.report_url, headers=excel_headers, json=self.metadata, stream=True
+        ) as response:
+            if isinstance(excel, str):
+                filename = excel
+            elif excel:
+                content_disposition = response.headers["Content-Disposition"]
+                filename = re.search(r'filename="(.*)"', content_disposition).group(1)
+
+            with open(filename, "wb") as spreadsheet:
+                for chunk in response.iter_content(chunk_size=512 * 1024):
+                    if chunk:
+                        spreadsheet.write(chunk)
+
+    def _get_excel_headers(self):
+        excel_headers = self.session.headers.copy()
+        excel_headers.update(self.EXCEL_HEADERS)
+        return excel_headers
