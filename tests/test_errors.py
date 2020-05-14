@@ -11,14 +11,12 @@ class ResponseWithApiError(requests.Response):
 
 def test_report_error():
     """Handle_error hook should raise ReportError only for error-like JSON."""
-
     with pytest.raises(ReportError):
         handle_error(ResponseWithApiError())
 
 
 def test_report_error_string_representation():
     """Test ReportError string representation."""
-
     with pytest.raises(ReportError) as report_error:
         handle_error(ResponseWithApiError())
 
@@ -34,7 +32,6 @@ class ResponseWithBinaryContent:
 
 def test_report_error_should_not_raise_with_binary_content():
     """Shouldn't raise for responses with binary content."""
-
     handle_error(ResponseWithBinaryContent())
 
 
