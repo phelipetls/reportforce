@@ -9,9 +9,6 @@ from .login import Salesforce
 from .helpers import errors
 from .helpers import parsers
 from .helpers.metadata import Metadata
-
-from .helpers.report_filters import set_filters, set_period, set_logic
-
 from .helpers.tabular import Tabular
 from .helpers.matrix import Matrix
 from .helpers.summary import Summary

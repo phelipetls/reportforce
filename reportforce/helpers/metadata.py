@@ -1,4 +1,7 @@
-import copy
+import re
+
+from dateutil.parser import parse
+
 
 class Metadata(dict):
     @property
@@ -17,25 +20,62 @@ class Metadata(dict):
     def report_filters(self):
         return self.report_metadata["reportFilters"]
 
+    @report_filters.setter
+    def report_filters(self, params):
+        for param in params:
+            column, operator, value = param
+
+            self.report_filters.append(
+                {
+                    "column": self.get_column_api_name(column),
+                    "operator": self.operators.get(operator),
+                    "value": value,
+                }
+            )
+
+    operators = {
+        "==": "equals",
+        "!=": "notEqual",
+        ">": "greaterThan",
+        "<": "lessThan",
+        ">=": "greaterOrEqual",
+        "<=": "lessOrEqual",
+        "contains": "contains",
+        "not contains": "notContain",
+        "startswith": "startsWith",
+    }
+
     @property
     def boolean_filter(self):
         return self.report_metadata["reportBooleanFilter"]
 
+    @boolean_filter.setter
+    def boolean_filter(self, logic):
+        self.report_metadata["reportBooleanFilter"] = logic
+
+    def increment_boolean_filter(self):
+        logic = self.boolean_filter
+        if logic:
+            last_number = re.sub(r"[()]", "", logic).split()[-1]
+            new_logic = logic + f" AND {int(last_number) + 1}"
+            self.boolean_filter = new_logic
+
     @property
-    def std_date_filter(self):
+    def date_filter(self):
         return self.report_metadata["standardDateFilter"]
 
-    @property
-    def sort_by(self):
-        return self.report_metadata["sortBy"]
+    @date_filter.setter
+    def date_filter(self, params):
+        start, end, column = params
 
-    @property
-    def groupings_down(self):
-        return self.report_metadata["groupingsDown"]
+        column = self.get_column_api_name(column)
+        start = parse(start, dayfirst=True).isoformat()[:10]
+        end = parse(end, dayfirst=True).isoformat()[:10]
 
-    @property
-    def groupings_across(self):
-        return self.report_metadata["groupingsAcross"]
+        self.report_metadata["standardDateFilter"]["durationValue"] = "CUSTOM"
+        self.report_metadata["standardDateFilter"]["startDate"] = start
+        self.report_metadata["standardDateFilter"]["endDate"] = end
+        self.report_metadata["standardDateFilter"]["column"] = column
 
     def get_columns_labels(self):
         return list(self.columns_info.keys())
@@ -54,11 +94,3 @@ class Metadata(dict):
             group["label"]
             for group in self.extended_metadata["groupingColumnInfo"].values()
         ]
-
-
-def parse_orientation(orientation):
-    if re.match(r"^(a|de)sc$", orientation, flags=re.IGNORECASE):
-        return orientation.title()
-
-    msg = "Orientation should be either 'asc' or 'desc', not '{}'"
-    raise ValueError(msg.format(orientation))

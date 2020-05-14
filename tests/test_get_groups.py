@@ -23,13 +23,9 @@ groups = [
 
 
 def test_get_groups_labels():
-    test = get_groups_labels(groups)
-
-    expected = [
+    assert get_groups_labels(groups) == [
         ["grouping1"],
         ["grouping2"],
         ["grouping3_1", "grouping3_2"],
         ["grouping4_1", "grouping4_2"],
     ]
-
-    assert test == expected
