@@ -34,10 +34,11 @@ class Report(dict):
     def get_column_info(self):
         return {
             info["label"]: {"dtype": info["dataType"], "api_name": column}
-            for column, info in self.get_which_column_info().items()
+            for column, info in self._columns_info.items()
         }
 
-    def get_which_column_info(self):
+    @property
+    def _columns_info(self):
         if self.format == "MATRIX":
             return self.extended_metadata["aggregateColumnInfo"]
         return self.extended_metadata["detailColumnInfo"]

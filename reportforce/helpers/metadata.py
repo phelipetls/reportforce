@@ -80,8 +80,11 @@ class Metadata(dict):
     def get_columns_labels(self):
         return list(self._get_columns_info().keys())
 
+    def get_columns_dtypes(self):
+        return [info["dtype"] for info in self.get_columns_info().values()]
+
     def get_column_dtype(self, column):
-        return self._get_columns_info()[column]["dtype"]
+        return self.get_columns_info()[column]["dtype"]
 
     def get_column_api_name(self, column):
         return self._get_columns_info()[column]["api_name"]
