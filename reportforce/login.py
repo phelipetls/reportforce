@@ -6,6 +6,10 @@ from xml.sax.saxutils import escape
 from .helpers.xml import read_failed_response, read_successful_response
 
 DEFAULT_VERSION = "47.0"
+SOAP_HEADERS = {
+    "Content-Type": "text/xml; charset=UTF-8",
+    "SoapAction": "login",
+}
 
 
 class Salesforce:
@@ -40,7 +44,7 @@ class Salesforce:
         self,
         username=None,
         password=None,
-        security_token=None,
+        token=None,
         version=DEFAULT_VERSION,
         domain="login",
         session_id=None,
@@ -53,7 +57,7 @@ class Salesforce:
 
         else:
             self.session_id, self.instance_url = soap_login(
-                username, password, security_token, version, domain
+                username, password, token, version, domain
             )
 
         self.version = self._get_latest_version() if latest_version else version
@@ -66,7 +70,7 @@ class Salesforce:
 
 
 def soap_login(
-    username=None, password=None, security_token=None, version="47.0", domain="login"
+    username=None, password=None, token=None, version="47.0", domain="login"
 ):
     """Login into Salesforce via SOAP API.
 
@@ -78,7 +82,7 @@ def soap_login(
     password : str
         Password.
 
-    security_token : str
+    token : str
         The security token. This is normally provided when
         you change your password via e-mail.
 
@@ -99,18 +103,28 @@ def soap_login(
         If anything goes wrong while authenticating.
     """
 
+    soap_url = generate_soap_url(domain, version)
+    soap_body = generate_soap_body(username, password, token)
+
+    response = requests.post(soap_url, headers=SOAP_HEADERS, data=soap_body)
+
+    if response.status_code != 200:
+        msg = read_failed_response(response.text)
+        raise AuthenticationError(msg)
+
+    return read_successful_response(response.text)
+
+
+def generate_soap_url(domain, version):
+    return f"https://{domain}.salesforce.com/services/Soap/u/{version}"
+
+
+def generate_soap_body(username=None, password=None, token=None):
     username = escape(username or input("Username: "))
     password = escape(password or getpass("Password: "))
-    security_token = escape(security_token or getpass("Security token: "))
+    token = escape(token or getpass("Security token: "))
 
-    soap_url = "https://{}.salesforce.com/services/Soap/u/{}".format(domain, version)
-
-    soap_headers = {
-        "Content-Type": "text/xml; charset=UTF-8",
-        "SoapAction": "login",
-    }
-
-    soap_body = """<?xml version="1.0" encoding="utf-8" ?>
+    return """<?xml version="1.0" encoding="utf-8" ?>
     <env:Envelope
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"
@@ -122,16 +136,8 @@ def soap_login(
             </n1:login>
         </env:Body>
     </env:Envelope>""".format(
-        username=username, password=password, token=security_token
+        username=username, password=password, token=token
     )
-
-    response = requests.post(soap_url, headers=soap_headers, data=soap_body)
-
-    if response.status_code != 200:
-        msg = read_failed_response(response.text)
-        raise AuthenticationError(msg)
-
-    return read_successful_response(response.text)
 
 
 class AuthenticationError(Exception):

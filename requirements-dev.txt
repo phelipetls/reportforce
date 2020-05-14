@@ -3,6 +3,7 @@ pandas
 pytest
 pytest-mock
 pytest-cov
+requests-mock
 coverage
 twine
 wheel
