@@ -2,6 +2,7 @@ import copy
 import urllib
 import requests
 import functools
+import pandas as pd
 
 from .login import Salesforce
 
@@ -11,12 +12,9 @@ from .helpers.metadata import Metadata
 
 from .helpers.report_filters import set_filters, set_period, set_logic
 
-from .report import (
-    get_excel,
-    get_tabular_reports,
-    get_summary_reports,
-    get_matrix_reports,
-)
+from .helpers.tabular import Tabular
+from .helpers.matrix import Matrix
+from .helpers.summary import Summary
 
 URL = "https://{}/services/data/v{}/analytics/reports/"
 
@@ -111,29 +109,27 @@ class Reportforce(Salesforce):
         ReportError
             If there is an error-like JSON string in the reponse body.
         """
+        self.report_url = self.url + report_id
+        self.id_column = id_column
+
         self.metadata = copy.deepcopy(self.get_metadata(report_id))
 
         if start or end:
-            set_period(start, end, date_column, self.metadata)
+            self.metadata.date_filter = (start, end, date_column)
         if logic:
-            set_logic(logic, self.metadata)
+            self.metadata.boolean_filter = logic
         if filters:
-            set_filters(filters, self.metadata)
+            self.metadata.report_filters = filters
 
         if excel:
             return get_excel(report_id, excel, self.metadata, self, **kwargs)
 
-        report_format = self.metadata["reportMetadata"]["reportFormat"]
+        parser = self._get_parser()
 
-        report_getter = self.report_getters[report_format]
+        report = pd.concat(self.report_generator())
 
-        return report_getter(report_id, id_column, self.metadata, self, **kwargs)
-
-    report_getters = {
-        "TABULAR": get_tabular_reports,
-        "SUMMARY": get_summary_reports,
-        "MATRIX": get_matrix_reports,
-    }
+        if not isinstance(report.index, pd.MultiIndex):
+            report = report.reset_index(drop=True)
 
     def get_total(self, report_id):
         """Get a report grand total."""
@@ -141,6 +137,7 @@ class Reportforce(Salesforce):
         report = self.session.get(url, params={"includeDetails": "false"}).json()
 
         return parsers.get_report_total(report)
+        return report
 
     @functools.lru_cache(maxsize=8)
     def get_metadata(self, report_id):
@@ -148,3 +145,35 @@ class Reportforce(Salesforce):
         url = urllib.parse.urljoin(self.url, report_id + "/describe")
 
         return Metadata(self.session.get(url).json())
+
+    def _get_parser(self):
+        report_format = self.metadata.report_format
+        if report_format == "TABULAR":
+            return Tabular
+        elif report_format == "MATRIX":
+            return Matrix
+        elif report_format == "SUMMARY":
+            return Summary
+
+    def _get_report(self):
+        response = self.session.post(self.report_url).json()
+        parser = self._get_parser()
+        return parser(response)
+
+    def _filter_already_seen_values(self, df):
+        values = df.loc[:, self.id_column].str.cat(sep=",", na_rep="-")
+
+        self.metadata.report_filters = [(self.id_column, "!=", values)]
+        self.metadata.increment_boolean_filter()
+
+    def report_generator(self):
+        report = self._get_report()
+        df = report.to_dataframe()
+        yield df
+
+        while not report.all_data and self.id_column:
+            self._filter_already_seen_values(df)
+
+            report = self._get_report()
+            df = report.to_dataframe()
+            yield df
