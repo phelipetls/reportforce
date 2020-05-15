@@ -1,15 +1,8 @@
-import re
 import itertools
 import pandas as pd
 
-from distutils.version import LooseVersion
-
 number_types = ["double", "percent", "int"]
 date_types = ["datetime", "date", "time"]
-
-
-def get_report_format(metadata):
-    return metadata["reportMetadata"]["reportFormat"]
 
 
 def get_value(cell, dtype):

@@ -1,3 +1,4 @@
+import re
 import copy
 import urllib
 import requests
@@ -7,7 +8,6 @@ import pandas as pd
 from .login import Salesforce
 
 from .helpers import errors
-from .helpers import parsers
 from .helpers.metadata import Metadata
 from .helpers.tabular import Tabular
 from .helpers.matrix import Matrix

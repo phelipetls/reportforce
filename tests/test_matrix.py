@@ -1,4 +1,3 @@
-import pytest
 import pandas as pd
 
 from reportforce.helpers.matrix import Matrix

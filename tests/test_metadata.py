@@ -1,5 +1,3 @@
-import copy
-
 from fixtures_utils import read_json
 from reportforce.helpers.metadata import Metadata
 
