@@ -123,6 +123,7 @@ class Reportforce(Salesforce):
         if excel:
             return self._save_spreadsheet(excel)
 
+        self.parser = self._get_parser()
         report = pd.concat(self._generate_reports())
 
         if not isinstance(report.index, pd.MultiIndex):
@@ -154,18 +155,13 @@ class Reportforce(Salesforce):
 
     def _get_report(self):
         response = self.session.post(self.report_url, json=self.metadata).json()
+        return self.parser(response)
 
-        parser = self._get_parser()
-        return parser(response)
+    _parsers = {"TABULAR": Tabular, "MATRIX": Matrix, "SUMMARY": Summary}
 
     def _get_parser(self):
         report_format = self.metadata.report_format
-        if report_format == "TABULAR":
-            return Tabular
-        elif report_format == "MATRIX":
-            return Matrix
-        elif report_format == "SUMMARY":
-            return Summary
+        return self._parsers[report_format]
 
     def _filter_past_values(self, df):
         new_filter = (self.id_column, "!=", df[self.id_column])
