@@ -57,6 +57,33 @@ def test_get_column_dtype():
     assert metadata.get_column_dtype("Opportunity Name") == "string"
 
 
+def test_get_operator():
+    assert metadata.get_operator("==") == "equals"
+
+
+def test_format_date():
+    assert metadata.format_value("01-02-2020", "Created Date") == "2020-02-01T00:00:00"
+
+
+def test_format_string():
+    assert metadata.format_value("OpportunityName1", "Opportunity Name") == (
+        '"OpportunityName1"'
+    )
+
+
+def test_format_multiple_strings():
+    values = ["Name1", "Name2"]
+    assert metadata.format_value(values, "Opportunity Name") == ('"Name1","Name2"')
+
+
+def test_format_number():
+    assert metadata.format_value(1, "Amount") == ('"1"')
+
+
+def test_format_multiple_numbers():
+    assert metadata.format_value([1, 2, 3], "Amount") == ('"1","2","3"')
+
+
 def test_get_groupings_label():
     assert Metadata(read_json("summary_metadata.json")).get_groupings_labels() == [
         "label"

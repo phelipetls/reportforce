@@ -1,4 +1,5 @@
 import pytest
+import pandas as pd
 
 from reportforce import Reportforce
 
@@ -46,8 +47,8 @@ def test_date_filter(setup):
     assert setup.metadata.date_filter == {
         "column": "FISCAL_QUARTER",
         "durationValue": "CUSTOM",
-        "startDate": "2020-01-01",
-        "endDate": "2020-01-31",
+        "startDate": "2020-01-01T00:00:00",
+        "endDate": "2020-01-31T00:00:00",
     }
 
 
@@ -63,12 +64,12 @@ def test_report_filters(setup):
             "filterType": "filterType",
             "isRunPageEditable": True,
             "operator": "operator",
-            "value": "value",
+            "value": 'value',
         },
-        {"column": "OPPORTUNITY_NAME", "operator": "notEqual", "value": "00112233"},
+        {"column": "OPPORTUNITY_NAME", "operator": "notEqual", "value": '"00112233"'},
         {
             "column": "OPPORTUNITY_NAME",
             "operator": "notEqual",
-            "value": "Acme - 200 Widgets",
-        }
+            "value": '"Acme - 200 Widgets"',
+        },
     ]

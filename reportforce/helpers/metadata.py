@@ -1,6 +1,7 @@
 import re
 
 from dateutil.parser import parse
+from reportforce.helpers import utils
 
 
 class Metadata(dict):
@@ -25,6 +26,8 @@ class Metadata(dict):
         for param in params:
             column, operator, value = param
 
+            value = self.format_value(value, column)
+
             self.report_filters.append(
                 {
                     "column": self.get_column_api_name(column),
@@ -32,6 +35,20 @@ class Metadata(dict):
                     "value": value,
                 }
             )
+
+    def format_value(self, value, column):
+        dtype = self.get_column_dtype(column)
+
+        if dtype in ["datetime", "date", "time"]:
+            return self.format_date(value)
+        elif utils.is_iterable(value):
+            return ",".join(map(utils.surround_with_quotes, value))
+        else:
+            return utils.surround_with_quotes(value)
+
+    @staticmethod
+    def format_date(value):
+        return parse(value, dayfirst=True).isoformat()
 
     operators = {
         "==": "equals",
