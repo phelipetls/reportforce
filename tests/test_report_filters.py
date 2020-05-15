@@ -72,3 +72,17 @@ def test_report_filters(setup):
             "value": '"Acme - 200 Widgets"',
         },
     ]
+
+
+def test_ignore_case(mock_login, mock_get_metadata, mock_http_request):
+    mock_get_metadata(METADATA)
+    mock_http_request(REPORT, "post")
+
+    rf = Reportforce("foo@bar.com", "1234", "token")
+    rf.get_report("ID", ignore_date_filter=True)
+    assert rf.metadata.date_filter == {
+        "column": "column",
+        "durationValue": "CUSTOM",
+        "endDate": None,
+        "startDate": None,
+    }

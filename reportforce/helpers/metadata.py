@@ -104,6 +104,11 @@ class Metadata(dict):
             column = self.get_column_api_name(column)
             self.report_metadata["standardDateFilter"]["column"] = column
 
+    def ignore_date_filter(self):
+        self["reportMetadata"]["standardDateFilter"]["durationValue"] = "CUSTOM"
+        self["reportMetadata"]["standardDateFilter"]["startDate"] = None
+        self["reportMetadata"]["standardDateFilter"]["endDate"] = None
+
     def map_columns_to_info(self):
         return {
             info["label"]: {"dtype": info["dataType"], "api_name": column}

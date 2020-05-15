@@ -59,6 +59,7 @@ class Reportforce(Salesforce):
         date_column=None,
         start=None,
         end=None,
+        ignore_date_filter=False,
         filters=[],
         logic=None,
         excel=None,
@@ -84,6 +85,9 @@ class Reportforce(Salesforce):
         end : str (optional)
             End date string, passed into dateutil.parser.parse. Must start with
             the day.
+
+        ignore_date_filter : bool (optional)
+            Whether or not you want to ignore the standard date filter.
 
         filters : list (optional)
             List of tuples, each of which represents a filter:
@@ -119,6 +123,8 @@ class Reportforce(Salesforce):
             self.metadata.boolean_filter = logic
         if filters:
             self.metadata.report_filters = filters
+        if ignore_date_filter:
+            self.metadata.ignore_date_filter()
 
         if excel:
             return self._save_spreadsheet(excel)
