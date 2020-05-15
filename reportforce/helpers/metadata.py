@@ -104,31 +104,31 @@ class Metadata(dict):
             column = self.get_column_api_name(column)
             self.report_metadata["standardDateFilter"]["column"] = column
 
-    def get_columns_labels(self):
-        return list(self.get_columns_info().keys())
-
-    def get_columns_dtypes(self):
-        return [info["dtype"] for info in self.get_columns_info().values()]
-
-    def get_column_dtype(self, column):
-        return self.get_columns_info()[column]["dtype"]
-
-    def get_column_api_name(self, column):
-        try:
-            return self.get_columns_info()[column]["api_name"]
-        except KeyError:
-            return self.get_all_columns_info()[column]["api_name"]
-
-    def get_columns_info(self):
+    def map_columns_to_info(self):
         return {
             info["label"]: {"dtype": info["dataType"], "api_name": column}
-            for column, info in self.columns_info().items()
+            for column, info in self.get_columns_info().items()
         }
 
-    def columns_info(self):
+    def get_columns_info(self):
         if self.report_format == "MATRIX":
             return self.extended_metadata["aggregateColumnInfo"]
         return self.extended_metadata["detailColumnInfo"]
+
+    def get_columns_labels(self):
+        return list(self.map_columns_to_info().keys())
+
+    def get_columns_dtypes(self):
+        return [info["dtype"] for info in self.map_columns_to_info().values()]
+
+    def get_column_dtype(self, column):
+        return self.map_columns_to_info()[column]["dtype"]
+
+    def get_column_api_name(self, column):
+        try:
+            return self.map_columns_to_info()[column]["api_name"]
+        except KeyError:
+            return self.get_all_columns_info()[column]["api_name"]
 
     def get_groupings_labels(self):
         return [

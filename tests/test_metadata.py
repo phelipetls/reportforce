@@ -6,7 +6,7 @@ metadata = Metadata(read_json("tabular_metadata.json"))
 
 
 def test_get_column_info():
-    assert metadata.get_columns_info() == {
+    assert metadata.map_columns_to_info() == {
         "Age": {"api_name": "AGE", "dtype": "int"},
         "Amount": {"api_name": "AMOUNT", "dtype": "currency"},
         "Created Date": {"api_name": "CREATED_DATE", "dtype": "datetime"},

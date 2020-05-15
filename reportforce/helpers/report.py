@@ -20,16 +20,31 @@ class Report(dict):
     def extended_metadata(self):
         return self["reportExtendedMetadata"]
 
-    def get_dtypes(self):
-        return [info["dtype"] for info in self.get_column_info().values()]
+    def map_columns_to_info(self):
+        """Map the column label to information like its type and API name."""
+        return {
+            info["label"]: {"dtype": info["dataType"], "api_name": column}
+            for column, info in self.get_columns_info().items()
+        }
+
+    def get_columns_info(self):
+        """Get information about columns. For matrices, about aggregates."""
+        if self.format == "MATRIX":
+            return self.extended_metadata["aggregateColumnInfo"]
+        return self.extended_metadata["detailColumnInfo"]
+
+    def get_columns_dtypes(self):
+        return [info["dtype"] for info in self.map_columns_to_info().values()]
 
     def get_column_dtype(self, column):
-        return self.get_column_info()[column]["dtype"]
+        return self.map_columns_to_info()[column]["dtype"]
 
-    def get_columns(self):
-        if self.format != "MATRIX":
-            return list(self.get_column_info().keys())
-        return self.get_matrix_columns()
+    def get_columns_labels(self):
+        return (
+            list(self.map_columns_to_info().keys())
+            if self.format != "MATRIX"
+            else self.get_matrix_columns()
+        )
 
     def get_matrix_columns(self):
         groupings_across = self["groupingsAcross"]["groupings"]
@@ -48,18 +63,6 @@ class Report(dict):
         if multi_columns:
             groups_labels = [""] + self.get_groupings_across_labels()
             return pd.MultiIndex.from_tuples(multi_columns, names=groups_labels)
-
-    def get_column_info(self):
-        return {
-            info["label"]: {"dtype": info["dataType"], "api_name": column}
-            for column, info in self._columns_info.items()
-        }
-
-    @property
-    def _columns_info(self):
-        if self.format == "MATRIX":
-            return self.extended_metadata["aggregateColumnInfo"]
-        return self.extended_metadata["detailColumnInfo"]
 
     def get_groupings_labels(self, groupings):
         groups = [group["name"] for group in groupings]

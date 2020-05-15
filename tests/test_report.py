@@ -4,8 +4,23 @@ from fixtures_utils import read_json
 tabular = Report(read_json("tabular.json"))
 
 
-def test_report_dtypes():
-    assert tabular.get_dtypes() == [
+def test_map_columns_to_info():
+    assert tabular.map_columns_to_info() == {
+        "Age": {"api_name": "AGE", "dtype": "int"},
+        "Amount": {"api_name": "AMOUNT", "dtype": "currency"},
+        "Created Date": {"api_name": "CREATED_DATE", "dtype": "datetime"},
+        "Fiscal Period": {"api_name": "FISCAL_QUARTER", "dtype": "string"},
+        "Lead Source": {"api_name": "LEAD_SOURCE", "dtype": "currency"},
+        "Next Step": {"api_name": "NEXT_STEP", "dtype": "string"},
+        "Opportunity Name": {"api_name": "OPPORTUNITY_NAME", "dtype": "string"},
+        "Opportunity Owner": {"api_name": "FULL_NAME", "dtype": "string"},
+        "Owner Role": {"api_name": "ROLLUP_DESCRIPTION", "dtype": "string"},
+        "Probability (%)": {"api_name": "PROBABILITY", "dtype": "percent"},
+    }
+
+
+def test_report_columns_dtypes():
+    assert tabular.get_columns_dtypes() == [
         "string",
         "currency",
         "currency",
@@ -19,8 +34,8 @@ def test_report_dtypes():
     ]
 
 
-def test_report_columns():
-    assert tabular.get_columns() == [
+def test_report_columns_labels():
+    assert tabular.get_columns_labels() == [
         "Opportunity Name",
         "Amount",
         "Lead Source",
@@ -41,8 +56,8 @@ def test_report_get_columns_dtype():
 matrix = Report(read_json("matrix.json"))
 
 
-def test_get_matrix_columns():
-    assert matrix.get_columns().tolist() == [
+def test_get_matrix_columns_labels():
+    assert matrix.get_columns_labels().tolist() == [
         ("Row Sum", "Product", "DeliveryDay1"),
         ("Row Sum", "Product", "DeliveryDay2"),
         ("Row Sum", "Product", "DeliveryDay3"),
