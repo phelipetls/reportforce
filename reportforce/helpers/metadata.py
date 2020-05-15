@@ -26,12 +26,13 @@ class Metadata(dict):
         for param in params:
             column, operator, value = param
 
+            api_name = self.get_column_api_name(column)
             value = self.format_value(value, column)
 
             self.report_filters.append(
                 {
-                    "column": self.get_column_api_name(column),
                     "operator": self.operators.get(operator),
+                    "column": api_name,
                     "value": value,
                 }
             )
@@ -104,7 +105,10 @@ class Metadata(dict):
         return self.get_columns_info()[column]["dtype"]
 
     def get_column_api_name(self, column):
-        return self._get_columns_info()[column]["api_name"]
+        try:
+            return self.get_columns_info()[column]["api_name"]
+        except KeyError:
+            return self.get_all_columns_info()[column]["api_name"]
 
     def _get_columns_info(self):
         return {
@@ -123,3 +127,17 @@ class Metadata(dict):
             group["label"]
             for group in self.extended_metadata["groupingColumnInfo"].values()
         ]
+
+    def get_all_columns_info(self):
+        all_objects = self["reportTypeMetadata"]["categories"]
+
+        all_columns = {}
+        for obj in all_objects:
+            all_columns.update(
+                {
+                    info["label"]: {"dtype": info["dataType"], "api_name": api_name}
+                    for api_name, info in obj["columns"].items()
+                }
+            )
+
+        return all_columns

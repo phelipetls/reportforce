@@ -206,7 +206,7 @@
         "categories": [
             {
                 "columns": {
-                    "Column": {
+                    "Column_1": {
                         "allowedInCustomDetailFormula": true,
                         "bucketable": true,
                         "dataType": "string",
@@ -215,7 +215,7 @@
                         "inactiveFilterValues": [],
                         "isCustom": true,
                         "isLookup": false,
-                        "label": "label",
+                        "label": "Column 1",
                         "maxLength": 50,
                         "uniqueCountable": true
                     }
@@ -225,7 +225,7 @@
             },
             {
                 "columns": {
-                    "Column": {
+                    "Column_2": {
                         "allowedInCustomDetailFormula": true,
                         "bucketable": true,
                         "dataType": "currency",
@@ -234,7 +234,7 @@
                         "inactiveFilterValues": [],
                         "isCustom": true,
                         "isLookup": false,
-                        "label": "label",
+                        "label": "Column 2",
                         "maxLength": null,
                         "uniqueCountable": true
                     }
