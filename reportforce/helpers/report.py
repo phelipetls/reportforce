@@ -48,21 +48,18 @@ class Report(dict):
 
     def get_matrix_columns(self):
         groupings_across = self["groupingsAcross"]["groupings"]
-        column_groups = parsers.get_groups(groupings_across)
+        groups = parsers.get_groups(groupings_across)
 
-        agg_info = self.extended_metadata["aggregateColumnInfo"]
-        agg_labels = [
-            agg_info[agg]["label"] for agg in self.report_metadata["aggregates"]
-        ]
+        aggregates = list(self.map_columns_to_info().keys())
 
-        multi_columns = []
-        for col in column_groups:
-            for label in agg_labels:
-                multi_columns.append((label,) + col)
+        groups_and_aggs = []
+        for group in groups:
+            for agg in aggregates:
+                groups_and_aggs.append((agg,) + group)
 
-        if multi_columns:
+        if groups_and_aggs:
             groups_labels = [""] + self.get_groupings_across_labels()
-            return pd.MultiIndex.from_tuples(multi_columns, names=groups_labels)
+            return pd.MultiIndex.from_tuples(groups_and_aggs, names=groups_labels)
 
     def get_groupings_labels(self, groupings):
         groups = [group["name"] for group in groupings]
