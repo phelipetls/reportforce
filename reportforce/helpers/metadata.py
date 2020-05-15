@@ -90,14 +90,19 @@ class Metadata(dict):
     def date_filter(self, params):
         start, end, column = params
 
-        column = self.get_column_api_name(column)
-        start = parse(start, dayfirst=True).isoformat()[:10]
-        end = parse(end, dayfirst=True).isoformat()[:10]
-
         self.report_metadata["standardDateFilter"]["durationValue"] = "CUSTOM"
-        self.report_metadata["standardDateFilter"]["startDate"] = start
-        self.report_metadata["standardDateFilter"]["endDate"] = end
-        self.report_metadata["standardDateFilter"]["column"] = column
+
+        if start:
+            start = self.format_date(start)
+            self.report_metadata["standardDateFilter"]["startDate"] = start
+
+        if end:
+            end = self.format_date(end)
+            self.report_metadata["standardDateFilter"]["endDate"] = end
+
+        if column:
+            column = self.get_column_api_name(column)
+            self.report_metadata["standardDateFilter"]["column"] = column
 
     def get_columns_labels(self):
         return list(self._get_columns_info().keys())
