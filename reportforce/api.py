@@ -1,9 +1,10 @@
 import re
 import copy
-import urllib
 import requests
 import functools
 import pandas as pd
+
+from urllib.parse import urljoin
 
 from .login import Salesforce
 
@@ -46,8 +47,10 @@ class Reportforce(Salesforce):
         super().__init__(*args, **kwargs)
 
         self.url = URL.format(self.instance_url, self.version)
-
         self.session.headers.update(self.headers)
+
+    def _get_report_url(self, report_id):
+        return urljoin(self.url, report_id)
 
     def get_report(
         self,
@@ -106,7 +109,7 @@ class Reportforce(Salesforce):
         ReportError
             If there is an error-like JSON string in the reponse body.
         """
-        self.report_url = self.url + report_id
+        self.report_url = self._get_report_url(report_id)
         self.id_column = id_column
 
         self.metadata = copy.deepcopy(self.get_metadata(report_id))
@@ -129,10 +132,13 @@ class Reportforce(Salesforce):
 
         return report
 
+    def _get_metadata_url(self, report_id):
+        return urljoin(self.url, report_id + "/describe")
+
     @functools.lru_cache(maxsize=8)
     def get_metadata(self, report_id):
         """Get a report metadata, used to manipulate reports."""
-        url = urllib.parse.urljoin(self.url, report_id + "/describe")
+        url = self._get_metadata_url(report_id)
 
         return Metadata(self.session.get(url).json())
 
@@ -145,10 +151,6 @@ class Reportforce(Salesforce):
         elif report_format == "SUMMARY":
             return Summary
 
-    def _get_report(self):
-        response = self.session.post(self.report_url).json()
-        parser = self._get_parser()
-        return parser(response)
 
     def _filter_already_seen_values(self, df):
         values = df.loc[:, self.id_column].str.cat(sep=",", na_rep="-")
@@ -168,6 +170,11 @@ class Reportforce(Salesforce):
             df = report.to_dataframe()
             yield df
 
+    def _get_report(self):
+        response = self.session.post(self.report_url, json=self.metadata).json()
+
+        parser = self._get_parser()
+        return parser(response)
     EXCEL_HEADERS = {
         "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     }
