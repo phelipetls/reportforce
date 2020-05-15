@@ -152,19 +152,13 @@ class Reportforce(Salesforce):
             return Summary
 
 
-    def _filter_already_seen_values(self, df):
-        values = df.loc[:, self.id_column].str.cat(sep=",", na_rep="-")
-
-        self.metadata.report_filters = [(self.id_column, "!=", values)]
-        self.metadata.increment_boolean_filter()
-
     def report_generator(self):
         report = self._get_report()
         df = report.to_dataframe()
         yield df
 
         while not report.all_data and self.id_column:
-            self._filter_already_seen_values(df)
+            self._filter_past_values(df)
 
             report = self._get_report()
             df = report.to_dataframe()
@@ -175,6 +169,11 @@ class Reportforce(Salesforce):
 
         parser = self._get_parser()
         return parser(response)
+    def _filter_past_values(self, df):
+        new_filter = (self.id_column, "!=", df[self.id_column])
+        self.metadata.report_filters = [new_filter]
+        self.metadata.increment_boolean_filter()
+
     EXCEL_HEADERS = {
         "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     }
