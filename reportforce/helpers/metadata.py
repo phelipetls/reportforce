@@ -105,7 +105,7 @@ class Metadata(dict):
             self.report_metadata["standardDateFilter"]["column"] = column
 
     def get_columns_labels(self):
-        return list(self._get_columns_info().keys())
+        return list(self.get_columns_info().keys())
 
     def get_columns_dtypes(self):
         return [info["dtype"] for info in self.get_columns_info().values()]
@@ -119,14 +119,13 @@ class Metadata(dict):
         except KeyError:
             return self.get_all_columns_info()[column]["api_name"]
 
-    def _get_columns_info(self):
+    def get_columns_info(self):
         return {
             info["label"]: {"dtype": info["dataType"], "api_name": column}
-            for column, info in self._columns_info.items()
+            for column, info in self.columns_info().items()
         }
 
-    @property
-    def _columns_info(self):
+    def columns_info(self):
         if self.report_format == "MATRIX":
             return self.extended_metadata["aggregateColumnInfo"]
         return self.extended_metadata["detailColumnInfo"]

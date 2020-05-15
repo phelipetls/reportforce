@@ -31,18 +31,6 @@ class Report(dict):
             return list(self.get_column_info().keys())
         return self.get_matrix_columns()
 
-    def get_column_info(self):
-        return {
-            info["label"]: {"dtype": info["dataType"], "api_name": column}
-            for column, info in self._columns_info.items()
-        }
-
-    @property
-    def _columns_info(self):
-        if self.format == "MATRIX":
-            return self.extended_metadata["aggregateColumnInfo"]
-        return self.extended_metadata["detailColumnInfo"]
-
     def get_matrix_columns(self):
         groupings_across = self["groupingsAcross"]["groupings"]
         column_groups = parsers.get_groups(groupings_across)
@@ -60,6 +48,18 @@ class Report(dict):
         if multi_columns:
             groups_labels = [""] + self.get_groupings_across_labels()
             return pd.MultiIndex.from_tuples(multi_columns, names=groups_labels)
+
+    def get_column_info(self):
+        return {
+            info["label"]: {"dtype": info["dataType"], "api_name": column}
+            for column, info in self._columns_info.items()
+        }
+
+    @property
+    def _columns_info(self):
+        if self.format == "MATRIX":
+            return self.extended_metadata["aggregateColumnInfo"]
+        return self.extended_metadata["detailColumnInfo"]
 
     def get_groupings_labels(self, groupings):
         groups = [group["name"] for group in groupings]

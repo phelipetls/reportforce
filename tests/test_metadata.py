@@ -1,4 +1,5 @@
 from fixtures_utils import read_json
+
 from reportforce.helpers.metadata import Metadata
 
 metadata = Metadata(read_json("tabular_metadata.json"))
@@ -84,10 +85,11 @@ def test_format_multiple_numbers():
     assert metadata.format_value([1, 2, 3], "Amount") == ('"1","2","3"')
 
 
+summary_metadata = Metadata(read_json("summary_metadata.json"))
+
+
 def test_get_groupings_label():
-    assert Metadata(read_json("summary_metadata.json")).get_groupings_labels() == [
-        "label"
-    ]
+    assert summary_metadata.get_groupings_labels() == ["label"]
 
 
 def test_get_available_columns():

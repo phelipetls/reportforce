@@ -62,7 +62,6 @@ class Reportforce(Salesforce):
         filters=[],
         logic=None,
         excel=None,
-        **kwargs
     ):
         """Function to get a Salesforce report into a DataFrame.
 
@@ -122,7 +121,6 @@ class Reportforce(Salesforce):
             self.metadata.report_filters = filters
 
         if excel:
-        parser = self._get_parser()
             return self._save_spreadsheet(excel)
 
         report = pd.concat(self.report_generator())
@@ -142,16 +140,6 @@ class Reportforce(Salesforce):
 
         return Metadata(self.session.get(url).json())
 
-    def _get_parser(self):
-        report_format = self.metadata.report_format
-        if report_format == "TABULAR":
-            return Tabular
-        elif report_format == "MATRIX":
-            return Matrix
-        elif report_format == "SUMMARY":
-            return Summary
-
-
     def report_generator(self):
         report = self._get_report()
         df = report.to_dataframe()
@@ -169,6 +157,16 @@ class Reportforce(Salesforce):
 
         parser = self._get_parser()
         return parser(response)
+
+    def _get_parser(self):
+        report_format = self.metadata.report_format
+        if report_format == "TABULAR":
+            return Tabular
+        elif report_format == "MATRIX":
+            return Matrix
+        elif report_format == "SUMMARY":
+            return Summary
+
     def _filter_past_values(self, df):
         new_filter = (self.id_column, "!=", df[self.id_column])
         self.metadata.report_filters = [new_filter]
