@@ -123,7 +123,7 @@ class Reportforce(Salesforce):
         if excel:
             return self._save_spreadsheet(excel)
 
-        report = pd.concat(self.report_generator())
+        report = pd.concat(self._generate_reports())
 
         if not isinstance(report.index, pd.MultiIndex):
             report = report.reset_index(drop=True)
@@ -140,7 +140,7 @@ class Reportforce(Salesforce):
 
         return Metadata(self.session.get(url).json())
 
-    def report_generator(self):
+    def _generate_reports(self):
         report = self._get_report()
         df = report.to_dataframe()
         yield df
