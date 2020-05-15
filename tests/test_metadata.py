@@ -88,6 +88,8 @@ def test_get_groupings_label():
     assert Metadata(read_json("summary_metadata.json")).get_groupings_labels() == [
         "label"
     ]
+
+
 def test_get_available_columns():
     assert summary_metadata.get_all_columns_info() == {
         "Column 1": {"api_name": "Column_1", "dtype": "string"},

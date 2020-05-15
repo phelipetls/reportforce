@@ -246,28 +246,12 @@
         "dataTypeFilterOperatorMap": {
             "date": [
                 {
-                    "label": "label",
-                    "name": "name"
+                    "label": "igual a",
+                    "name": "equals"
                 },
                 {
-                    "label": "label",
-                    "name": "name"
-                },
-                {
-                    "label": "label",
-                    "name": "name"
-                },
-                {
-                    "label": "label",
-                    "name": "name"
-                },
-                {
-                    "label": "label",
-                    "name": "name"
-                },
-                {
-                    "label": "label",
-                    "name": "name"
+                    "label": "maior ou igual a",
+                    "name": "greaterOrEqual"
                 }
             ],
             "string": [

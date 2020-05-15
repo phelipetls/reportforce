@@ -27,12 +27,13 @@ class Metadata(dict):
             column, operator, value = param
 
             api_name = self.get_column_api_name(column)
+            operator = self.get_operator(operator)
             value = self.format_value(value, column)
 
             self.report_filters.append(
                 {
-                    "operator": self.operators.get(operator),
                     "column": api_name,
+                    "operator": operator,
                     "value": value,
                 }
             )
@@ -62,6 +63,9 @@ class Metadata(dict):
         "not contains": "notContain",
         "startswith": "startsWith",
     }
+
+    def get_operator(self, operator):
+        return self.operators.get(operator)
 
     @property
     def boolean_filter(self):
