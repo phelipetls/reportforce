@@ -131,12 +131,6 @@ class Reportforce(Salesforce):
         if not isinstance(report.index, pd.MultiIndex):
             report = report.reset_index(drop=True)
 
-    def get_total(self, report_id):
-        """Get a report grand total."""
-        url = urllib.parse.urljoin(self.url, report_id)
-        report = self.session.get(url, params={"includeDetails": "false"}).json()
-
-        return parsers.get_report_total(report)
         return report
 
     @functools.lru_cache(maxsize=8)
