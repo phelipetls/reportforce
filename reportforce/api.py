@@ -126,10 +126,7 @@ class Reportforce(Salesforce):
         self.parser = self._get_parser()
         report = pd.concat(self._generate_reports())
 
-        if not isinstance(report.index, pd.MultiIndex):
-            report = report.reset_index(drop=True)
-
-        return report
+        return self._reset_index(report)
 
     def _get_metadata_url(self, report_id):
         return urljoin(self.url, report_id + "/describe")
@@ -167,6 +164,12 @@ class Reportforce(Salesforce):
         new_filter = (self.id_column, "!=", df[self.id_column])
         self.metadata.report_filters = [new_filter]
         self.metadata.increment_boolean_filter()
+
+    def _reset_index(self, df):
+        """Unless it is a pandas.MultiIndex."""
+        if not isinstance(df.index, pd.MultiIndex):
+            df = df.reset_index(drop=True)
+        return df
 
     EXCEL_HEADERS = {
         "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
