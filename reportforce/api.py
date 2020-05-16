@@ -149,7 +149,6 @@ class Reportforce(Salesforce):
 
     @functools.lru_cache(maxsize=8)
     def get_metadata(self, report_id):
-        """Get a report metadata, used to manipulate reports."""
         url = self._get_metadata_url(report_id)
 
         return Metadata(self.session.get(url).json())
