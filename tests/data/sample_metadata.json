@@ -64,7 +64,28 @@
                 "label": "Type"
             }
         },
-        "groupingColumnInfo": {}
+        "groupingColumnInfo": {
+            "CLOSE_DATE": {
+                "label": "Close Date",
+                "dataType": "date",
+                "groupingLevel": 1
+            },
+            "STAGE_NAME": {
+                "label": "Stage",
+                "dataType": "picklist",
+                "groupingLevel": 0
+            },
+            "ACCOUNT_NAME": {
+                "label": "Account Name",
+                "dataType": "string",
+                "groupingLevel": 0
+            },
+            "ACCOUNT_LAST_ACTIVITY": {
+                "label": "Account: Last Activity",
+                "dataType": "date",
+                "groupingLevel": 1
+            }
+        }
     },
     "reportMetadata": {
         "aggregates": [

@@ -1,4 +1,5 @@
 import re
+import itertools
 
 from dateutil.parser import parse
 from reportforce.helpers import utils
@@ -28,7 +29,7 @@ class Metadata(dict):
 
             api_name = self.get_column_api_name(column)
             operator = self.get_operator(operator)
-            value = self.format_value(value, column)
+            value = self.format_value(value, api_name)
 
             self.report_filters.append(
                 {"column": api_name, "operator": operator, "value": value}
@@ -93,43 +94,35 @@ class Metadata(dict):
 
     @property
     def date_start(self):
-        return self.report_metadata["standardDateFilter"]["startDate"]
+        return self.date_filter["startDate"]
 
     @date_start.setter
     def date_start(self, date_string):
-        self.report_metadata["standardDateFilter"]["startDate"] = self.format_date(
-            date_string
-        )
+        self.date_filter["startDate"] = self.format_date(date_string)
 
     @property
     def date_end(self):
-        return self.report_metadata["standardDateFilter"]["endDate"]
+        return self.date_filter["endDate"]
 
     @date_end.setter
     def date_end(self, date_string):
-        self.report_metadata["standardDateFilter"]["endDate"] = self.format_date(
-            date_string
-        )
+        self.date_filter["endDate"] = self.format_date(date_string)
 
     @property
     def date_column(self):
-        return self.report_metadata["standardDateFilter"]["column"]
+        return self.date_filter["column"]
 
     @date_column.setter
     def date_column(self, column):
-        self.report_metadata["standardDateFilter"]["column"] = self.get_column_api_name(
-            column
-        )
+        self.date_filter["column"] = self.get_column_api_name(column)
 
     @property
     def date_duration(self):
-        return self.report_metadata["standardDateFilter"]["durationValue"]
+        return self.date_filter["durationValue"]
 
     @date_duration.setter
     def date_duration(self, duration):
-        self.report_metadata["standardDateFilter"][
-            "durationValue"
-        ] = duration
+        self.date_filter["durationValue"] = duration
 
     def ignore_date_filter(self):
         self.date_duration = "CUSTOM"
@@ -143,54 +136,72 @@ class Metadata(dict):
         self.date_start = start
         self.date_end = end
 
-    def map_columns_to_info(self):
-        return {
-            info["label"]: {"dtype": info["dataType"], "api_name": column}
-            for column, info in self.get_columns_info().items()
-        }
+    @property
+    def detail_column_info(self):
+        return self.extended_metadata["detailColumnInfo"].items()
 
-    def get_columns_info(self):
-        if self.report_format == "MATRIX":
-            return self.extended_metadata["aggregateColumnInfo"]
-        return self.extended_metadata["detailColumnInfo"]
+    @property
+    def aggregate_column_info(self):
+        return self.extended_metadata["aggregateColumnInfo"].items()
 
-    def get_columns_labels(self):
-        return list(self.map_columns_to_info().keys())
+    @property
+    def all_available_columns(self):
+        return itertools.chain(
+            *(
+                obj["columns"].items()
+                for obj in self["reportTypeMetadata"]["categories"]
+            )
+        )
 
-    def get_columns_dtypes(self):
-        return [info["dtype"] for info in self.map_columns_to_info().values()]
+    @property
+    def all_columns_info(self):
+        return itertools.chain(
+            self.detail_column_info,
+            self.aggregate_column_info,
+            self.all_available_columns,
+        )
+
+    def get_column_info_by_api_name(self, target, info):
+        for api_name, infos in self.all_columns_info:
+            if api_name == target:
+                return infos[info]
+
+    def get_column_info_by_label(self, target, info):
+        for api_name, infos in self.all_columns_info:
+            if infos["label"] == target:
+                return api_name if info == "apiName" else infos[info]
+
+    def get_column_label(self, column):
+        return self.get_column_info_by_api_name(column, "label")
 
     def get_column_dtype(self, column):
-        try:
-            return self.map_columns_to_info()[column]["dtype"]
-        except KeyError:
-            return self.get_all_columns_info()[column]["dtype"]
+        return self.get_column_info_by_api_name(column, "dataType")
 
     def get_column_api_name(self, column):
-        try:
-            return self.map_columns_to_info()[column]["api_name"]
-        except KeyError:
-            return self.get_all_columns_info()[column]["api_name"]
+        return self.get_column_info_by_label(column, "apiName")
+
+    def get_columns_labels(self):
+        return [
+            self.get_column_label(column) for column, _ in self.get_included_columns()
+        ]
+
+    def get_columns_dtypes(self):
+        return [
+            self.get_column_dtype(column) for column, _ in self.get_included_columns()
+        ]
+
+    def get_included_columns(self):
+        return (
+            self.aggregate_column_info
+            if self.report_format == "MATRIX"
+            else self.detail_column_info
+        )
 
     def get_groupings_labels(self):
         return [
             group["label"]
             for group in self.extended_metadata["groupingColumnInfo"].values()
         ]
-
-    def get_all_columns_info(self):
-        all_objects = self["reportTypeMetadata"]["categories"]
-
-        all_columns = {}
-        for obj in all_objects:
-            all_columns.update(
-                {
-                    info["label"]: {"dtype": info["dataType"], "api_name": api_name}
-                    for api_name, info in obj["columns"].items()
-                }
-            )
-
-        return all_columns
 
     def get_duration_info(self, duration):
         return self.get_date_filter_durations_groups()[duration].values()

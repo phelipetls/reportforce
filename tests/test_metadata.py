@@ -1,153 +1,139 @@
 from fixtures_utils import read_json
-
 from reportforce.helpers.metadata import Metadata
 
-metadata = Metadata(read_json("tabular_metadata.json"))
+metadata = Metadata(read_json("sample_metadata.json"))
 
 
-def test_get_column_info():
-    assert metadata.map_columns_to_info() == {
-        "Age": {"api_name": "AGE", "dtype": "int"},
-        "Amount": {"api_name": "AMOUNT", "dtype": "currency"},
-        "Created Date": {"api_name": "CREATED_DATE", "dtype": "datetime"},
-        "Fiscal Period": {"api_name": "FISCAL_QUARTER", "dtype": "string"},
-        "Lead Source": {"api_name": "LEAD_SOURCE", "dtype": "picklist"},
-        "Next Step": {"api_name": "NEXT_STEP", "dtype": "string"},
-        "Opportunity Name": {"api_name": "OPPORTUNITY_NAME", "dtype": "string"},
-        "Opportunity Owner": {"api_name": "FULL_NAME", "dtype": "string"},
-        "Owner Role": {"api_name": "ROLLUP_DESCRIPTION", "dtype": "string"},
-        "Probability (%)": {"api_name": "PROBABILITY", "dtype": "percent"},
-    }
+class TestGetters:
+    def test_get_column_api_name(self):
+        assert metadata.get_column_api_name("Opportunity Name") == "OPPORTUNITY_NAME"
+
+    def test_get_column_label(self):
+        assert metadata.get_column_label("OPPORTUNITY_NAME") == "Opportunity Name"
+
+    def test_get_column_dtype(self):
+        assert metadata.get_column_dtype("OPPORTUNITY_NAME") == "string"
+
+    def test_get_columns_labels(self):
+        assert metadata.get_columns_labels() == [
+            "Owner Role",
+            "Opportunity Owner",
+            "Account Name",
+            "Opportunity Name",
+            "Stage",
+            "Fiscal Period",
+            "Amount",
+            "Probability (%)",
+            "Age",
+            "Close Date",
+            "Created Date",
+            "Next Step",
+            "Lead Source",
+            "Type",
+        ]
+
+    def test_get_columns_dtypes(self):
+        assert metadata.get_columns_dtypes() == [
+            "string",
+            "string",
+            "string",
+            "string",
+            "picklist",
+            "string",
+            "currency",
+            "percent",
+            "int",
+            "date",
+            "datetime",
+            "string",
+            "picklist",
+            "picklist",
+        ]
+
+    def test_get_operator(self):
+        assert metadata.get_operator("==") == "equals"
+
+    def test_get_aggregate_api_name(self):
+        assert metadata.get_column_api_name("Record Count") == "RowCount"
+
+    def test_get_aggregate_label(self):
+        assert metadata.get_column_label("RowCount") == "Record Count"
+
+    def test_get_aggregate_dtype(self):
+        assert metadata.get_column_dtype("RowCount") == "int"
+
+    def test_get_non_included_column_api_name(self):
+        assert (
+            metadata.get_column_api_name("Last Modified Alias")
+            == "LAST_UPDATE_BY_ALIAS"
+        )
+
+    def test_get_non_included_column_label(self):
+        assert (
+            metadata.get_column_label("LAST_UPDATE_BY_ALIAS") == "Last Modified Alias"
+        )
+
+    def test_get_non_included_column_dtype(self):
+        assert metadata.get_column_dtype("LAST_UPDATE_BY_ALIAS") == "string"
+
+    def test_get_groupings_label(self):
+        assert metadata.get_groupings_labels() == [
+            "Close Date",
+            "Stage",
+            "Account Name",
+            "Account: Last Activity",
+        ]
+
+    def test_get_date_filter_duration_groups(self):
+        assert metadata.get_date_filter_durations_groups() == {
+            "Current FY": {
+                "end": "2016-12-31",
+                "start": "2016-01-01",
+                "value": "THIS_FISCAL_YEAR",
+            },
+            "Custom": {"end": "2016-12-12", "start": "2016-12-13", "value": "CUSTOM"},
+            "Previous FY": {
+                "end": "2015-12-31",
+                "start": "2015-01-01",
+                "value": "LAST_FISCAL_YEAR",
+            },
+        }
 
 
-def test_get_columns_labels():
-    assert metadata.get_columns_labels() == [
-        "Opportunity Name",
-        "Amount",
-        "Lead Source",
-        "Next Step",
-        "Probability (%)",
-        "Fiscal Period",
-        "Age",
-        "Created Date",
-        "Opportunity Owner",
-        "Owner Role",
-    ]
+class TestFormatValue:
+    def test_format_date(self):
+        assert (
+            metadata.format_value("01-02-2020", "CREATED_DATE") == "2020-02-01T00:00:00"
+        )
+
+    def test_format_multiple_dates(self):
+        assert (
+            metadata.format_value(["01-02-2020", "02-02-2020"], "CREATED_DATE")
+            == "2020-02-01T00:00:00,2020-02-02T00:00:00"
+        )
+
+    def test_format_string(self):
+        assert metadata.format_value("Name", "OPPORTUNITY_NAME") == '"Name"'
+
+    def test_format_multiple_strings(self):
+        assert metadata.format_value(["Name", "Another"], "OPPORTUNITY_NAME") == (
+            '"Name","Another"'
+        )
+
+    def test_format_number(self):
+        assert metadata.format_value(1, "AMOUNT") == ('"1"')
+
+    def test_format_multiple_numbers(self):
+        assert metadata.format_value([1, 2, 3], "AMOUNT") == ('"1","2","3"')
 
 
-def test_get_columns_dtypes():
-    assert metadata.get_columns_dtypes() == [
-        "string",
-        "currency",
-        "picklist",
-        "string",
-        "percent",
-        "string",
-        "int",
-        "datetime",
-        "string",
-        "string",
-    ]
+class TestIncrementBooleanFilter:
+    def test_simple_filter(self):
+        test = "1 AND 2 AND 3"
+        expected = "1 AND 2 AND 3 AND 4"
+        assert Metadata._add_new_filter_to_boolean_filter(test) == expected
 
-
-def test_get_column_api_name():
-    assert metadata.get_column_api_name("Opportunity Name") == "OPPORTUNITY_NAME"
-
-
-def test_get_column_dtype():
-    assert metadata.get_column_dtype("Opportunity Name") == "string"
-
-
-def test_get_operator():
-    assert metadata.get_operator("==") == "equals"
-
-
-def test_format_date():
-    assert metadata.format_value("01-02-2020", "Created Date") == "2020-02-01T00:00:00"
-
-
-def test_format_multiple_dates():
-    assert metadata.format_value(["01-02-2020", "02-02-2020"], "Created Date") == "2020-02-01T00:00:00,2020-02-02T00:00:00"
-
-
-def test_format_string():
-    assert metadata.format_value("OpportunityName1", "Opportunity Name") == (
-        '"OpportunityName1"'
-    )
-
-
-def test_format_multiple_strings():
-    values = ["Name1", "Name2"]
-    assert metadata.format_value(values, "Opportunity Name") == ('"Name1","Name2"')
-
-
-def test_format_number():
-    assert metadata.format_value(1, "Amount") == ('"1"')
-
-
-def test_format_multiple_numbers():
-    assert metadata.format_value([1, 2, 3], "Amount") == ('"1","2","3"')
-
-
-summary_metadata = Metadata(read_json("summary_metadata.json"))
-
-
-def test_get_groupings_label():
-    assert summary_metadata.get_groupings_labels() == ["label"]
-
-
-def test_get_available_columns():
-    assert summary_metadata.get_all_columns_info() == {
-        "Column 1": {"api_name": "Column_1", "dtype": "string"},
-        "Column 2": {"api_name": "Column_2", "dtype": "currency"},
-    }
-
-
-def test_get_column_api_name_summary():
-    assert summary_metadata.get_column_api_name("Column 1") == ("Column_1")
-
-
-def test_add_new_filter_to_boolean_filter():
-    test = "(((1 AND 2) AND 3) AND 4)"
-    expected = "(((1 AND 2) AND 3) AND 4) AND 5"
-    assert Metadata._add_new_filter_to_boolean_filter(test) == expected
-
-    test = "(((((1 AND 2 AND 3 AND 4 AND (5 or 6 or 10))) AND 7) AND 8) AND 9)"
-    expected = (
-        "(((((1 AND 2 AND 3 AND 4 AND (5 or 6 or 10))) AND 7) AND 8) AND 9) AND 10"
-    )
-    assert Metadata._add_new_filter_to_boolean_filter(test) == expected
-
-    test = "1 AND 2 AND 3"
-    expected = "1 AND 2 AND 3 AND 4"
-    assert Metadata._add_new_filter_to_boolean_filter(test) == expected
-
-
-def test_get_date_filter_durations_groups():
-    assert Metadata(
-        read_json("sample_metadata.json")
-    ).get_date_filter_durations_groups() == {
-        "Current FY": {
-            "end": "2016-12-31",
-            "start": "2016-01-01",
-            "value": "THIS_FISCAL_YEAR",
-        },
-        "Custom": {"end": "2016-12-12", "start": "2016-12-13", "value": "CUSTOM"},
-        "Previous FY": {
-            "end": "2015-12-31",
-            "start": "2015-01-01",
-            "value": "LAST_FISCAL_YEAR",
-        },
-    }
-
-
-def test_set_duration_value():
-    metadata = Metadata(read_json("sample_metadata.json"))
-    metadata.set_date_duration("Current FY")
-
-    assert metadata.date_filter == {
-        "column": "CLOSE_DATE",
-        "durationValue": "THIS_FISCAL_YEAR",
-        "endDate": "2016-12-31T00:00:00",
-        "startDate": "2016-01-01T00:00:00",
-    }
+    def test_difficult_filter(self):
+        test = "(((1 AND 2) AND 3) AND 4)"
+        expected = "(((1 AND 2) AND 3) AND 4) AND 5"
+        assert Metadata._add_new_filter_to_boolean_filter(test) == expected
