@@ -162,7 +162,10 @@ class Metadata(dict):
         return [info["dtype"] for info in self.map_columns_to_info().values()]
 
     def get_column_dtype(self, column):
-        return self.map_columns_to_info()[column]["dtype"]
+        try:
+            return self.map_columns_to_info()[column]["dtype"]
+        except KeyError:
+            return self.get_all_columns_info()[column]["dtype"]
 
     def get_column_api_name(self, column):
         try:
