@@ -38,7 +38,10 @@ class Metadata(dict):
         dtype = self.get_column_dtype(column)
 
         if dtype in ["datetime", "date", "time"]:
-            return self.format_date(value)
+            if utils.is_iterable(value):
+                return ",".join(map(self.format_date, value))
+            else:
+                return self.format_date(value)
         elif utils.is_iterable(value):
             return ",".join(map(utils.surround_with_quotes, value))
         else:

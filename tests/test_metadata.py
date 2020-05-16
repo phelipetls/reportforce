@@ -66,6 +66,10 @@ def test_format_date():
     assert metadata.format_value("01-02-2020", "Created Date") == "2020-02-01T00:00:00"
 
 
+def test_format_multiple_dates():
+    assert metadata.format_value(["01-02-2020", "02-02-2020"], "Created Date") == "2020-02-01T00:00:00,2020-02-02T00:00:00"
+
+
 def test_format_string():
     assert metadata.format_value("OpportunityName1", "Opportunity Name") == (
         '"OpportunityName1"'
