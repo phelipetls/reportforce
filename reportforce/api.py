@@ -145,7 +145,7 @@ class Reportforce(Salesforce):
         return self._reset_index(report)
 
     def _get_metadata_url(self, report_id):
-        return urljoin(self.url, report_id + "/describe")
+        return self._get_report_url(report_id) + "/describe"
 
     @functools.lru_cache(maxsize=8)
     def get_metadata(self, report_id):
