@@ -59,6 +59,7 @@ class Reportforce(Salesforce):
         date_column=None,
         start=None,
         end=None,
+        date_duration=None,
         ignore_date_filter=False,
         filters=[],
         logic=None,
@@ -118,14 +119,22 @@ class Reportforce(Salesforce):
 
         self.metadata = copy.deepcopy(self.get_metadata(report_id))
 
-        if start or end:
-            self.metadata.date_filter = (start, end, date_column)
-        if logic:
-            self.metadata.boolean_filter = logic
-        if filters:
-            self.metadata.report_filters = filters
+        self.metadata.boolean_filter = logic
+        self.metadata.report_filters = filters
+
         if ignore_date_filter:
             self.metadata.ignore_date_filter()
+        elif date_duration:
+            self.metadata.set_date_duration(date_duration)
+        else:
+            if start:
+                self.metadata.date_start = start
+            if end:
+                self.metadata.date_end = end
+            if date_column:
+                self.metadata.date_column = date_column
+            if (start or end or date_column):
+                self.metadata.date_duration = "CUSTOM"
 
         if excel:
             return self._save_spreadsheet(excel)
