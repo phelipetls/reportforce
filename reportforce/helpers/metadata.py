@@ -192,3 +192,23 @@ class Metadata(dict):
             )
 
         return all_columns
+
+    def get_duration_info(self, duration):
+        return self.get_date_filter_durations_groups()[duration].values()
+
+    def get_date_filter_durations_groups(self):
+        date_filter_durations_groups = {}
+
+        for group in self["reportTypeMetadata"]["standardDateFilterDurationGroups"]:
+            date_filter_durations_groups.update(
+                {
+                    duration["label"]: {
+                        "start": duration["startDate"],
+                        "end": duration["endDate"],
+                        "value": duration["value"],
+                    }
+                    for duration in group["standardDateFilterDurations"]
+                }
+            )
+
+        return date_filter_durations_groups

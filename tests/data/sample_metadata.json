@@ -1,0 +1,1605 @@
+{
+    "reportExtendedMetadata": {
+        "aggregateColumnInfo": {
+            "RowCount": {
+                "dataType": "int",
+                "label": "Record Count"
+            }
+        },
+        "detailColumnInfo": {
+            "ROLLUP_DESCRIPTION": {
+                "dataType": "string",
+                "label": "Owner Role"
+            },
+            "FULL_NAME": {
+                "dataType": "string",
+                "label": "Opportunity Owner"
+            },
+            "ACCOUNT_NAME": {
+                "dataType": "string",
+                "label": "Account Name"
+            },
+            "OPPORTUNITY_NAME": {
+                "dataType": "string",
+                "label": "Opportunity Name"
+            },
+            "STAGE_NAME": {
+                "dataType": "picklist",
+                "label": "Stage"
+            },
+            "FISCAL_QUARTER": {
+                "dataType": "string",
+                "label": "Fiscal Period"
+            },
+            "AMOUNT": {
+                "dataType": "currency",
+                "label": "Amount"
+            },
+            "PROBABILITY": {
+                "dataType": "percent",
+                "label": "Probability (%)"
+            },
+            "AGE": {
+                "dataType": "int",
+                "label": "Age"
+            },
+            "CLOSE_DATE": {
+                "dataType": "date",
+                "label": "Close Date"
+            },
+            "CREATED_DATE": {
+                "dataType": "datetime",
+                "label": "Created Date"
+            },
+            "NEXT_STEP": {
+                "dataType": "string",
+                "label": "Next Step"
+            },
+            "LEAD_SOURCE": {
+                "dataType": "picklist",
+                "label": "Lead Source"
+            },
+            "TYPE": {
+                "dataType": "picklist",
+                "label": "Type"
+            }
+        },
+        "groupingColumnInfo": {}
+    },
+    "reportMetadata": {
+        "aggregates": [
+            "RowCount"
+        ],
+        "chart": null,
+        "crossFilters": [],
+        "currency": null,
+        "description": null,
+        "detailColumns": [
+            "ROLLUP_DESCRIPTION",
+            "FULL_NAME",
+            "ACCOUNT_NAME",
+            "OPPORTUNITY_NAME",
+            "STAGE_NAME",
+            "FISCAL_QUARTER",
+            "AMOUNT",
+            "PROBABILITY",
+            "AGE",
+            "CLOSE_DATE",
+            "CREATED_DATE",
+            "NEXT_STEP",
+            "LEAD_SOURCE",
+            "TYPE"
+        ],
+        "developerName": "DocTest2_mG",
+        "division": null,
+        "folderId": "005R0000000Kg8cIAC",
+        "groupingsAcross": [],
+        "groupingsDown": [],
+        "hasDetailRows": true,
+        "hasRecordCount": true,
+        "historicalSnapshotDates": [],
+        "id": "00OR0000000PYkiMAG",
+        "name": "DocTest2",
+        "reportBooleanFilter": null,
+        "reportFilters": [],
+        "reportFormat": "TABULAR",
+        "reportType": {
+            "label": "Opportunities",
+            "type": "Opportunity"
+        },
+        "scope": "organization",
+        "showGrandTotal": true,
+        "showSubtotals": true,
+        "sortBy": [],
+        "standardDateFilter": {
+            "column": "CLOSE_DATE",
+            "durationValue": "THIS_FISCAL_QUARTER",
+            "endDate": "2016-12-31",
+            "startDate": "2016-10-01"
+        },
+        "standardFilters": [
+            {
+                "name": "open",
+                "value": "all"
+            },
+            {
+                "name": "probability",
+                "value": ">0"
+            }
+        ],
+        "supportsRoleHierarchy": true,
+        "userOrHierarchyFilterId": null
+    },
+    "reportTypeMetadata": {
+        "categories": [
+            {
+                "columns": {
+                    "CREATED": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Created By"
+                    },
+                    "CREATED_ALIAS": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Created Alias"
+                    },
+                    "LAST_UPDATE_BY": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Last Modified By"
+                    },
+                    "LAST_UPDATE_BY_ALIAS": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Last Modified Alias"
+                    },
+                    "OPPORTUNITY_NAME": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Opportunity Name"
+                    },
+                    "TYPE": {
+                        "dataType": "picklist",
+                        "filterValues": [
+                            {
+                                "label": "Existing Business",
+                                "name": "Existing Business"
+                            },
+                            {
+                                "label": "New Business",
+                                "name": "New Business"
+                            }
+                        ],
+                        "filterable": true,
+                        "label": "Type"
+                    },
+                    "LEAD_SOURCE": {
+                        "dataType": "picklist",
+                        "filterValues": [
+                            {
+                                "label": "Advertisement",
+                                "name": "Advertisement"
+                            },
+                            {
+                                "label": "Employee Referral",
+                                "name": "Employee Referral"
+                            },
+                            {
+                                "label": "External Referral",
+                                "name": "External Referral"
+                            },
+                            {
+                                "label": "Partner",
+                                "name": "Partner"
+                            },
+                            {
+                                "label": "Public Relations",
+                                "name": "Public Relations"
+                            },
+                            {
+                                "label": "Seminar - Internal",
+                                "name": "Seminar - Internal"
+                            },
+                            {
+                                "label": "Seminar - Partner",
+                                "name": "Seminar - Partner"
+                            },
+                            {
+                                "label": "Trade Show",
+                                "name": "Trade Show"
+                            },
+                            {
+                                "label": "Web",
+                                "name": "Web"
+                            },
+                            {
+                                "label": "Word of mouth",
+                                "name": "Word of mouth"
+                            },
+                            {
+                                "label": "Other",
+                                "name": "Other"
+                            }
+                        ],
+                        "filterable": true,
+                        "label": "Lead Source"
+                    },
+                    "PARTNER_NAME": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Primary Partner"
+                    },
+                    "AMOUNT": {
+                        "dataType": "currency",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Amount"
+                    },
+                    "CLOSED": {
+                        "dataType": "boolean",
+                        "filterValues": [
+                            {
+                                "label": "True",
+                                "name": "True"
+                            },
+                            {
+                                "label": "False",
+                                "name": "False"
+                            }
+                        ],
+                        "filterable": true,
+                        "label": "Closed"
+                    },
+                    "WON": {
+                        "dataType": "boolean",
+                        "filterValues": [
+                            {
+                                "label": "True",
+                                "name": "True"
+                            },
+                            {
+                                "label": "False",
+                                "name": "False"
+                            }
+                        ],
+                        "filterable": true,
+                        "label": "Won"
+                    },
+                    "CLOSE_DATE": {
+                        "dataType": "date",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Close Date"
+                    },
+                    "CLOSE_DATE2": {
+                        "dataType": "date",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Close Date (2)"
+                    },
+                    "CLOSE_MONTH": {
+                        "dataType": "date",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Close Month"
+                    },
+                    "LAST_STAGE_CHANGE_DATE": {
+                        "dataType": "datetime",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Last Stage Change Date"
+                    },
+                    "NEXT_STEP": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Next Step"
+                    },
+                    "STAGE_NAME": {
+                        "dataType": "picklist",
+                        "filterValues": [
+                            {
+                                "label": "Prospecting",
+                                "name": "Prospecting"
+                            },
+                            {
+                                "label": "Qualification",
+                                "name": "Qualification"
+                            },
+                            {
+                                "label": "Needs Analysis",
+                                "name": "Needs Analysis"
+                            },
+                            {
+                                "label": "Value Proposition",
+                                "name": "Value Proposition"
+                            },
+                            {
+                                "label": "Id. Decision Makers",
+                                "name": "Id. Decision Makers"
+                            },
+                            {
+                                "label": "Perception Analysis",
+                                "name": "Perception Analysis"
+                            },
+                            {
+                                "label": "Proposal/Price Quote",
+                                "name": "Proposal/Price Quote"
+                            },
+                            {
+                                "label": "Negotiation/Review",
+                                "name": "Negotiation/Review"
+                            },
+                            {
+                                "label": "Closed Won",
+                                "name": "Closed Won"
+                            },
+                            {
+                                "label": "Closed Lost",
+                                "name": "Closed Lost"
+                            }
+                        ],
+                        "filterable": true,
+                        "label": "Stage"
+                    },
+                    "PROBABILITY": {
+                        "dataType": "percent",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Probability (%)"
+                    },
+                    "FISCAL_QUARTER": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Fiscal Period"
+                    },
+                    "FISCAL_YEAR": {
+                        "dataType": "int",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Fiscal Year"
+                    },
+                    "AGE": {
+                        "dataType": "int",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Age"
+                    },
+                    "STAGE_DURATION": {
+                        "dataType": "int",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Stage Duration"
+                    },
+                    "FORECAST_CATEGORY": {
+                        "dataType": "picklist",
+                        "filterValues": [
+                            {
+                                "label": "Omitted",
+                                "name": "Omitted"
+                            },
+                            {
+                                "label": "Pipeline",
+                                "name": "Pipeline"
+                            },
+                            {
+                                "label": "Best Case",
+                                "name": "Best Case"
+                            },
+                            {
+                                "label": "Commit",
+                                "name": "Commit"
+                            },
+                            {
+                                "label": "Closed",
+                                "name": "Closed"
+                            }
+                        ],
+                        "filterable": true,
+                        "label": "Forecast Category"
+                    },
+                    "OPPORTUNITY_ID": {
+                        "dataType": "id",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Opportunity ID"
+                    },
+                    "LAST_ACTIVITY": {
+                        "dataType": "date",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Last Activity"
+                    },
+                    "DESCRIPTION": {
+                        "dataType": "textarea",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Description"
+                    },
+                    "HASOPPLINEITEM": {
+                        "dataType": "boolean",
+                        "filterValues": [
+                            {
+                                "label": "True",
+                                "name": "True"
+                            },
+                            {
+                                "label": "False",
+                                "name": "False"
+                            }
+                        ],
+                        "filterable": true,
+                        "label": "Has Products"
+                    },
+                    "CREATED_DATE": {
+                        "dataType": "datetime",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Created Date"
+                    },
+                    "LAST_UPDATE": {
+                        "dataType": "datetime",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Last Modified Date"
+                    }
+                },
+                "label": "Opportunity Information"
+            },
+            {
+                "columns": {
+                    "FULL_NAME": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Opportunity Owner"
+                    },
+                    "ROLLUP_DESCRIPTION": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Owner Role"
+                    },
+                    "ALIAS": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Opportunity Owner Alias"
+                    },
+                    "OWNER_EMAIL": {
+                        "dataType": "email",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Opportunity Owner Email"
+                    },
+                    "OWNER_PHONE": {
+                        "dataType": "phone",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Opportunity Owner: Phone"
+                    },
+                    "OWNER_MOBILE_PHONE": {
+                        "dataType": "phone",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Opportunity Owner: Mobile Phone"
+                    },
+                    "OWNER_MANAGER": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Opportunity Owner: Manager"
+                    },
+                    "OWNER_TITLE": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Opportunity Owner: Title"
+                    },
+                    "OWNER_COMPANY": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Opportunity Owner: Company"
+                    },
+                    "OWNER_DEPARTMENT": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Opportunity Owner: Department"
+                    },
+                    "OWNER_DIVISION": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Opportunity Owner: Division"
+                    },
+                    "OWNER_PROFILE": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Opportunity Owner: Profile"
+                    },
+                    "OWNER_ACTIVE": {
+                        "dataType": "boolean",
+                        "filterValues": [
+                            {
+                                "label": "True",
+                                "name": "True"
+                            },
+                            {
+                                "label": "False",
+                                "name": "False"
+                            }
+                        ],
+                        "filterable": true,
+                        "label": "Opportunity Owner: Active"
+                    }
+                },
+                "label": "Opportunity Owner Information"
+            },
+            {
+                "columns": {
+                    "ACCOUNT_NAME": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Account Name"
+                    },
+                    "ACCOUNT_OWNER": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Account Owner"
+                    },
+                    "ACCOUNT_OWNER_ALIAS": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Account Owner Alias"
+                    },
+                    "PARENT_NAME": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Parent Account"
+                    },
+                    "PARENT_ID": {
+                        "dataType": "id",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Parent Account ID"
+                    },
+                    "SALES": {
+                        "dataType": "currency",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Annual Revenue"
+                    },
+                    "ACCOUNT_TYPE": {
+                        "dataType": "picklist",
+                        "filterValues": [
+                            {
+                                "label": "Analyst",
+                                "name": "Analyst"
+                            },
+                            {
+                                "label": "Competitor",
+                                "name": "Competitor"
+                            },
+                            {
+                                "label": "Customer",
+                                "name": "Customer"
+                            },
+                            {
+                                "label": "Integrator",
+                                "name": "Integrator"
+                            },
+                            {
+                                "label": "Investor",
+                                "name": "Investor"
+                            },
+                            {
+                                "label": "Partner",
+                                "name": "Partner"
+                            },
+                            {
+                                "label": "Press",
+                                "name": "Press"
+                            },
+                            {
+                                "label": "Prospect",
+                                "name": "Prospect"
+                            },
+                            {
+                                "label": "Reseller",
+                                "name": "Reseller"
+                            },
+                            {
+                                "label": "Other",
+                                "name": "Other"
+                            }
+                        ],
+                        "filterable": true,
+                        "label": "Account Type"
+                    },
+                    "INDUSTRY": {
+                        "dataType": "picklist",
+                        "filterValues": [
+                            {
+                                "label": "Agriculture",
+                                "name": "Agriculture"
+                            },
+                            {
+                                "label": "Apparel",
+                                "name": "Apparel"
+                            },
+                            {
+                                "label": "Banking",
+                                "name": "Banking"
+                            },
+                            {
+                                "label": "Biotechnology",
+                                "name": "Biotechnology"
+                            },
+                            {
+                                "label": "Chemicals",
+                                "name": "Chemicals"
+                            },
+                            {
+                                "label": "Communications",
+                                "name": "Communications"
+                            },
+                            {
+                                "label": "Construction",
+                                "name": "Construction"
+                            },
+                            {
+                                "label": "Consulting",
+                                "name": "Consulting"
+                            },
+                            {
+                                "label": "Education",
+                                "name": "Education"
+                            },
+                            {
+                                "label": "Electronics",
+                                "name": "Electronics"
+                            },
+                            {
+                                "label": "Energy",
+                                "name": "Energy"
+                            },
+                            {
+                                "label": "Engineering",
+                                "name": "Engineering"
+                            },
+                            {
+                                "label": "Entertainment",
+                                "name": "Entertainment"
+                            },
+                            {
+                                "label": "Environmental",
+                                "name": "Environmental"
+                            },
+                            {
+                                "label": "Finance",
+                                "name": "Finance"
+                            },
+                            {
+                                "label": "Food & Beverage",
+                                "name": "Food & Beverage"
+                            },
+                            {
+                                "label": "Government",
+                                "name": "Government"
+                            },
+                            {
+                                "label": "Healthcare",
+                                "name": "Healthcare"
+                            },
+                            {
+                                "label": "Hospitality",
+                                "name": "Hospitality"
+                            },
+                            {
+                                "label": "Insurance",
+                                "name": "Insurance"
+                            },
+                            {
+                                "label": "Machinery",
+                                "name": "Machinery"
+                            },
+                            {
+                                "label": "Manufacturing",
+                                "name": "Manufacturing"
+                            },
+                            {
+                                "label": "Media",
+                                "name": "Media"
+                            },
+                            {
+                                "label": "Not For Profit",
+                                "name": "Not For Profit"
+                            },
+                            {
+                                "label": "Other",
+                                "name": "Other"
+                            },
+                            {
+                                "label": "Recreation",
+                                "name": "Recreation"
+                            },
+                            {
+                                "label": "Retail",
+                                "name": "Retail"
+                            },
+                            {
+                                "label": "Shipping",
+                                "name": "Shipping"
+                            },
+                            {
+                                "label": "Technology",
+                                "name": "Technology"
+                            },
+                            {
+                                "label": "Telecommunications",
+                                "name": "Telecommunications"
+                            },
+                            {
+                                "label": "Transportation",
+                                "name": "Transportation"
+                            },
+                            {
+                                "label": "Utilities",
+                                "name": "Utilities"
+                            }
+                        ],
+                        "filterable": true,
+                        "label": "Industry"
+                    },
+                    "EMPLOYEES": {
+                        "dataType": "int",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Employees"
+                    },
+                    "ACCOUNT_ID": {
+                        "dataType": "id",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Account ID"
+                    },
+                    "ACCOUNT_LAST_ACTIVITY": {
+                        "dataType": "date",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Account: Last Activity"
+                    },
+                    "ACCOUNT_CREATED_DATE": {
+                        "dataType": "datetime",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Account: Created Date"
+                    },
+                    "ACCOUNT_LAST_UPDATE": {
+                        "dataType": "datetime",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Account: Last Modified Date"
+                    },
+                    "ACCOUNT_DESCRIPTION": {
+                        "dataType": "textarea",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Account Description"
+                    }
+                },
+                "label": "Account: General"
+            },
+            {
+                "columns": {
+                    "ADDRESS1_STREET": {
+                        "dataType": "textarea",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Billing Street"
+                    },
+                    "ADDRESS1_LINE1": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Billing Address Line 1"
+                    },
+                    "ADDRESS1_LINE2": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Billing Address Line 2"
+                    },
+                    "ADDRESS1_LINE3": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Billing Address Line 3"
+                    },
+                    "ADDRESS1_CITY": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Billing City"
+                    },
+                    "ADDRESS1_STATE": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Billing State/Province"
+                    },
+                    "ADDRESS1_ZIP": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Billing Zip/Postal Code"
+                    },
+                    "ADDRESS1_COUNTRY": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Billing Country"
+                    },
+                    "ADDRESS2_STREET": {
+                        "dataType": "textarea",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Shipping Street"
+                    },
+                    "ADDRESS2_LINE1": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Shipping Address Line 1"
+                    },
+                    "ADDRESS2_LINE2": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Shipping Address Line 2"
+                    },
+                    "ADDRESS2_LINE3": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Shipping Address Line 3"
+                    },
+                    "ADDRESS2_CITY": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Shipping City"
+                    },
+                    "ADDRESS2_STATE": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Shipping State/Province"
+                    },
+                    "ADDRESS2_ZIP": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Shipping Zip/Postal Code"
+                    },
+                    "ADDRESS2_COUNTRY": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Shipping Country"
+                    }
+                },
+                "label": "Account: Address"
+            },
+            {
+                "columns": {
+                    "PHONE1": {
+                        "dataType": "phone",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Phone"
+                    },
+                    "PHONE2": {
+                        "dataType": "phone",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Fax"
+                    },
+                    "URL": {
+                        "dataType": "url",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Website"
+                    }
+                },
+                "label": "Account: Ph/Fax"
+            },
+            {
+                "columns": {
+                    "CONTACT": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Primary Contact"
+                    },
+                    "CON.TITLE": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Contact: Title"
+                    },
+                    "CON.PHONE": {
+                        "dataType": "phone",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Contact: Phone"
+                    },
+                    "CON.EMAIL": {
+                        "dataType": "email",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Contact: Email"
+                    }
+                },
+                "label": "Primary Contact"
+            },
+            {
+                "columns": {
+                    "CON.ADDRESS2_STREET": {
+                        "dataType": "textarea",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Mailing Street"
+                    },
+                    "CON.ADDRESS2_LINE1": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Mailing Address Line 1"
+                    },
+                    "CON.ADDRESS2_LINE2": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Mailing Address Line 2"
+                    },
+                    "CON.ADDRESS2_LINE3": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Mailing Address Line 3"
+                    },
+                    "CON.ADDRESS2_CITY": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Mailing City"
+                    },
+                    "CON.ADDRESS2_STATE": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Mailing State/Province"
+                    },
+                    "CON.ADDRESS2_ZIP": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Mailing Zip/Postal Code"
+                    },
+                    "CON.ADDRESS2_COUNTRY": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Mailing Country"
+                    },
+                    "CON.ADDRESS1_STREET": {
+                        "dataType": "textarea",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Other Street"
+                    },
+                    "CON.ADDRESS1_LINE1": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Other Address Line 1"
+                    },
+                    "CON.ADDRESS1_LINE2": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Other Address Line 2"
+                    },
+                    "CON.ADDRESS1_LINE3": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Other Address Line 3"
+                    },
+                    "CON.ADDRESS1_CITY": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Other City"
+                    },
+                    "CON.ADDRESS1_STATE": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Other State/Province"
+                    },
+                    "CON.ADDRESS1_ZIP": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Other Zip/Postal Code"
+                    },
+                    "CON.ADDRESS1_COUNTRY": {
+                        "dataType": "string",
+                        "filterValues": [],
+                        "filterable": true,
+                        "label": "Other Country"
+                    }
+                },
+                "label": "Contact: Address"
+            }
+        ],
+        "dataTypeFilterOperatorMap": {
+            "date": [
+                {
+                    "label": "equals",
+                    "name": "equals"
+                },
+                {
+                    "label": "not equal to",
+                    "name": "notEqual"
+                },
+                {
+                    "label": "less than",
+                    "name": "lessThan"
+                },
+                {
+                    "label": "greater than",
+                    "name": "greaterThan"
+                },
+                {
+                    "label": "less or equal",
+                    "name": "lessOrEqual"
+                },
+                {
+                    "label": "greater or equal",
+                    "name": "greaterOrEqual"
+                }
+            ],
+            "string": [
+                {
+                    "label": "equals",
+                    "name": "equals"
+                },
+                {
+                    "label": "not equal to",
+                    "name": "notEqual"
+                },
+                {
+                    "label": "less than",
+                    "name": "lessThan"
+                },
+                {
+                    "label": "greater than",
+                    "name": "greaterThan"
+                },
+                {
+                    "label": "less or equal",
+                    "name": "lessOrEqual"
+                },
+                {
+                    "label": "greater or equal",
+                    "name": "greaterOrEqual"
+                },
+                {
+                    "label": "contains",
+                    "name": "contains"
+                },
+                {
+                    "label": "does not contain",
+                    "name": "notContain"
+                },
+                {
+                    "label": "starts with",
+                    "name": "startsWith"
+                }
+            ],
+            "picklist": [
+                {
+                    "label": "equals",
+                    "name": "equals"
+                },
+                {
+                    "label": "not equal to",
+                    "name": "notEqual"
+                },
+                {
+                    "label": "less than",
+                    "name": "lessThan"
+                },
+                {
+                    "label": "greater than",
+                    "name": "greaterThan"
+                },
+                {
+                    "label": "less or equal",
+                    "name": "lessOrEqual"
+                },
+                {
+                    "label": "greater or equal",
+                    "name": "greaterOrEqual"
+                },
+                {
+                    "label": "contains",
+                    "name": "contains"
+                },
+                {
+                    "label": "does not contain",
+                    "name": "notContain"
+                },
+                {
+                    "label": "starts with",
+                    "name": "startsWith"
+                }
+            ],
+            "textarea": [
+                {
+                    "label": "equals",
+                    "name": "equals"
+                },
+                {
+                    "label": "not equal to",
+                    "name": "notEqual"
+                },
+                {
+                    "label": "less than",
+                    "name": "lessThan"
+                },
+                {
+                    "label": "greater than",
+                    "name": "greaterThan"
+                },
+                {
+                    "label": "less or equal",
+                    "name": "lessOrEqual"
+                },
+                {
+                    "label": "greater or equal",
+                    "name": "greaterOrEqual"
+                },
+                {
+                    "label": "contains",
+                    "name": "contains"
+                },
+                {
+                    "label": "does not contain",
+                    "name": "notContain"
+                },
+                {
+                    "label": "starts with",
+                    "name": "startsWith"
+                }
+            ],
+            "percent": [
+                {
+                    "label": "equals",
+                    "name": "equals"
+                },
+                {
+                    "label": "not equal to",
+                    "name": "notEqual"
+                },
+                {
+                    "label": "less than",
+                    "name": "lessThan"
+                },
+                {
+                    "label": "greater than",
+                    "name": "greaterThan"
+                },
+                {
+                    "label": "less or equal",
+                    "name": "lessOrEqual"
+                },
+                {
+                    "label": "greater or equal",
+                    "name": "greaterOrEqual"
+                }
+            ],
+            "int": [
+                {
+                    "label": "equals",
+                    "name": "equals"
+                },
+                {
+                    "label": "not equal to",
+                    "name": "notEqual"
+                },
+                {
+                    "label": "less than",
+                    "name": "lessThan"
+                },
+                {
+                    "label": "greater than",
+                    "name": "greaterThan"
+                },
+                {
+                    "label": "less or equal",
+                    "name": "lessOrEqual"
+                },
+                {
+                    "label": "greater or equal",
+                    "name": "greaterOrEqual"
+                }
+            ],
+            "url": [
+                {
+                    "label": "equals",
+                    "name": "equals"
+                },
+                {
+                    "label": "not equal to",
+                    "name": "notEqual"
+                },
+                {
+                    "label": "less than",
+                    "name": "lessThan"
+                },
+                {
+                    "label": "greater than",
+                    "name": "greaterThan"
+                },
+                {
+                    "label": "less or equal",
+                    "name": "lessOrEqual"
+                },
+                {
+                    "label": "greater or equal",
+                    "name": "greaterOrEqual"
+                },
+                {
+                    "label": "contains",
+                    "name": "contains"
+                },
+                {
+                    "label": "does not contain",
+                    "name": "notContain"
+                },
+                {
+                    "label": "starts with",
+                    "name": "startsWith"
+                }
+            ],
+            "datetime": [
+                {
+                    "label": "equals",
+                    "name": "equals"
+                },
+                {
+                    "label": "not equal to",
+                    "name": "notEqual"
+                },
+                {
+                    "label": "less than",
+                    "name": "lessThan"
+                },
+                {
+                    "label": "greater than",
+                    "name": "greaterThan"
+                },
+                {
+                    "label": "less or equal",
+                    "name": "lessOrEqual"
+                },
+                {
+                    "label": "greater or equal",
+                    "name": "greaterOrEqual"
+                }
+            ],
+            "boolean": [
+                {
+                    "label": "equals",
+                    "name": "equals"
+                },
+                {
+                    "label": "not equal to",
+                    "name": "notEqual"
+                }
+            ],
+            "phone": [
+                {
+                    "label": "equals",
+                    "name": "equals"
+                },
+                {
+                    "label": "not equal to",
+                    "name": "notEqual"
+                },
+                {
+                    "label": "less than",
+                    "name": "lessThan"
+                },
+                {
+                    "label": "greater than",
+                    "name": "greaterThan"
+                },
+                {
+                    "label": "less or equal",
+                    "name": "lessOrEqual"
+                },
+                {
+                    "label": "greater or equal",
+                    "name": "greaterOrEqual"
+                },
+                {
+                    "label": "contains",
+                    "name": "contains"
+                },
+                {
+                    "label": "does not contain",
+                    "name": "notContain"
+                },
+                {
+                    "label": "starts with",
+                    "name": "startsWith"
+                }
+            ],
+            "currency": [
+                {
+                    "label": "equals",
+                    "name": "equals"
+                },
+                {
+                    "label": "not equal to",
+                    "name": "notEqual"
+                },
+                {
+                    "label": "less than",
+                    "name": "lessThan"
+                },
+                {
+                    "label": "greater than",
+                    "name": "greaterThan"
+                },
+                {
+                    "label": "less or equal",
+                    "name": "lessOrEqual"
+                },
+                {
+                    "label": "greater or equal",
+                    "name": "greaterOrEqual"
+                }
+            ],
+            "id": [
+                {
+                    "label": "equals",
+                    "name": "equals"
+                },
+                {
+                    "label": "not equal to",
+                    "name": "notEqual"
+                },
+                {
+                    "label": "starts with",
+                    "name": "startsWith"
+                }
+            ],
+            "email": [
+                {
+                    "label": "equals",
+                    "name": "equals"
+                },
+                {
+                    "label": "not equal to",
+                    "name": "notEqual"
+                },
+                {
+                    "label": "less than",
+                    "name": "lessThan"
+                },
+                {
+                    "label": "greater than",
+                    "name": "greaterThan"
+                },
+                {
+                    "label": "less or equal",
+                    "name": "lessOrEqual"
+                },
+                {
+                    "label": "greater or equal",
+                    "name": "greaterOrEqual"
+                },
+                {
+                    "label": "contains",
+                    "name": "contains"
+                },
+                {
+                    "label": "does not contain",
+                    "name": "notContain"
+                },
+                {
+                    "label": "starts with",
+                    "name": "startsWith"
+                }
+            ]
+        },
+        "divisionInfo": null,
+        "scopeInfo": {
+            "defaultValue": "organization",
+            "values": [
+                {
+                    "allowsDivision": false,
+                    "label": "My opportunities",
+                    "value": "user"
+                },
+                {
+                    "allowsDivision": false,
+                    "label": "My team's opportunities",
+                    "value": "team"
+                },
+                {
+                    "allowsDivision": true,
+                    "label": "All opportunities",
+                    "value": "organization"
+                }
+            ]
+        },
+        "standardDateFilterDurationGroups": [
+            {
+                "label": "",
+                "standardDateFilterDurations": [
+                    {
+                        "endDate": "2016-12-12",
+                        "label": "Custom",
+                        "startDate": "2016-12-13",
+                        "value": "CUSTOM"
+                    }
+                ]
+            },
+            {
+                "label": "Fiscal Year",
+                "standardDateFilterDurations": [
+                    {
+                        "endDate": "2016-12-31",
+                        "label": "Current FY",
+                        "startDate": "2016-01-01",
+                        "value": "THIS_FISCAL_YEAR"
+                    },
+                    {
+                        "endDate": "2015-12-31",
+                        "label": "Previous FY",
+                        "startDate": "2015-01-01",
+                        "value": "LAST_FISCAL_YEAR"
+                    }
+                ]
+            }
+        ],
+        "standardFilterInfos": {
+            "probability": {
+                "type": "PICKLIST",
+                "filterValues": [
+                    {
+                        "label": "All",
+                        "name": ">0"
+                    },
+                    {
+                        "label": "> 90%",
+                        "name": "gt90"
+                    },
+                    {
+                        "label": "> 80%",
+                        "name": "gt80"
+                    },
+                    {
+                        "label": "> 70%",
+                        "name": "gt70"
+                    },
+                    {
+                        "label": "> 60%",
+                        "name": "gt60"
+                    },
+                    {
+                        "label": "> 50%",
+                        "name": "gt50"
+                    },
+                    {
+                        "label": "> 40%",
+                        "name": "gt40"
+                    },
+                    {
+                        "label": "> 30%",
+                        "name": "gt30"
+                    },
+                    {
+                        "label": "> 20%",
+                        "name": "gt20"
+                    },
+                    {
+                        "label": "> 10%",
+                        "name": "gt10"
+                    },
+                    {
+                        "label": "< 90%",
+                        "name": "lt90"
+                    },
+                    {
+                        "label": "< 80%",
+                        "name": "lt80"
+                    },
+                    {
+                        "label": "< 70%",
+                        "name": "lt70"
+                    },
+                    {
+                        "label": "< 60%",
+                        "name": "lt60"
+                    },
+                    {
+                        "label": "< 50%",
+                        "name": "lt50"
+                    },
+                    {
+                        "label": "< 40%",
+                        "name": "lt40"
+                    },
+                    {
+                        "label": "< 30%",
+                        "name": "lt30"
+                    },
+                    {
+                        "label": "< 20%",
+                        "name": "lt20"
+                    },
+                    {
+                        "label": "< 10%",
+                        "name": "lt10"
+                    }
+                ],
+                "label": "Probability"
+            },
+            "open": {
+                "type": "PICKLIST",
+                "filterValues": [
+                    {
+                        "label": "Any",
+                        "name": "all"
+                    },
+                    {
+                        "label": "Open",
+                        "name": "open"
+                    },
+                    {
+                        "label": "Closed",
+                        "name": "closed"
+                    },
+                    {
+                        "label": "Closed Won",
+                        "name": "closedwon"
+                    }
+                ],
+                "label": "Opportunity Status"
+            }
+        }
+    }
+}

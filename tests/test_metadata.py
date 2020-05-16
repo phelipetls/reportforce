@@ -115,3 +115,33 @@ def test_add_new_filter_to_boolean_filter():
     test = "1 AND 2 AND 3"
     expected = "1 AND 2 AND 3 AND 4"
     assert Metadata._add_new_filter_to_boolean_filter(test) == expected
+
+
+def test_get_date_filter_durations_groups():
+    assert Metadata(
+        read_json("sample_metadata.json")
+    ).get_date_filter_durations_groups() == {
+        "Current FY": {
+            "end": "2016-12-31",
+            "start": "2016-01-01",
+            "value": "THIS_FISCAL_YEAR",
+        },
+        "Custom": {"end": "2016-12-12", "start": "2016-12-13", "value": "CUSTOM"},
+        "Previous FY": {
+            "end": "2015-12-31",
+            "start": "2015-01-01",
+            "value": "LAST_FISCAL_YEAR",
+        },
+    }
+
+
+def test_set_duration_value():
+    metadata = Metadata(read_json("sample_metadata.json"))
+    metadata.set_date_duration("Current FY")
+
+    assert metadata.date_filter == {
+        "column": "CLOSE_DATE",
+        "durationValue": "THIS_FISCAL_YEAR",
+        "endDate": "2016-12-31T00:00:00",
+        "startDate": "2016-01-01T00:00:00",
+    }

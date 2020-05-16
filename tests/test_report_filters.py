@@ -86,3 +86,19 @@ def test_ignore_case(mock_login, mock_get_metadata, mock_http_request):
         "endDate": None,
         "startDate": None,
     }
+
+
+def test_set_duration_group(mock_login, mock_get_metadata, mock_http_request):
+    """Test if specifying a date duration gives the correct date filter."""
+    mock_get_metadata(Metadata(read_json("sample_metadata.json")))
+    mock_http_request(REPORT, "post")
+
+    rf = Reportforce("foo@bar.com", "1234", "token")
+    rf.get_report("ID", date_duration="Current FY")
+
+    assert rf.metadata.date_filter == {
+        "column": "CLOSE_DATE",
+        "durationValue": "THIS_FISCAL_YEAR",
+        "endDate": "2016-12-31T00:00:00",
+        "startDate": "2016-01-01T00:00:00",
+    }
