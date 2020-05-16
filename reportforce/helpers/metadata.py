@@ -50,7 +50,8 @@ class Metadata(dict):
 
     @staticmethod
     def format_date(value):
-        return parse(value, dayfirst=True).isoformat()
+        if value is not None:
+            return parse(value, dayfirst=True).isoformat()
 
     operators = {
         "==": "equals",
@@ -91,28 +92,57 @@ class Metadata(dict):
     def date_filter(self):
         return self.report_metadata["standardDateFilter"]
 
-    @date_filter.setter
-    def date_filter(self, params):
-        start, end, column = params
+    @property
+    def date_start(self):
+        return self.report_metadata["standardDateFilter"]["startDate"]
 
-        self.report_metadata["standardDateFilter"]["durationValue"] = "CUSTOM"
+    @date_start.setter
+    def date_start(self, date_string):
+        self.report_metadata["standardDateFilter"]["startDate"] = self.format_date(
+            date_string
+        )
 
-        if start:
-            start = self.format_date(start)
-            self.report_metadata["standardDateFilter"]["startDate"] = start
+    @property
+    def date_end(self):
+        return self.report_metadata["standardDateFilter"]["endDate"]
 
-        if end:
-            end = self.format_date(end)
-            self.report_metadata["standardDateFilter"]["endDate"] = end
+    @date_end.setter
+    def date_end(self, date_string):
+        self.report_metadata["standardDateFilter"]["endDate"] = self.format_date(
+            date_string
+        )
 
-        if column:
-            column = self.get_column_api_name(column)
-            self.report_metadata["standardDateFilter"]["column"] = column
+    @property
+    def date_column(self):
+        return self.report_metadata["standardDateFilter"]["column"]
+
+    @date_column.setter
+    def date_column(self, column):
+        self.report_metadata["standardDateFilter"]["column"] = self.get_column_api_name(
+            column
+        )
+
+    @property
+    def date_duration(self):
+        return self.report_metadata["standardDateFilter"]["durationValue"]
+
+    @date_duration.setter
+    def date_duration(self, duration):
+        self.report_metadata["standardDateFilter"][
+            "durationValue"
+        ] = duration
 
     def ignore_date_filter(self):
-        self["reportMetadata"]["standardDateFilter"]["durationValue"] = "CUSTOM"
-        self["reportMetadata"]["standardDateFilter"]["startDate"] = None
-        self["reportMetadata"]["standardDateFilter"]["endDate"] = None
+        self.date_duration = "CUSTOM"
+        self.date_start = None
+        self.date_end = None
+
+    def set_date_duration(self, duration):
+        start, end, duration = self.get_duration_info(duration)
+
+        self.date_duration = duration
+        self.date_start = start
+        self.date_end = end
 
     def map_columns_to_info(self):
         return {
