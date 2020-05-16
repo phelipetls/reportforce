@@ -1,12 +1,11 @@
 # 0.0.7
 
-- Huge refactoring towards a more OOP approach regarding the report parsers
-  etc.
+- Huge refactoring towards a more OOP approach regarding the report parsers,
+  filtering etc.
 - Remove `Reportforce.get_total`.
 - Add optional parameter to ignore standard date filter into
-  `Reportforce.get_report`, named `ignore_date_filter`. Useful if by default
-  there is only dates in current month but you want to get dates in another
-  month, without needing to create a report.
+  `Reportforce.get_report`, named `ignore_date_filter`. Useful if the standard
+  date filter conflicts with another date filter passed into `filters`.
 - Add support to filter by `date_duration`, e.g., "This month", "Last month",
   "Current Fiscal Year", etc.
 
@@ -21,11 +20,10 @@
 
 # 0.0.4
 
-- Allow user to authenticate with Salesforce object without any arguments,
-  which will means he is going to provide the credentials via standard input.
-- Escape user credentials in XML body for logging in via SOAP API, closes #2.
-- Allow user to pass domain when using Reportforce, closes #4.
+- Allow user to authenticate with Salesforce object via standard input.
+- Escape user credentials in XML body for logging in via SOAP API.
+- Allow user to pass domain when using Reportforce.
 
 # 0.0.3
 
-- Fix bug of reportforce.helpers not being a package (withou a `__init__.py` file).
+- Fix bug of reportforce.helpers not being a package (without a `__init__.py` file).
