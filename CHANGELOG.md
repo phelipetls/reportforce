@@ -1,3 +1,15 @@
+# 0.0.7
+
+- Huge refactoring towards a more OOP approach regarding the report parsers
+  etc.
+- Remove `Reportforce.get_total`.
+- Add optional parameter to ignore standard date filter into
+  `Reportforce.get_report`, named `ignore_date_filter`. Useful if by default
+  there is only dates in current month but you want to get dates in another
+  month, without needing to create a report.
+- Add support to filter by `date_duration`, e.g., "This month", "Last month",
+  "Current Fiscal Year", etc.
+
 # 0.0.6
 
 - Fix bug of domain defaulting to `None` in Salesforce object.
