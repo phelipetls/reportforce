@@ -31,11 +31,7 @@ class Metadata(dict):
             value = self.format_value(value, column)
 
             self.report_filters.append(
-                {
-                    "column": api_name,
-                    "operator": operator,
-                    "value": value,
-                }
+                {"column": api_name, "operator": operator, "value": value}
             )
 
     def format_value(self, value, column):

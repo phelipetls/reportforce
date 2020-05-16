@@ -99,7 +99,7 @@ def test_get_available_columns():
     }
 
 
-def test_get_column_api_name():
+def test_get_column_api_name_summary():
     assert summary_metadata.get_column_api_name("Column 1") == ("Column_1")
 
 
@@ -109,7 +109,9 @@ def test_add_new_filter_to_boolean_filter():
     assert Metadata._add_new_filter_to_boolean_filter(test) == expected
 
     test = "(((((1 AND 2 AND 3 AND 4 AND (5 or 6 or 10))) AND 7) AND 8) AND 9)"
-    expected = "(((((1 AND 2 AND 3 AND 4 AND (5 or 6 or 10))) AND 7) AND 8) AND 9) AND 10"
+    expected = (
+        "(((((1 AND 2 AND 3 AND 4 AND (5 or 6 or 10))) AND 7) AND 8) AND 9) AND 10"
+    )
     assert Metadata._add_new_filter_to_boolean_filter(test) == expected
 
     test = "1 AND 2 AND 3"

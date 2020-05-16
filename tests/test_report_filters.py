@@ -1,7 +1,8 @@
 import pytest
-import pandas as pd
 
 from reportforce import Reportforce
+from reportforce.helpers.metadata import Metadata
+
 from fixtures_utils import read_json
 
 REPORT = read_json("tabular.json")
@@ -32,10 +33,10 @@ def setup(mock_login, mock_generate_reports, mock_get_metadata):
 
 def test_logic(setup):
     """
-    Test if the filter was incremented three times due
-    1. to user-specified filter and
-    2. to filtering out already seen values.
+    Test if the filter was incremented one times due
+    to filtering out already seen values.
     """
+    assert len(setup.metadata.report_filters) == 3
     assert setup.metadata.boolean_filter == "1 AND 2 AND 3"
 
 
@@ -63,7 +64,7 @@ def test_report_filters(setup):
             "filterType": "filterType",
             "isRunPageEditable": True,
             "operator": "operator",
-            "value": 'value',
+            "value": "value",
         },
         {"column": "OPPORTUNITY_NAME", "operator": "notEqual", "value": '"00112233"'},
         {
@@ -74,12 +75,14 @@ def test_report_filters(setup):
     ]
 
 
-def test_ignore_case(mock_login, mock_get_metadata, mock_http_request):
+def test_ignore_date_filter(mock_login, mock_get_metadata, mock_http_request):
+    """Test if specifying ignore_date_filter removes the standard date filter."""
     mock_get_metadata(METADATA)
     mock_http_request(REPORT, "post")
 
     rf = Reportforce("foo@bar.com", "1234", "token")
     rf.get_report("ID", ignore_date_filter=True)
+
     assert rf.metadata.date_filter == {
         "column": "column",
         "durationValue": "CUSTOM",

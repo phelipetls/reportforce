@@ -4,8 +4,9 @@ def is_iterable(v):
     try:
         iter(v)
         return True
-    except:
+    except TypeError:
         return False
+
 
 def surround_with_quotes(s):
     return f'"{s}"'
