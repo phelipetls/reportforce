@@ -1,3 +1,3 @@
---editable ..
+reportforce
 mkdocs==1.1
 mkdocs-material
