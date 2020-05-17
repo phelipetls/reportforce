@@ -62,5 +62,5 @@ class Matrix(Report):
                 groups_and_aggs.append((agg,) + group)
 
         if groups_and_aggs:
-            groups_labels = [""] + self.get_groupings_across_labels()
+            groups_labels = ["Aggregates"] + self.get_groupings_across_labels()
             return pd.MultiIndex.from_tuples(groups_and_aggs, names=groups_labels)
