@@ -154,12 +154,17 @@ class Reportforce(Salesforce):
         return Metadata(self.session.get(url).json())
 
     def _generate_reports(self, **kwargs):
+        id_column = self.id_column
+
+        if id_column is not None:
+            update_filter = self.metadata._get_strategy(id_column)
+
         report = self._get_report(**kwargs)
         df = report.to_dataframe()
         yield df
 
-        while not report.all_data and self.id_column:
-            self._filter_past_values(df)
+        while not report.all_data and id_column:
+            update_filter(df, id_column)
 
             report = self._get_report(**kwargs)
             df = report.to_dataframe()
@@ -176,11 +181,6 @@ class Reportforce(Salesforce):
     def _get_parser(self):
         report_format = self.metadata.report_format
         return self._parsers[report_format]
-
-    def _filter_past_values(self, df):
-        new_filter = (self.id_column, "!=", df[self.id_column])
-        self.metadata.report_filters = [new_filter]
-        self.metadata.increment_boolean_filter()
 
     def _reset_index(self, df):
         """Unless it is a pandas.MultiIndex."""

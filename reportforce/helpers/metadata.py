@@ -199,3 +199,35 @@ class Metadata(dict):
             )
 
         return date_filter_durations_groups
+
+    @property
+    def sort_by(self):
+        return self.report_metadata["sortBy"]
+
+    @sort_by.setter
+    def sort_by(self, params):
+        column, order = params
+        self.report_metadata["sortBy"] = [
+            {
+                "sortColumn": self.get_column_api_name(column),
+                "sortOrder": order.title(),
+            }
+        ]
+
+    def _get_strategy(self, id_column):
+        is_lookup = self.get_column_info_by_label(id_column, "isLookup")
+        if is_lookup:
+            self.sort_by = (id_column, "Asc")
+            self.report_filters = [(id_column, ">", "")]
+            self.increment_boolean_filter()
+            return self._filter_by_sorting
+        return self._filter_past_values
+
+    def _filter_past_values(self, df, id_column):
+        new_filter = (id_column, "!=", df[id_column])
+        self.report_filters = [new_filter]
+        self.increment_boolean_filter()
+
+    def _filter_by_sorting(self, df, id_column):
+        last_value = df[id_column].iat[-1]
+        self.report_filters[-1]["value"] = utils.surround_with_quotes(last_value)
