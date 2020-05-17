@@ -165,12 +165,12 @@ class Metadata(dict):
     def get_column_info_by_api_name(self, target, info):
         for api_name, infos in self.all_columns_info:
             if api_name == target:
-                return infos[info]
+                return infos.get(info)
 
     def get_column_info_by_label(self, target, info):
         for api_name, infos in self.all_columns_info:
             if infos["label"] == target:
-                return api_name if info == "apiName" else infos[info]
+                return api_name if info == "apiName" else infos.get(info)
 
     def get_column_label(self, column):
         return self.get_column_info_by_api_name(column, "label")
