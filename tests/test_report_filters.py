@@ -91,13 +91,13 @@ def test_ignore_date_filter(mock_login, mock_get_metadata, mock_http_request):
     }
 
 
-def test_set_duration_group(mock_login, mock_get_metadata, mock_http_request):
-    """Test if specifying a date duration gives the correct date filter."""
+def test_set_date_interval(mock_login, mock_get_metadata, mock_http_request):
+    """Test if specifying a date interval gives the correct date filter."""
     mock_get_metadata(Metadata(read_json("sample_metadata.json")))
     mock_http_request(REPORT, "post")
 
     rf = Reportforce("foo@bar.com", "1234", "token")
-    rf.get_report("ID", date_duration="Current FY")
+    rf.get_report("ID", date_interval="Current FY")
 
     assert rf.metadata.date_filter == {
         "column": "CLOSE_DATE",

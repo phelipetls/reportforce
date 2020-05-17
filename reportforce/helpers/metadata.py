@@ -118,22 +118,22 @@ class Metadata(dict):
         self.date_filter["column"] = self.get_column_api_name(column)
 
     @property
-    def date_duration(self):
+    def date_interval(self):
         return self.date_filter["durationValue"]
 
-    @date_duration.setter
-    def date_duration(self, duration):
-        self.date_filter["durationValue"] = duration
+    @date_interval.setter
+    def date_interval(self, interval):
+        self.date_filter["durationValue"] = interval
 
     def ignore_date_filter(self):
-        self.date_duration = "CUSTOM"
+        self.date_interval = "CUSTOM"
         self.date_start = None
         self.date_end = None
 
-    def set_date_duration(self, duration):
-        start, end, duration = self.get_duration_info(duration)
+    def set_date_interval(self, interval):
+        start, end, interval = self.get_interval_info(interval)
 
-        self.date_duration = duration
+        self.date_interval = interval
         self.date_start = start
         self.date_end = end
 
@@ -181,25 +181,25 @@ class Metadata(dict):
     def get_column_api_name(self, column):
         return self.get_column_info_by_label(column, "apiName")
 
-    def get_duration_info(self, duration):
-        return self.get_date_filter_durations_groups()[duration].values()
+    def get_interval_info(self, interval):
+        return self.get_date_filter_intervals()[interval].values()
 
-    def get_date_filter_durations_groups(self):
-        date_filter_durations_groups = {}
+    def get_date_filter_intervals(self):
+        date_filter_intervals = {}
 
         for group in self["reportTypeMetadata"]["standardDateFilterDurationGroups"]:
-            date_filter_durations_groups.update(
-                {
-                    duration["label"]: {
-                        "start": duration["startDate"],
-                        "end": duration["endDate"],
-                        "value": duration["value"],
+            for interval in group["standardDateFilterDurations"]:
+                date_filter_intervals.update(
+                    {
+                        interval["label"]: {
+                            "start": interval["startDate"],
+                            "end": interval["endDate"],
+                            "value": interval["value"],
+                        }
                     }
-                    for duration in group["standardDateFilterDurations"]
-                }
-            )
+                )
 
-        return date_filter_durations_groups
+        return date_filter_intervals
 
     @property
     def sort_by(self):

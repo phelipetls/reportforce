@@ -59,7 +59,7 @@ class Reportforce(Salesforce):
         date_column=None,
         start=None,
         end=None,
-        date_duration=None,
+        date_interval=None,
         ignore_date_filter=False,
         filters=[],
         logic=None,
@@ -124,8 +124,8 @@ class Reportforce(Salesforce):
 
         if ignore_date_filter:
             self.metadata.ignore_date_filter()
-        elif date_duration:
-            self.metadata.set_date_duration(date_duration)
+        elif date_interval:
+            self.metadata.set_date_interval(date_interval)
         else:
             if start:
                 self.metadata.date_start = start
@@ -134,7 +134,7 @@ class Reportforce(Salesforce):
             if date_column:
                 self.metadata.date_column = date_column
             if start or end or date_column:
-                self.metadata.date_duration = "CUSTOM"
+                self.metadata.date_interval = "CUSTOM"
 
         if excel:
             return self._save_spreadsheet(excel)

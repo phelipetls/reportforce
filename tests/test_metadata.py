@@ -40,8 +40,8 @@ class TestMetadataGetters:
     def test_get_non_included_column_dtype(self):
         assert metadata.get_column_dtype("LAST_UPDATE_BY_ALIAS") == "string"
 
-    def test_get_date_filter_duration_groups(self):
-        assert metadata.get_date_filter_durations_groups() == {
+    def test_get_date_filter_interval_groups(self):
+        assert metadata.get_date_filter_intervals() == {
             "Current FY": {
                 "end": "2016-12-31",
                 "start": "2016-01-01",

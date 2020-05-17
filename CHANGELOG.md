@@ -6,7 +6,7 @@
 - Add optional parameter to ignore standard date filter into
   `Reportforce.get_report`, named `ignore_date_filter`. Useful if the standard
   date filter conflicts with another date filter passed into `filters`.
-- Add support to filter by `date_duration`, e.g., "This month", "Last month",
+- Add support to filter by `date_interval`, e.g., "This month", "Last month",
   "Current Fiscal Year", etc.
 
 # 0.0.6
