@@ -1,7 +1,6 @@
 import pytest
 
 from reportforce import Reportforce
-
 from fixtures_utils import read_json
 
 REPORT = read_json("tabular.json")

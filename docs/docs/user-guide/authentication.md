@@ -2,9 +2,8 @@
 
 ## Security Token
 
-First of all, you'll need to authenticate your calls somehow.
-
-Here is one way to do it, using your username, password and security token:
+First of all, you'll need to authenticate. Here is one way to do it, using your
+username, password and security token:
 
 ```python
 from reportforce import Reportforce
@@ -42,7 +41,7 @@ getting data.
 By default, it is assumed that your Salesforce server supports the version 47.0
 of the Analytics and SOAP API.
 
-If that is not the case, please pass the right version to the `version`
+If that is not the case, please pass the right version into the `version`
 parameter when logging in.
 
 ```python

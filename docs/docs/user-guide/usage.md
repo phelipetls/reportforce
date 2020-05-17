@@ -19,12 +19,12 @@ Unfortunately, this is needed because the API doesn't provide a way to limit by
 a number of rows or something more convenient like that.
 
 ```python
-rf.get_report("00O1a000001YtFG", id_column="ID_COLUMN")
+rf.get_report("00O1a000001YtFG", id_column="Case Number")
 ```
 
 ## Filtering by dates
 
-You can also filter the report by dates on the fly:
+You can also customize the standard date filter like so:
 
 ```python
 rf.get_report("00O1a000001YtFG", start="01 December, 2019", end="31/01/2020")
@@ -40,6 +40,12 @@ report. You may change it with the `date_column` argument.
 rf.get_report("00O1a000001YtFG", start="01/12/2020", date_column="Last Modification Date")
 ```
 
+It's also possible to filter by an arbitrary date interval.
+
+```python
+rf.get_report("00O1a000001YtFG", date_interval="Current Fiscal Year")
+```
+
 ## Filtering a column
 
 If you want to filter the report by a report column, you may do it by passing a
@@ -52,6 +58,17 @@ rf.get_report("00O1a000001YtFG", filters=[("Sales Revenue", ">=", 3000)])
 You can use the typical logical operators as in Python, e.g.
 `!=`, `==` etc., but also `contains`, `not contains` and `startswith`.
 
+To pass more than one value to the filter, just pass an iterable like a list or a tuple:
+
+```python
+rf.get_report(
+    "00O1a000001YtFG", filters=[("Closed Date", "==", ["01-02-2020", "02-02-2020"])]
+)
+```
+
+You can filter by columns that are not included in the report's details also,
+i.e., columns that are not displayed in the rows.
+
 ## Adding filter logic
 
 When filtering, you may find it useful to add a logic to your filters:
@@ -60,15 +77,8 @@ When filtering, you may find it useful to add a logic to your filters:
 rf.get_report("00O1a000001YtFG", filters=[("Account", "==", "Mary")], logic="1 AND 2")
 ```
 
-## Customizing request calls
-
-Every keyword arguments is passed to the POST request call (done by the `requests` library).
-
-You can take advantage of that to customize the URL query, for example:
-
-```python
-rf.get_report("00O1a000001YtFG", params={"includeDetails": "false"})
-```
+If there already is a logic and you add a filter, you will have to update the
+underlying logic accordingly, otherwise the API will thrown an error.
 
 ## Downloading report as Excel spreadsheet
 
@@ -86,22 +96,4 @@ But you may also pass a string to give the file the name you want.
 
 ```python
 rf.get_report("00O1a000001YtFG", excel="spreadsheet.xlsx")
-```
-
-!!! note
-    This still struggles if the report is huge. It's common to hang for a while
-    until it starts to be saved by chunks.
-
-## Speeding up
-
-Unfortunately, this package struggles with performance, although I'm really
-trying my best to make it work.
-
-You can speed up things a little by monkeypatching the json parser library:
-
-```python
-import requests
-import ujson
-
-requests.models.complexjson = ujson
 ```
