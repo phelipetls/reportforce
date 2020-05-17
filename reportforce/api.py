@@ -177,9 +177,7 @@ class Reportforce(Salesforce):
     _parsers = {"TABULAR": Tabular, "MATRIX": Matrix, "SUMMARY": Summary}
 
     def _get_parser(self):
-        report_format = self.metadata.report_format
-        return self._parsers[report_format]
-
+        return self._parsers[self.metadata.report_format]
 
     EXCEL_HEADERS = {
         "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

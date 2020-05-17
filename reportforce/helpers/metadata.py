@@ -216,13 +216,16 @@ class Metadata(dict):
         ]
 
     def _get_strategy(self, id_column):
-        is_lookup = self.get_column_info_by_label(id_column, "isLookup")
+        is_lookup = self._is_lookup(id_column)
         if is_lookup:
             self.sort_by = (id_column, "Asc")
             self.report_filters = [(id_column, ">", "")]
             self.increment_boolean_filter()
             return self._filter_by_sorting
         return self._filter_past_values
+
+    def _is_lookup(self, column):
+        return self.get_column_info_by_label(column, "isLookup")
 
     def _filter_past_values(self, df, id_column):
         new_filter = (id_column, "!=", df[id_column])
