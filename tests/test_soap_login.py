@@ -41,9 +41,9 @@ BODY_TEMPLATE = """<?xml version="1.0" encoding="utf-8" ?>
 
 
 def test_generate_soap_body():
-    assert login.generate_soap_body("foo@bar.com", "pass", "token") == BODY_TEMPLATE.format(
+    assert login.generate_soap_body(
         "foo@bar.com", "pass", "token"
-    )
+    ) == BODY_TEMPLATE.format("foo@bar.com", "pass", "token")
 
 
 def test_generate_soap_body_escaped():
@@ -56,9 +56,9 @@ def test_generate_soap_body_with_stdin(mocker):
     mocker.patch("builtins.input", return_value="foo@bar.com")
     mocker.patch("reportforce.login.getpass", side_effect=["pass", "token<>&"])
 
-    assert login.generate_soap_body("foo@bar.com", "pass", "token<>&") == BODY_TEMPLATE.format(
-        "foo@bar.com", "pass", "token&lt;&gt;&amp;"
-    )
+    assert login.generate_soap_body(
+        "foo@bar.com", "pass", "token<>&"
+    ) == BODY_TEMPLATE.format("foo@bar.com", "pass", "token&lt;&gt;&amp;")
 
 
 def test_failed_login(requests_mock):

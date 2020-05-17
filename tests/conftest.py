@@ -38,9 +38,7 @@ def mock_generate_reports(mocker):
 
         generator = map(MockJsonResponse, [all_data_false] * n + [data])
 
-        mocker.patch.object(
-            Reportforce.session, "post", side_effect=generator
-        )
+        mocker.patch.object(Reportforce.session, "post", side_effect=generator)
 
     return _mock_generate_reports
 

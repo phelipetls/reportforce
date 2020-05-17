@@ -26,7 +26,7 @@ def get_groups(groups):
     """Iterate through a list of groupings to
     get the cartesian product of their values.
 
-    For example, imagine this list of groupings:
+    For example, given this list of groupings:
 
     g = [
         {
@@ -70,14 +70,14 @@ def get_groups(groups):
      ('grouping1', 'grouping2', 'grouping3_2', 'grouping4_1'),
      ('grouping1', 'grouping2', 'grouping3_2', 'grouping4_1')]
     """
-    indices = []
+    all_groups = []
     for group in groups:
         groups_labels = get_groups_labels([group], [])
-        indices.extend(itertools.product(*groups_labels))
-    return indices
+        all_groups.extend(itertools.product(*groups_labels))
+    return all_groups
 
 
-def get_groups_labels(groups, L=[]):
+def get_groups_labels(groups, groupings_labels=[]):
     """Recursively extract the labels for each
     group, for every level of nesting.
 
@@ -87,13 +87,14 @@ def get_groups_labels(groups, L=[]):
     [['grouping1'], ['grouping2'], ['grouping3_1', 'grouping3_2'], ['grouping4_1', 'grouping4_1']]
     """
     labels = []
-    groupings = []
+    nested_groupings = []
 
     for group in groups:
         labels.append(group["label"])
-        groupings.extend(group["groupings"])
-    else:
-        L.append(labels)
-        if groupings:
-            get_groups_labels(groupings, L)
-    return L
+        nested_groupings.extend(group["groupings"])
+
+    groupings_labels.append(labels)
+    if nested_groupings:
+        get_groups_labels(nested_groupings, groupings_labels)
+
+    return groupings_labels

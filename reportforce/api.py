@@ -133,7 +133,7 @@ class Reportforce(Salesforce):
                 self.metadata.date_end = end
             if date_column:
                 self.metadata.date_column = date_column
-            if (start or end or date_column):
+            if start or end or date_column:
                 self.metadata.date_duration = "CUSTOM"
 
         if excel:
