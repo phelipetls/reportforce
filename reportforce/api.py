@@ -171,10 +171,8 @@ class Reportforce(Salesforce):
             yield df
 
     def _get_report(self, **kwargs):
-        response = self.session.post(
-            self.report_url, json=self.metadata, **kwargs
-        ).json()
-        return self.parser(response)
+        response = self.session.post(self.report_url, json=self.metadata, **kwargs)
+        return self.parser(response.json())
 
     _parsers = {"TABULAR": Tabular, "MATRIX": Matrix, "SUMMARY": Summary}
 
