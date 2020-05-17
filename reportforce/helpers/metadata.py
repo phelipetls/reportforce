@@ -180,29 +180,6 @@ class Metadata(dict):
     def get_column_api_name(self, column):
         return self.get_column_info_by_label(column, "apiName")
 
-    def get_columns_labels(self):
-        return [
-            self.get_column_label(column) for column, _ in self.get_included_columns()
-        ]
-
-    def get_columns_dtypes(self):
-        return [
-            self.get_column_dtype(column) for column, _ in self.get_included_columns()
-        ]
-
-    def get_included_columns(self):
-        return (
-            self.aggregate_column_info
-            if self.report_format == "MATRIX"
-            else self.detail_column_info
-        )
-
-    def get_groupings_labels(self):
-        return [
-            group["label"]
-            for group in self.extended_metadata["groupingColumnInfo"].values()
-        ]
-
     def get_duration_info(self, duration):
         return self.get_date_filter_durations_groups()[duration].values()
 

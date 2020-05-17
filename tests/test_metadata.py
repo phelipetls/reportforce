@@ -14,42 +14,6 @@ class TestGetters:
     def test_get_column_dtype(self):
         assert metadata.get_column_dtype("OPPORTUNITY_NAME") == "string"
 
-    def test_get_columns_labels(self):
-        assert metadata.get_columns_labels() == [
-            "Owner Role",
-            "Opportunity Owner",
-            "Account Name",
-            "Opportunity Name",
-            "Stage",
-            "Fiscal Period",
-            "Amount",
-            "Probability (%)",
-            "Age",
-            "Close Date",
-            "Created Date",
-            "Next Step",
-            "Lead Source",
-            "Type",
-        ]
-
-    def test_get_columns_dtypes(self):
-        assert metadata.get_columns_dtypes() == [
-            "string",
-            "string",
-            "string",
-            "string",
-            "picklist",
-            "string",
-            "currency",
-            "percent",
-            "int",
-            "date",
-            "datetime",
-            "string",
-            "picklist",
-            "picklist",
-        ]
-
     def test_get_operator(self):
         assert metadata.get_operator("==") == "equals"
 
@@ -75,14 +39,6 @@ class TestGetters:
 
     def test_get_non_included_column_dtype(self):
         assert metadata.get_column_dtype("LAST_UPDATE_BY_ALIAS") == "string"
-
-    def test_get_groupings_label(self):
-        assert metadata.get_groupings_labels() == [
-            "Close Date",
-            "Stage",
-            "Account Name",
-            "Account: Last Activity",
-        ]
 
     def test_get_date_filter_duration_groups(self):
         assert metadata.get_date_filter_durations_groups() == {

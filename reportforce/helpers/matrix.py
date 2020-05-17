@@ -15,7 +15,7 @@ class Matrix(Report):
         if cells.size == 0:
             return pd.DataFrame()
 
-        columns = self.get_columns_labels()
+        columns = self.get_matrix_columns()
         index = self.get_index()
 
         cells.shape = (len(index), len(columns))
@@ -49,3 +49,18 @@ class Matrix(Report):
         groupings = self["groupingsDown"]["groupings"]
         names = self.get_groupings_down_labels()
         return pd.MultiIndex.from_tuples(parsers.get_groups(groupings), names=names)
+
+    def get_matrix_columns(self):
+        groupings_across = self["groupingsAcross"]["groupings"]
+        groups = parsers.get_groups(groupings_across)
+
+        aggregates = self.get_columns_labels()
+
+        groups_and_aggs = []
+        for group in groups:
+            for agg in aggregates:
+                groups_and_aggs.append((agg,) + group)
+
+        if groups_and_aggs:
+            groups_labels = [""] + self.get_groupings_across_labels()
+            return pd.MultiIndex.from_tuples(groups_and_aggs, names=groups_labels)
