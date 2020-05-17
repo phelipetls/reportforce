@@ -4,7 +4,7 @@ from reportforce.helpers.metadata import Metadata
 metadata = Metadata(read_json("sample_metadata.json"))
 
 
-class TestGetters:
+class TestMetadataGetters:
     def test_get_column_api_name(self):
         assert metadata.get_column_api_name("Opportunity Name") == "OPPORTUNITY_NAME"
 

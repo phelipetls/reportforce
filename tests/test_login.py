@@ -1,7 +1,5 @@
-import pytest
-
 from reportforce.login import Salesforce
-from fixtures_utils import read_json, MockJsonResponse
+from fixtures_utils import read_json
 
 USERNAME = "fake@username.com"
 PASSWORD = "pass"
@@ -11,7 +9,6 @@ TOKEN = "token"
 def test_soap_login(mock_login):
     """Test authentication via user-password-token method."""
     sf = Salesforce(USERNAME, PASSWORD, TOKEN)
-
     assert sf.version == "47.0"
     assert sf.session_id == "sessionId"
     assert sf.instance_url == "www.salesforce.com"
@@ -21,7 +18,6 @@ def test_soap_login(mock_login):
 def test_use_session_id(mock_login):
     """Test authentication when user provides session ID and instance URL directly."""
     sf = Salesforce(session_id="userSessionId", instance_url="www.enterprise.com")
-
     assert sf.version == "47.0"
     assert sf.session_id == "userSessionId"
     assert sf.instance_url == "www.enterprise.com"
@@ -29,25 +25,17 @@ def test_use_session_id(mock_login):
 
 
 def test_change_version(mock_login):
-    """Test authentication when user provides session ID and instance URL directly."""
+    """Test authentication when user changes default version."""
     sf = Salesforce(USERNAME, PASSWORD, TOKEN, version="48.0")
-
     assert sf.version == "48.0"
 
 
 VERSIONS = read_json("versions.json")
 
 
-@pytest.fixture
-def mock_get_request(monkeypatch):
-    def _mock_get_request(*args, **kwargs):
-        return MockJsonResponse(VERSIONS)
-
-    monkeypatch.setattr("requests.get", _mock_get_request)
-
-
-def test_get_latest_version(mock_login, mock_get_request):
+def test_get_latest_version(mock_login, requests_mock):
     """Test getting latest version of Salesforce."""
-    sf = Salesforce(USERNAME, PASSWORD, TOKEN, latest_version=True)
+    requests_mock.get("https://www.salesforce.com/services/data/", json=VERSIONS)
 
+    sf = Salesforce(USERNAME, PASSWORD, TOKEN, version="36.0", latest_version=True)
     assert sf.version == "48.0"

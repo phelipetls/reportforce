@@ -60,4 +60,4 @@ class TestMatrix:
     def test_get_groupings_across_labels(self):
         assert matrix.get_groupings_labels(
             matrix.report_metadata["groupingsAcross"]
-        ) == ["Product", "Delivery Day",]
+        ) == ["Product", "Delivery Day"]

@@ -6,11 +6,6 @@ from reportforce import login
 SUCCESS = read_data("login_successful.xml")
 FAILURE = read_data("login_failed.xml")
 
-USERNAME = "fake@username.com"
-PASSWORD = "pass"
-TOKEN = "token"
-
-
 EXPECTED_URL = "https://login.salesforce.com/services/Soap/u/47.0"
 
 EXPECTED_HEADERS = {
@@ -25,7 +20,7 @@ def test_xml_response_parser(requests_mock, mocker):
         "https://login.salesforce.com/services/Soap/u/47.0", text=SUCCESS
     )
 
-    assert login.soap_login(USERNAME, PASSWORD, TOKEN) == (
+    assert login.soap_login("foo@bar.com", "pass", "token") == (
         "sessionId",
         "www.salesforce.com",
     )
@@ -46,23 +41,23 @@ BODY_TEMPLATE = """<?xml version="1.0" encoding="utf-8" ?>
 
 
 def test_generate_soap_body():
-    login.generate_soap_body(USERNAME, PASSWORD, TOKEN) == BODY_TEMPLATE.format(
-        "username", "password", "token"
+    assert login.generate_soap_body("foo@bar.com", "pass", "token") == BODY_TEMPLATE.format(
+        "foo@bar.com", "pass", "token"
     )
 
 
 def test_generate_soap_body_escaped():
-    login.generate_soap_body(
+    assert login.generate_soap_body("<>&", "<>&", "<>&") == BODY_TEMPLATE.format(
         "&lt;&gt;&amp;", "&lt;&gt;&amp;", "&lt;&gt;&amp;"
-    ) == BODY_TEMPLATE.format("<>&", "<>&", "<>&")
+    )
 
 
 def test_generate_soap_body_with_stdin(mocker):
-    mocker.patch("reportforce.login.input", return_value=USERNAME)
-    mocker.patch("reportforce.login.getpass", side_effect=[PASSWORD, "token<>&"])
+    mocker.patch("builtins.input", return_value="foo@bar.com")
+    mocker.patch("reportforce.login.getpass", side_effect=["pass", "token<>&"])
 
-    login.generate_soap_body(USERNAME, PASSWORD, TOKEN) == BODY_TEMPLATE.format(
-        USERNAME, PASSWORD, TOKEN
+    assert login.generate_soap_body("foo@bar.com", "pass", "token<>&") == BODY_TEMPLATE.format(
+        "foo@bar.com", "pass", "token&lt;&gt;&amp;"
     )
 
 
@@ -74,7 +69,7 @@ def test_failed_login(requests_mock):
     )
 
     with pytest.raises(login.AuthenticationError) as err:
-        login.soap_login(USERNAME, PASSWORD, TOKEN)
+        login.soap_login("foo@bar.com", "pass", "token")
 
     expected = (
         "INVALID_LOGIN: Invalid username, password, "
