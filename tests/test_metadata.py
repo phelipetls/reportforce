@@ -131,9 +131,9 @@ class TestIncrementBooleanFilter:
     def test_simple_filter(self):
         test = "1 AND 2 AND 3"
         expected = "1 AND 2 AND 3 AND 4"
-        assert Metadata._add_new_filter_to_boolean_filter(test) == expected
+        assert Metadata._increment_boolean_filter(test) == expected
 
     def test_difficult_filter(self):
         test = "(((1 AND 2) AND 3) AND 4)"
         expected = "(((1 AND 2) AND 3) AND 4) AND 5"
-        assert Metadata._add_new_filter_to_boolean_filter(test) == expected
+        assert Metadata._increment_boolean_filter(test) == expected

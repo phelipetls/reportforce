@@ -79,11 +79,11 @@ class Metadata(dict):
     def increment_boolean_filter(self):
         logic = self.boolean_filter
         if logic:
-            new_logic = self._add_new_filter_to_boolean_filter(logic)
+            new_logic = self._increment_boolean_filter(logic)
             self.boolean_filter = new_logic
 
     @staticmethod
-    def _add_new_filter_to_boolean_filter(logic):
+    def _increment_boolean_filter(logic):
         last_number = re.sub(r"[()]", "", logic).split()[-1]
         new_logic = logic + f" AND {int(last_number) + 1}"
         return new_logic
