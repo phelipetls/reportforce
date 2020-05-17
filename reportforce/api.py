@@ -8,7 +8,7 @@ from urllib.parse import urljoin
 
 from .login import Salesforce
 
-from .helpers import errors
+from .helpers import errors, utils
 from .helpers.metadata import Metadata
 from .helpers.tabular import Tabular
 from .helpers.matrix import Matrix
@@ -142,7 +142,7 @@ class Reportforce(Salesforce):
         self.parser = self._get_parser()
         report = pd.concat(self._generate_reports(**kwargs))
 
-        return self._reset_index(report)
+        return utils.reset_useless_index(report)
 
     def _get_metadata_url(self, report_id):
         return self._get_report_url(report_id) + "/describe"
@@ -180,11 +180,6 @@ class Reportforce(Salesforce):
         report_format = self.metadata.report_format
         return self._parsers[report_format]
 
-    def _reset_index(self, df):
-        """Unless it is a pandas.MultiIndex."""
-        if not isinstance(df.index, pd.MultiIndex):
-            df = df.reset_index(drop=True)
-        return df
 
     EXCEL_HEADERS = {
         "Accept": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
