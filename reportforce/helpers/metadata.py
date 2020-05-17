@@ -74,7 +74,8 @@ class Metadata(dict):
 
     @boolean_filter.setter
     def boolean_filter(self, logic):
-        self.report_metadata["reportBooleanFilter"] = logic
+        if logic is not None:
+            self.report_metadata["reportBooleanFilter"] = logic
 
     def increment_boolean_filter(self):
         logic = self.boolean_filter
