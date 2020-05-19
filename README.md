@@ -22,6 +22,16 @@ Check out our documentation at [readthedocs](http://reportforce.rtfd.io/).
 -   Workaround the 2000 row limit if you provide a column with unique values.
 -   Download reports as Excel files.
 
+# Example usage
+
+```python
+from reportforce import Reportforce
+
+Reportforce("user", "pass", "token").get_report("00O1a000001YtFG")
+```
+
+Learn more at our [User guide](https://reportforce.readthedocs.io/en/latest/user-guide/usage/).
+
 ## License
 
 [MIT](https://github.com/phelipetls/seriesbr/blob/master/LICENSE)
