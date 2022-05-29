@@ -7,6 +7,8 @@
 
 <!--- [![PyPI Downloads](https://img.shields.io/pypi/dm/reportforce)](https://pypistats.org/packages/reportforce) -->
 
+**NOTE: This project is no longer maintained, because I don't work with Salesforce anymore.**
+
 Ever needed to daily download a Salesforce report and curse your life because
 it gets so tedious to do so manually in the browser or something?
 
